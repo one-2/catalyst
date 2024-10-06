@@ -1,7 +1,7 @@
 //
 // Stephen Elliott, September 2024
 //
-// This file contains Vis namespace functions.
+// This file contains the Vis namespace.
 // Vis is an interface to matplotlibcpp use by the Model class.
 //
 // May the land not contain you.
