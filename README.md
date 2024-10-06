@@ -6,5 +6,6 @@
 
 
 Build commands:
+-> be in /build, then run
 cmake -DCMAKE_PREFIX_PATH=path/to/libtorch path/to/project
-cmake --build . --config test
+cmake --build . --config Release

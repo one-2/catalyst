@@ -8,44 +8,44 @@
 // Wherefore art thou.
 //
 
-class Log
-{
-public:
-    Log(std::string directory)
-    {
-        return;
-    }
+// class Log
+// {
+// public:
+//     Log(std::string directory)
+//     {
+//         return;
+//     }
 
-    int log_info(std::string message)
-    {
-        return 0;
-    }
+//     int log_info(std::string message)
+//     {
+//         return 0;
+//     }
 
-    int log_message(std::string message)
-    {
-        return 0;
-    }
+//     int log_message(std::string message)
+//     {
+//         return 0;
+//     }
 
-    int log_exception(std::exception exception)
-    {
-        return 0;
-    }
+//     int log_exception(std::exception exception)
+//     {
+//         return 0;
+//     }
 
-    int log_debug(std::string message)
-    {
-        return 0;
-    }
+//     int log_debug(std::string message)
+//     {
+//         return 0;
+//     }
 
-    std::string get_logs(std::string path)
-    {
-        return "";
-    }
+//     std::string get_logs(std::string path)
+//     {
+//         return "";
+//     }
 
-    std::ostream& operator<<
-    {
-        return;
-    }
+//     std::ostream& operator<<
+//     {
+//         return;
+//     }
 
-private:
-    std::string directory;
-}
+// private:
+//     std::string directory;
+// }
