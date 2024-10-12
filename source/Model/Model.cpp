@@ -2,9 +2,7 @@
 //
 // Stephen Elliott, September 2024
 //
-// This file defines the Model abstract class, an interface to modelling classes.
-//
-// Onwards and upwards.
+// This file defines the Model abstract class, an interface to modelling classes. Onwards and upwards.
 //
 
 #include <vector>
@@ -13,24 +11,29 @@
 
 #include "../Log/Log.h"
 
+// Model class definition
 class Model
 {
 private:
-    // How to store training results? Weights? Losses? Intermediate checkpoints?
+    ModelHistory training_history;
+    ModelHistory evaluation_history;
 
 public:
     Model();
-    virtual void train(std::vector<std::variant<int, float>>::iterator data) = 0;
-    virtual void evaluate(std::vector<std::variant<int, float>>::iterator data) = 0;
-
+    virtual void train(DataLoader data) = 0;
+    virtual void evaluate(DataLoader data) = 0;
     friend std::ostream& operator<<(std::ostream& os, const Model& model);
 };
 
+// Model constructor (abstract)
 Model::Model()
 {
-    //
+    // Initialise the training and evaluation histories
+    training_history = ModelHistory();
+    evaluation_history = ModelHistory();
 }
 
+// Overload << operator to print model information
 std::ostream& operator<<(std::ostream& os, const Model& model)
 {
     os << "Model information: TODO" << std::endl;

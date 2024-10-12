@@ -1,18 +1,22 @@
-#ifndef Model.h // prevent multiple linking/reference errors
-#define Model.h
+#ifndef MODEL_H // prevent multiple linking/reference errors
+#define MODEL_H
+
+#include <vector>
+#include <variant>
+#include <iostream>
 
 class Model
 {
-public:
-    int Model();
-    int train();
-    int validate();
-    int test();
-    int add_log(std::string type, std::string message);
-    std::ostream& operator<<;
-
 private:
-    std::vector<Log> logs;
-}
+
+
+public:
+    Model();
+
+    virtual void train(DataLoader data) = 0;
+    virtual void evaluate(DataLoader data) = 0;
+
+    friend std::ostream& operator<<(std::ostream& os, const Model& model);
+};
 
 #endif // MODEL_H
