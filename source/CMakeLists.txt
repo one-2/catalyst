@@ -1,8 +1,9 @@
-# Define the source files in the src directory
-file(GLOB_RECURSE SOURCE_FILES "*.cpp" "*.h")
+# Collect all source files into one library
+file(GLOB_RECURSE SOURCE_FILES *.cpp)
+add_library(catalyst ${SOURCE_FILES})
 
-# Create a library target for the source code
-add_library(source_library ${SOURCE_FILES})
+# Link to Torch libraries
+target_link_libraries(catalyst PRIVATE ${TORCH_LIBRARIES})
 
-# Include subdirectories in compiler references
-target_include_directories(source_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+# Include directories for the library
+target_include_directories(catalyst PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

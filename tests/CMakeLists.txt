@@ -1,28 +1,22 @@
-# gtest FetchContent setup
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/5376968f6948923e2411081fd9372e71a59d8e77.zip
-)
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)  # For Windows
-FetchContent_MakeAvailable(googletest)
+# tests/CMakeLists.txt
 
-# Add the unit tests subdirectory
-add_subdirectory(unit)  # Include the unit folder's CMakeLists.txt
+# External libraries
+add_subdirectory(googletest)
 
-# List of test files at this level (without extensions)
-set(TEST_SOURCES
-    dummy_test
-)
+# Gather all test files
+file(GLOB_RECURSE SOURCE_FILES *.cpp)
 
-# Loop through each test source
-foreach(TEST_SOURCE ${TEST_SOURCES})
-    # Add executable for each test
-    add_executable(${TEST_SOURCE} ${TEST_SOURCE}.cpp)
+foreach(src ${SOURCE_FILES})
+    get_filename_component(test_name ${src} NAME_WE)
+    
+    add_executable(${test_name} ${src})
+    
+    # Link to source, Torch, gtest
+    target_link_libraries(${test_name} PRIVATE catalyst ${TORCH_LIBRARIES} gtest gtest_main)
 
-    # Link each test executable with gtest and the source library
-    target_link_libraries(${TEST_SOURCE} PRIVATE source_library gtest gtest_main)
+    # Make sure to include the source directory where headers reside
+    target_include_directories(${test_name} PRIVATE ${CMAKE_SOURCE_DIR}/source)
 
     # Register the test with CTest
-    add_test(NAME ${TEST_SOURCE} COMMAND ${TEST_SOURCE})
+    add_test(NAME ${test_name} COMMAND ${test_name})
 endforeach()

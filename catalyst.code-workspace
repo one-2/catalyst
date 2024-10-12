@@ -54,6 +54,7 @@
 			"typeinfo": "cpp",
 			"cstring": "cpp",
 			"ctime": "cpp",
+			"any": "cpp",
 			"bitset": "cpp",
 			"chrono": "cpp",
 			"complex": "cpp",

@@ -1,35 +1,62 @@
-// // matrixops.cpp
-// //
-// // Stephen Elliott, September 2024
-// //
-// // This file contains the MatrixOps namespace.
-// // MatrixOps is an interface to operations on pytorchcpp
-// // data structures.
-// //
-// // The tallest tree sees the farthest.
-// //
+// tensorops.cpp
+//
+// Stephen Elliott, October 8 2024
+//
+// This file contains the tensorops namespace.
+// tensorops is an interface to operations on pytorchcpp
+// data structures.
+//
+// The tallest tree sees the farthest.
+//
 
-// namespace matrixops
-// {
-//     Torch::tensor matmul(torch::Tensor a, torch::Tensor b)
-//     {
-//         return Torch::tensor(0);
-//     }
-    
-//     Torch::tensor reLu(Torch::Tensor a)
-//     {
-//         return Torch::tensor(0);
-//     }
-    
-//     Torch::tensor softMax(Torch::Tensor a)
-//     {
-//         return Torch::tensor(0);
-//     }
-    
-//     Torch::tensor identity(Torch::Tensor a)
-//     {
-//         return Torch::tensor(0);
-//     }
-    
-//     std::ostream& operator<<
-// }
+#include <torch/torch.h>
+#include "tensorops.h"
+
+namespace tensorops
+{
+    torch::Tensor matmul(torch::Tensor a, torch::Tensor b)
+    {
+        return torch::matmul(a, b);
+    }
+
+    torch::Tensor reLu(torch::Tensor a)
+    {
+        return torch::relu(a);
+    }
+
+    torch::Tensor softmax(torch::Tensor a)
+    {
+        return torch::softmax(a, 0);
+    }
+
+    torch::Tensor identity(int n)
+    {
+        return torch::eye(n);
+    }
+
+    torch::Tensor sum(torch::Tensor a, torch::Tensor b)
+    {
+        return a + b;
+    }
+
+    torch::Tensor multiple(torch::Tensor a, double scalar)
+    {
+        return a * scalar;
+    }
+
+    torch::Tensor scalar_product(torch::Tensor a, torch::Tensor b)
+    {
+        return torch::dot(a, b);
+    }
+
+    torch::Tensor tensor_product(torch::Tensor a, torch::Tensor b)
+    {
+        return torch::matmul(a, b);
+    }
+
+    std::ostream& operator<<(std::ostream& os, const torch::Tensor& tensor)
+    {
+        os << tensor.toString();
+        return os;
+    }
+}

@@ -1,17 +1,30 @@
-// #ifndef tensorops.h
-// #define tensorops.h
+// testtensorops.h
+//
+// Stephen Elliott, 2024-10-06
+//
+// This file contains the declarations for tensor operations
+//
 
-// namespace tensorops
-// {
-//     Torch::tensor matmul(torch::Tensor a, torch::Tensor b);
+#ifndef TESTTENSOROPS_H
+#define TESTTENSOROPS_H
 
-//     Torch::tensor reLu(Torch::Tensor a);
+#include <torch/torch.h>
+#include <ostream>
 
-//     Torch::tensor softMax(Torch::Tensor a);
-    
-//     Torch::tensor identity(Torch::Tensor a);
+// Function declarations
+    namespace tensorops
+    {
+        torch::Tensor matmul(torch::Tensor a, torch::Tensor b);
+        torch::Tensor reLu(torch::Tensor a);
+        torch::Tensor softmax(torch::Tensor a);
+        torch::Tensor identity(int n);
+        torch::Tensor sum(torch::Tensor a, torch::Tensor b);
+        torch::Tensor multiple(torch::Tensor a, double scalar);
+        torch::Tensor scalar_product(torch::Tensor a, torch::Tensor b);
+        torch::Tensor tensor_product(torch::Tensor a, torch::Tensor b);
 
-//     std::ostream& operator<<;
-// }
+        // Overloaded operator<< for the tensor library
+        std::ostream& operator<<(std::ostream& os, const torch::Tensor& tensor);
+    }
 
-// #endif //TENSOROPS_H
+#endif // TESTTENSOROPS_H
