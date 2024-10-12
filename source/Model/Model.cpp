@@ -1,61 +1,38 @@
-// // Model.cpp
-// //
-// // Stephen Elliott, September 2024
-// //
-// // This file contains the Model abstract class.
-// // Model is defines an interface to all statistical
-// // modelling methods.
-// //
-// // Onwards and upwards.
-// //
+// Model.cpp
+//
+// Stephen Elliott, September 2024
+//
+// This file defines the Model abstract class, an interface to modelling classes.
+//
+// Onwards and upwards.
+//
 
-// #include <vector>
-// #include "../log/log.h"
+#include <vector>
+#include <variant>
+#include <iostream>
 
-// class Model
-// {
-// public:
-//     int Model();
-//     int train();
-//     int validate();
-//     int test();
-//     int add_log(std::string type, std::string message);
-//     std::ostream& operator<<;
+#include "../Log/Log.h"
 
-// private:
-//     std::vector<Log> logs;
-// }
+class Model
+{
+private:
+    // How to store training results? Weights? Losses? Intermediate checkpoints?
 
-// int Model::Model()
-// {
-//     return 0;
-// }
+public:
+    Model();
+    virtual void train(std::vector<std::variant<int, float>>::iterator data) = 0;
+    virtual void evaluate(std::vector<std::variant<int, float>>::iterator data) = 0;
 
-// int add_layer(std::string activation,
-//               std::string out_connection,
-//               int width)
-// {
-//     return 0;
-// }
+    friend std::ostream& operator<<(std::ostream& os, const Model& model);
+};
 
-// int Model::train()
-// {
-//     return 0;
-// }
+Model::Model()
+{
+    //
+}
 
-// int Model::validate()
-// {
-//     return 0;
-// }
-
-// int Model::test()
-// {
-//     return 0;
-// }
-
-// int Model::add_log(std::string type, std::string message)
-// {
-//     return 0;
-// }
-
-// std::ostream& operator<<;
+std::ostream& operator<<(std::ostream& os, const Model& model)
+{
+    os << "Model information: TODO" << std::endl;
+    return os;
+}
