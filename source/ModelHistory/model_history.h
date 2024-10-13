@@ -14,6 +14,7 @@
 #include <vector>
 #include <variant>
 
+
 class ModelHistory
 {
 private:
@@ -22,9 +23,12 @@ private:
     std::vector<std::vector<float>> history;
 
 public:
-    ModelHistory(bool stopwatch, int sampling_rate);
-    bool is_this_training_history();
+    ModelHistory(bool is_training, bool stopwatch, int sampling_rate);
+    void append_history(float loss, float timing = -1); // default value -1 indicates no timing
     std::vector<float> get_losses();
+    std::vector<float> get_stopwatch();
     int get_history_length();
-    friend std::ostream& operator<<(std::ostream& os, const ModelHistory& mh);
+    int get_sampling_rate();
+    bool get_is_training();
+    friend std::ostream& operator<<(std::ostream& os, ModelHistory& mh);
 };
