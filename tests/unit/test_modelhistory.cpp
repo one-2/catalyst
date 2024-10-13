@@ -25,7 +25,7 @@ TEST(ModelHistory, Constructor)
     int sampling_rate_t1 = 1000;
     ModelHistory t1 = ModelHistory(is_training_t1, stopwatch_t1, sampling_rate_t1);
 
-    EXPECT_EQ(t1.is_this_training_history(), is_training_t1);
+    EXPECT_EQ(t1.get_is_training(), is_training_t1);
     EXPECT_EQ(t1.get_history_length(), 0);
     EXPECT_EQ(t1.get_sampling_rate(), sampling_rate_t1);
     EXPECT_EQ(t1.get_losses().size(), 0);
@@ -35,7 +35,7 @@ TEST(ModelHistory, Constructor)
     int sampling_rate_t2 = 2000;
     ModelHistory t2 = ModelHistory(is_training_t2, stopwatch_t2, sampling_rate_t2);
 
-    EXPECT_EQ(t2.is_this_training_history(), is_training_t2);
+    EXPECT_EQ(t2.get_is_training(), is_training_t2);
     EXPECT_EQ(t2.get_history_length(), 0);
     EXPECT_EQ(t2.get_sampling_rate(), sampling_rate_t2);
     EXPECT_EQ(t2.get_losses().size(), 0);
@@ -101,6 +101,6 @@ TEST(ModelHistory, OperatorOutputStream)
     std::ostringstream os;
     os << mh;
 
-    std::string expected_output = "ModelHistory: [is_training: 0, sampling_rate: 1000, losses: [0.5, 0.3], stopwatch: []]";
+    std::string expected_output = "ModelHistory(is_training=0, architecture=default)\nLosses: 0.5 0.3 \nTimings: ";
     EXPECT_EQ(os.str(), expected_output);
 }
