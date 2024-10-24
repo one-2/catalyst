@@ -1,18 +1,18 @@
-#ifndef Model.h // prevent multiple linking/reference errors
-#define Model.h
+#ifndef MODEL_H // prevent multiple linking/reference errors
+#define MODEL_H
 
 class Model
 {
 public:
-    int Model();
+    Model();
     int train();
     int validate();
     int test();
     int add_log(std::string type, std::string message);
-    std::ostream& operator<<;
+    // std::ostream& operator<<;
 
 private:
-    std::vector<Log> logs;
-}
+    // std::vector<Log> logs;
+};
 
 #endif // MODEL_H
