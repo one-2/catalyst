@@ -42,9 +42,8 @@ namespace io {
             }
         }
 
-        return torch::Tensor();
+        return tensor_data;
     }
-
 
     // Model load_checkpoint(std::string path) {
     //     return Model();
