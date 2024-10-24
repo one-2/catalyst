@@ -14,9 +14,9 @@
 #include "../Model/Model.h"
 
 namespace io {
-    torch::Tensor load_from_csv(std::string path);
-    Model load_checkpoint(std::string path);
-    std::string write_checkpoint(std::string path, std::string label);
+    torch::Tensor load_tensor_from_csv(std::string path);
+    // Model load_checkpoint(std::string path);
+    // std::string write_checkpoint(std::string path, std::string label);
 }
 
 #endif // IO_H
