@@ -22,7 +22,7 @@ TEST(Dataset, SplitDataset)
     //
     // Even split - percentages partition the dataset at integer indexes
     //
-    Dataset dataset1;    // Add mock data to the dataset using IO class and local test file
+    Dataset dataset1 = 
 
     auto [train, test, validate] = dataset1.split(0.7, 0.2, 0.1);
 
