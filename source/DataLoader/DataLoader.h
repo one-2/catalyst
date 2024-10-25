@@ -12,7 +12,7 @@
 #ifndef DATALOADER_H
 #define DATALOADER_H
 
-#include <vector>
+#include <array>
 #include <iostream>
 #include <torch/torch.h>
 #include "../Dataset/Dataset.h"
@@ -21,15 +21,15 @@
 class DataLoader {
 public:
     DataLoader(std::shared_ptr<Dataset> dataset);
-    torch::Tensor get_next_value_tensor();
+    std::array<torch::Tensor, 2> get_next_observation();
     std::shared_ptr<Dataset> get_dataset_ptr();
 
     // friend std::ostream& operator<<(std::ostream& os, const DataLoader& loader);
 
 private:
-    std::shared_ptr<Dataset> _dataset;
-    int _current_index;
-    void _reset_head();
+    std::shared_ptr<Dataset> dataset_;
+    int current_index_;
+    void reset_head_();
 };
 
 #endif // DATALOADER_H

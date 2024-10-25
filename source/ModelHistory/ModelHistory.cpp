@@ -4,18 +4,18 @@
 //
 // Date: 2024-10-13
 //
-// Description: The ModelHistory class.
+// Description:
 //
 
 #include <torch/torch.h>
-#include "model_history.h"
+#include "./ModelHistory.h"
 
 ModelHistory::ModelHistory(bool is_training, bool stopwatch, int sampling_rate)
     : is_training(is_training), architecture("default"), history(2) {
     // Initialize history vectors
-    history[0].reserve(sampling_rate); // For losses
+    history[0].reserve(sampling_rate); //For losses
     if (stopwatch) {
-        history[1].reserve(sampling_rate); // For timings
+        history[1].reserve(sampling_rate); //For timings
     }
 }
 
