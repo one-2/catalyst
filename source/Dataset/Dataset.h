@@ -15,26 +15,25 @@
 #include <vector>
 #include <variant>
 #include <iostream>
-#include "DataLoader/DataLoader.h"
+#include <tuple>
+#include "../DataLoader/DataLoader.h"
 
 
 class Dataset
 {
-private:
-    struct data_point
-    {
-        int index;
-        std::vector<std::variant<int, float>> predictors;
-        std::variant<int, float> target;
-    }
-
-    std::vector<data_point> data;
-
 public:
+    Dataset(std::string path);
+    Dataset::Dataset(torch::Tensor input, torch::Tensor output, int start_index, int length);
     DataLoader get_dataloader();
-    std::tuple<Dataset, Dataset, Dataset> split(float train, float test, float validate);
-    int length();
+    std::list<Dataset> split(float train, float test, float validate);
+    int get_length();
     friend std::ostream& operator<<(std::ostream& os, const Dataset& dataset);
+
+private:
+    torch::tensor input;
+    torch::tensor outcome;
+
+    std::list<int> Dataset::compute_split_lengths();
 };
 
 #endif // DATASET_H
