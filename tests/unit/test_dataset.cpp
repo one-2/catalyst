@@ -1,92 +1,85 @@
-// tests/unit/test_dataset.cpp
+// source/Dataset/test_Dataset.cpp
 //
 // Author: Stephen Elliott
 //
-// Date: 2024-10-13
+// Date: 2024-10-25
 //
-// Description: Tests for Dataset class.
+// Description: Unit tests for Dataset class.
 //
 
-#include <vector>
-#include <variant>
 #include <gtest/gtest.h>
+#include <torch/torch.h>
+#include <fstream>
 #include "Dataset/Dataset.h"
 
-// Test cases
+//
+// Constructor from csv
+//
+TEST(Dataset, ConstructorWithCSVPath) {
+    // Setup
+    torch::Tensor dummy_data = torch::rand({100, 11});
+    
+    std::ofstream temp_csv("constructor_test_temp.csv");
+    temp_csv << "col1,col2,col3,col4,col5,col6,col7,col8,col9,col10,target\n";
+    for (int i = 0; i < 100; ++i) {
+        for (int j = 0; j < 10; ++j) {
+            temp_csv << std::to_string(dummy_data[i][j].item<float>()) << ",";
+        }
+        temp_csv << std::to_string(dummy_data[i][10].item<float>()) << "\n";
+    }
+    temp_csv.close();
+
+    // Test
+    Dataset dataset("constructor_test_temp.csv", 10);
+
+    EXPECT_EQ(dataset.get_length(), 100);
+    EXPECT_EQ(dataset.input.size(1), 10);
+    EXPECT_EQ(dataset.target.size(0), 100);
+
+    // Cleanup
+    std::remove("constructor_test_temp.csv");
+}
+
+// 
+// Constructor from tensors
+//
+TEST(Dataset, ConstructorWithTensors) {
+    torch::Tensor input = torch::rand({100, 10});
+    torch::Tensor target = torch::rand({100, 1});
+    Dataset dataset(input, target, 0, 100);
+
+    EXPECT_EQ(dataset.get_length(), 100);
+    EXPECT_EQ(dataset.input.size(1), 10);
+    EXPECT_EQ(dataset.target.size(0), 100);
+}
 
 //
-// Split the dataset
+// Train/validate/test split the data
 //
-// TEST(Dataset, SplitDataset)
-// {
-//     //
-//     // Even split - percentages partition the dataset at integer indexes
-//     //
-//     Dataset dataset1 = 
+TEST(Dataset, Split) {
+    torch::Tensor input = torch::rand({100, 10});
+    torch::Tensor target = torch::rand({100, 1});
+    Dataset dataset(input, target, 0, 100);
 
-//     auto [train, test, validate] = dataset1.split(0.7, 0.2, 0.1);
+    auto splits = dataset.split(0.6, 0.2, 0.2);
+    EXPECT_EQ(splits[0]->get_length(), 60);
+    EXPECT_EQ(splits[1]->get_length(), 20);
+    EXPECT_EQ(splits[2]->get_length(), 20);
 
-//     EXPECT_EQ
-//     (
-//         train.length(), 7
-//     );
-//     EXPECT_EQ
-//     (
-//         test.length(), 2
-//     );
-//     EXPECT_EQ
-//     (
-//         validate.length(), 1
-//     );
+    // Test split method with rounding
+    auto rounded_splits = dataset.split(0.333, 0.333, 0.334);
+    EXPECT_EQ(rounded_splits[0]->get_length(), 33);
+    EXPECT_EQ(rounded_splits[1]->get_length(), 33);
+    EXPECT_EQ(rounded_splits[2]->get_length(), 34);
+}
 
-//     //
-//     // Odd split - percentages partition the dataset at fractional indexes
-//     //
-//     Dataset dataset2;    // Add mock data to the dataset using IO class and local test file
+// Test operator<<
+TEST(Dataset, OutputOperator) {
+    // torch::Tensor input = torch::rand({100, 10});
+    // torch::Tensor target = torch::rand({100, 1});
+    // Dataset dataset(input, target, 0, 100);
 
-//     auto [train, test, validate] = dataset2.split(0.4, 0.3, 0.3); // Split over-allocates the training set
-
-//     EXPECT_EQ
-//     (
-//         train.length(), 2
-//     );
-//     EXPECT_EQ
-//     (
-//         test.length(), 1
-//     );
-//     EXPECT_EQ
-//     (
-//         validate.length(), 1
-//     );
-// }
-
-// //
-// // Retrieve a dataloader
-// //
-// TEST(Dataset, GetDataLoader)
-// {
-//     Dataset dataset;
-//     // Add mock data to the dataset
-//     // TODO
-
-//     DataLoader dataloader = dataset.get_dataloader();
-
-//     // verify dataloader output stream
-//     // TODO
-// }
-
-// //
-// // Operator<< overload
-// //
-// TEST(Dataset, OutputStreamOperator)
-// {
-//     Dataset dataset;
-//     // Add mock data to the dataset
-//     // TODO
-
-//     std::ostringstream os;
-//     os << dataset;
-
-//     std::string expected_output = "..."; // TODO
-//     EXPECT_EQ(os.str(), expected_output);
-// }
+    // std::ostringstream os;
+    // os << dataset;
+    EXPECT_EQ("", "Dataset details: length = 100");
+}

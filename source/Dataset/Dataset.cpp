@@ -14,6 +14,8 @@
 #include "./Dataset.h"
 #include "../io/io.h"
 
+#include <iostream> //Debugging
+
 //
 // Loads a dataset from a given csv path
 //
@@ -65,30 +67,26 @@ std::array<int, 3> Dataset::compute_split_lengths(float train, float validate, f
     int validate_length = int(length * validate);
     int test_length = int(length * test);
     
-    //Correct underflow due to typecasting
-    auto underflow_length = [length, train_length, validate_length, test_length]() {
+    // Correct underflow due to typecasting
+    auto underflow_length = [&length, &train_length, &validate_length, &test_length]() {
+        //& reference captures by reference (default is by value)
         return length - (train_length + validate_length + test_length);
     };
 
     while (underflow_length() > 0) {
+        std::cout << "underflow_length() = " << underflow_length() << std::endl;
 
-        //Use the modulus of the underflow to redistribute spare samples
+        // Use the modulus of the underflow to redistribute spare samples
         switch (underflow_length() % 3) {
             case 0:
                 train_length++;
-                if (train_length == 0 || underflow_length() == 0) {
-                    break;
-                }
+                break;
             case 1:
                 validate_length++;
-                if (validate_length == 0 || underflow_length() == 0) {
-                    break;
-                }
+                break;
             case 2:
                 test_length++;
-                if (test_length == 0 || underflow_length() == 0) {
-                    break;
-                }
+                break;
         }
     }
 
@@ -106,7 +104,7 @@ int Dataset::get_length() {
 //
 // Output dataset info to ostream
 //
-std::ostream& operator<<(std::ostream& os, Dataset& dataset) { //Maybe Dataset& should be const? 
-    os << "Dataset details: " << dataset.get_length();
-    return os;
-}
+// std::ostream& operator<<(std::ostream& os, Dataset& dataset) { //Maybe Dataset& should be const? 
+//     os << "Dataset details: " << "length = " << dataset.get_length();
+//     return os;
+// }
