@@ -19,9 +19,9 @@ TEST(Dataset, ConstructorWithCSVPath) {
     // Setup
     torch::Tensor dummy_data = torch::rand({100, 11});
     
-    std::ofstream temp_csv("constructor_test_temp.csv");
-    temp_csv << "col1,col2,col3,col4,col5,col6,col7,col8,col9,col10,target\n";
-    for (int i = 0; i < 100; ++i) {
+    std::ofstream temp_csv("./constructor_test_temp.csv");
+    temp_csv << "col1,col2,col3,col4,col5,col6,col7,col8,col9,col10,target\n"; //Write header
+    for (int i = 0; i < 100; ++i) { //Write digits 1-100
         for (int j = 0; j < 10; ++j) {
             temp_csv << std::to_string(dummy_data[i][j].item<float>()) << ",";
         }
