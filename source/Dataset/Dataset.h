@@ -21,7 +21,7 @@ class Dataset
 {
 public:
     Dataset(std::string path, int target_variable_index);
-    Dataset(torch::Tensor input, torch::Tensor output, int start_index, int length);
+    Dataset(const torch::Tensor& input, const torch::Tensor& output, int start_index, int length); //Passes reference. No malloc required.
     std::array<std::shared_ptr<Dataset>, 3> split(float train, float validate, float test);
     int get_length();
     friend std::ostream& operator<<(std::ostream& os, const Dataset& dataset);
@@ -29,7 +29,7 @@ public:
     torch::Tensor target;
 
 private:
-    std::array<int, 3> compute_split_lengths(float train, float validate, float test);
+    std::array<int, 3> compute_split_lengths_(float train, float validate, float test);
 };
 
 #endif // DATASET_H
