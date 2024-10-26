@@ -22,12 +22,31 @@
 Dataset::Dataset(std::string path, int target_variable_index) {
     torch::Tensor data = io::load_tensor_from_csv(path);
 
-    //Save input
-    torch::Tensor first_part = data.index({torch::indexing::Slice(), torch::indexing::Slice(torch::indexing::None, target_variable_index)});
-    torch::Tensor second_part = data.index({torch::indexing::Slice(), torch::indexing::Slice(target_variable_index + 1, torch::indexing::None)});
-    this->input = torch::cat({first_part, second_part});
+    // std::cout << data << std::endl; //DEBUGGING
 
-    //Save target
+    //Save input
+    torch::Tensor input_first_part = data.index({
+        torch::indexing::Slice(), //All rows
+        torch::indexing::Slice(torch::indexing::None, target_variable_index) //Slice of columns up to, not incl, the target
+    });
+    torch::Tensor input_second_part = data.index({
+        torch::indexing::Slice(), //All rows
+        torch::indexing::Slice(target_variable_index + 1, torch::indexing::None) //From 1 after target to the end of the cols
+    });
+    
+    std::cout << input_first_part.size(1) << std::endl; //DEBUGGING
+    std::cout << input_second_part.size(1) << std::endl; //DEBUGGING
+
+    // Declare input
+    if (input_first_part.size(1) == 0) { //Checks col dimension
+        this->input = input_second_part;
+    } else if (input_second_part.size(1) == 0) {
+        this->input = input_first_part;
+    } else {
+        this->input = torch::cat({input_first_part, input_second_part});
+    }
+
+    // Declare target
     this->target = data.index({torch::indexing::Slice(), target_variable_index});
 };
 
@@ -97,8 +116,7 @@ std::array<int, 3> Dataset::compute_split_lengths(float train, float validate, f
 // Get the length of the dataset
 // 
 int Dataset::get_length() {
-    // Implementation for returning the length of the dataset
-    return this->input.size(1); //Queries dimension 1
+    return this->input.size(0); //Queries dimension 0 (rows)
 }
 
 //
