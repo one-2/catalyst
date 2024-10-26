@@ -21,7 +21,7 @@
 // Load csv to a tensor
 //
 TEST(io, LoadTensorFromCsv) {
-        std::string csv_content = "1.0,2.0,3.0\n4.0,5.0,6.0\n7.0,8.0,9.0\n"; //Dummy data
+        std::string csv_content = "col1,col2,col3,col4,col5,col6,col7,col8,col9\n1.0,2.0,3.0\n4.0,5.0,6.0\n7.0,8.0,9.0\n"; //Dummy data
         std::string temp_csv_path = "/tmp/test_data.csv";
         std::ofstream temp_csv_file(temp_csv_path);
         temp_csv_file << csv_content;

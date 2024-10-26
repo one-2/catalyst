@@ -8,8 +8,7 @@
 //
 
 #include <gtest/gtest.h>
-#include <torch/torch.h>
-#include "ModelHistory/model_history.h"
+#include "ModelHistory/ModelHistory.h"
 
 // Test cases
 

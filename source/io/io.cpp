@@ -22,13 +22,15 @@ namespace io {
         std::string line;
         std::vector<std::vector<float>> data;
 
+        std::getline(file, line); //Skip the header row
+
         while (std::getline(file, line)) {
             //For every line
             std::stringstream ss(line); //Open a stream on the line
             std::string item;
             std::vector<float> row;
 
-            while (std::getline(ss, item, ',')) { //For every line
+            while (std::getline(ss, item, ',')) { //For every comma-delimited segment
                 row.push_back(std::stof(item)); //Add the line onto the row vector
             }
             data.push_back(row); //Append the row vector to the outer vector
