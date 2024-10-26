@@ -39,46 +39,49 @@ TEST(Dataset, ConstructorWithCSVPath) {
     std::remove("./constructor_test_temp.csv");
 }
 
-// // 
-// // Constructor from tensors
-// //
-// TEST(Dataset, ConstructorWithTensors) {
-//     torch::Tensor input = torch::rand({100, 10});
-//     torch::Tensor target = torch::rand({100, 1});
-//     Dataset dataset(input, target, 0, 100);
+// 
+// Constructor from tensors
+//
+TEST(Dataset, ConstructorWithTensors) {
+    torch::Tensor input = torch::rand({100, 10});
+    torch::Tensor target = torch::rand({100, 1});
+    Dataset dataset(input, target, 0, 100);
 
-//     EXPECT_EQ(dataset.get_length(), 100);
-//     EXPECT_EQ(dataset.input.size(1), 10);
-//     EXPECT_EQ(dataset.target.size(0), 100);
-// }
+    EXPECT_EQ(dataset.get_length(), 100);
+    EXPECT_EQ(dataset.input.size(1), 10);
+    EXPECT_EQ(dataset.target.size(0), 100);
+}
 
-// //
-// // Train/validate/test split the data
-// //
-// TEST(Dataset, Split) {
-//     torch::Tensor input = torch::rand({100, 10});
-//     torch::Tensor target = torch::rand({100, 1});
-//     Dataset dataset(input, target, 0, 100);
+//
+// Train/validate/test split the data
+//
+TEST(Dataset, Split) {
+    torch::Tensor input = torch::rand({100, 10});
+    torch::Tensor target = torch::rand({100, 1});
+    Dataset dataset(input, target, 0, 100);
 
-//     auto splits = dataset.split(0.6, 0.2, 0.2);
-//     EXPECT_EQ(splits[0]->get_length(), 60);
-//     EXPECT_EQ(splits[1]->get_length(), 20);
-//     EXPECT_EQ(splits[2]->get_length(), 20);
+    auto splits = dataset.split(0.6, 0.2, 0.2);
+    std::cout << splits[0]->get_length() << std::endl;
+    EXPECT_EQ(splits[0]->get_length(), 60);
+    EXPECT_EQ(splits[1]->get_length(), 20);
+    EXPECT_EQ(splits[2]->get_length(), 20);
 
-//     // Test split method with rounding
-//     auto rounded_splits = dataset.split(0.333, 0.333, 0.334);
-//     EXPECT_EQ(rounded_splits[0]->get_length(), 33);
-//     EXPECT_EQ(rounded_splits[1]->get_length(), 33);
-//     EXPECT_EQ(rounded_splits[2]->get_length(), 34);
-// }
+    // Test split method with rounding
+    auto rounded_splits = dataset.split(0.333, 0.333, 0.334);
+    EXPECT_EQ(rounded_splits[0]->get_length(), 33);
+    EXPECT_EQ(rounded_splits[1]->get_length(), 34);
+    EXPECT_EQ(rounded_splits[2]->get_length(), 33);
+}
 
-// // Test operator<<
-// TEST(Dataset, OutputOperator) {
-//     // torch::Tensor input = torch::rand({100, 10});
-//     // torch::Tensor target = torch::rand({100, 1});
-//     // Dataset dataset(input, target, 0, 100);
+//
+// Test operator<<
+//
+TEST(Dataset, OutputOperator) {
+    torch::Tensor input = torch::rand({100, 10});
+    torch::Tensor target = torch::rand({100, 1});
+    Dataset dataset(input, target, 0, 100);
 
-//     // std::ostringstream os;
-//     // os << dataset;
-//     EXPECT_EQ("", "Dataset details: length = 100");
-// }
+    std::ostringstream os;
+    os << dataset;
+    EXPECT_EQ(os.str(), "Dataset details: length = 100");
+}

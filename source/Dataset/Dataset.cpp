@@ -68,10 +68,19 @@ std::array<std::shared_ptr<Dataset>, 3> Dataset::split(float train, float valida
     //Compute lengths to split the dataset into
     std::array<int, 3> split_lengths = this->compute_split_lengths(train, validate, test);
 
+    for (int length : split_lengths) {
+        std::cout << length << " " << std::endl; // DEBUGGING
+    }
+    std::cout << "\n" << std::endl;
+
     //Split the dataset
-    auto train_set = std::make_shared<Dataset>(input, target, 0, split_lengths[0]);
-    auto validate_set = std::make_shared<Dataset>(input, target, split_lengths[0], split_lengths[1]);
-    auto test_set = std::make_shared<Dataset>(input, target, split_lengths[1], split_lengths[2]);
+    int train_stop = split_lengths[0];
+    int validate_stop = train_stop + split_lengths[1];
+    int test_stop = validate_stop + split_lengths[2];
+
+    auto train_set = std::make_shared<Dataset>(input, target, 0, train_stop);
+    auto validate_set = std::make_shared<Dataset>(input, target, train_stop, validate_stop);
+    auto test_set = std::make_shared<Dataset>(input, target, validate_stop, test_stop);
 
     return std::array<std::shared_ptr<Dataset>, 3> {train_set, validate_set, test_set};
 }
@@ -86,7 +95,7 @@ std::array<int, 3> Dataset::compute_split_lengths(float train, float validate, f
     int validate_length = int(length * validate);
     int test_length = int(length * test);
     
-    // Correct underflow due to typecasting
+    // Correct underflow due to integer downcasting
     auto underflow_length = [&length, &train_length, &validate_length, &test_length]() {
         //& reference captures by reference (default is by value)
         return length - (train_length + validate_length + test_length);
@@ -95,7 +104,7 @@ std::array<int, 3> Dataset::compute_split_lengths(float train, float validate, f
     while (underflow_length() > 0) {
         std::cout << "underflow_length() = " << underflow_length() << std::endl;
 
-        // Use the modulus of the underflow to redistribute spare samples
+        // Equally redistribute spare samples. Redistribution is sequential (due to mod). Start set is random.
         switch (underflow_length() % 3) {
             case 0:
                 train_length++;
@@ -122,7 +131,6 @@ int Dataset::get_length() {
 //
 // Output dataset info to ostream
 //
-// std::ostream& operator<<(std::ostream& os, Dataset& dataset) { //Maybe Dataset& should be const? 
-//     os << "Dataset details: " << "length = " << dataset.get_length();
-//     return os;
-// }
+std::ostream& operator<<(std::ostream& os, const Dataset& dataset) {
+    os << "Dataset details: " << "length = " << dataset.input.size(0);
+}
