@@ -20,9 +20,14 @@
 
 class DataLoader {
 public:
+    struct Observation {
+        torch::Tensor input;
+        torch::Tensor target;
+    };
+
     DataLoader(std::shared_ptr<Dataset> dataset);
-    std::array<torch::Tensor, 2> get_next_observation();
-    std::shared_ptr<Dataset> get_dataset_ptr();
+    Observation get_next_observation();
+    std::shared_ptr<Dataset> get_dataset_ptr() const;
 
     // friend std::ostream& operator<<(std::ostream& os, const DataLoader& loader);
 

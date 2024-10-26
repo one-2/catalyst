@@ -12,11 +12,11 @@
 
 DataLoader::DataLoader(std::shared_ptr<Dataset> dataset) : dataset_(dataset), current_index_(0) {}
 
-std::array<torch::Tensor, 2> DataLoader::get_next_observation() {
+DataLoader::Observation DataLoader::get_next_observation() {
     if (current_index_ < dataset_->get_length()) {
         return {
-            dataset_->input[this->current_index_++],
-            dataset_->target[this->current_index_++]
+            dataset_->input[current_index_], //Was a double-indexing bug here. Careful how many times I index when accessing and viewing a variable several times in the same method
+            dataset_->target[current_index_++]
         };
     } else {
         reset_head_();
@@ -24,7 +24,7 @@ std::array<torch::Tensor, 2> DataLoader::get_next_observation() {
     }
 }
 
-std::shared_ptr<Dataset> DataLoader::get_dataset_ptr() {
+std::shared_ptr<Dataset> DataLoader::get_dataset_ptr() const {
     return dataset_;
 }
 
