@@ -9,6 +9,8 @@
 #include <variant>
 #include <iostream>
 
+#include "../ModelHistory"
+#include "../DataLoader/DataLoader.h"
 #include "../Log/Log.h"
 
 // Model class definition
@@ -25,17 +27,33 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Model& model);
 };
 
-// Model constructor (abstract)
-Model::Model()
-{
-    // Initialise the training and evaluation histories
-    training_history = ModelHistory();
-    evaluation_history = ModelHistory();
-}
+//
+// Constructor
+//
+Model(std::string type, std::string logging_path);
 
-// Overload << operator to print model information
-std::ostream& operator<<(std::ostream& os, const Model& model)
-{
-    os << "Model information: TODO" << std::endl;
-    return os;
-}
+//
+// Run a training cycle
+//
+void train(DataLoader dataloader, int epochs, int batch_size);
+
+//
+// Run an evaluation cycle
+//
+int evaluate(DataLoader dataloader);
+
+//
+// Fetch the model logbook
+//
+const Logbook& get_logbook() const;
+
+//
+// Serialise the model (using Protobuf)
+//
+static void serialise() = 0; //NOTE: Abstract static
+
+//
+// Deserialise the model (using Protobuf)
+//
+static Model deserialise(std::string) = 0;
+
