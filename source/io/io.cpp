@@ -14,6 +14,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <filesystem>
 
 namespace io {
     torch::Tensor load_tensor_from_csv(std::string path) {
@@ -47,11 +48,33 @@ namespace io {
         return tensor_data;
     }
 
-    // Model load_checkpoint(std::string path) {
-    //     return Model();
-    // }
+    std::string write_log(const std::string& serialised_log, const std::string& directory) {
+        // Generate unique filename
+        auto t = std::time(nullptr);
+        auto tm = *std::localtime(&t);
+        std::ostringstream oss;
+        oss << std::put_time(&tm, "%Y%m%d%H%M%S");
+        std::string timestamp = oss.str();
 
-    // std::string write_checkpoint(std::string path, std::string label) {
-    //     return "";
-    // }
+        // Build directory path, if it doesn't exist
+        build_directory_path(directory);
+        
+        // Build log file
+        std::string log_file_path = directory + "/log_" + timestamp + ".txt";
+        std::ofstream log_file(log_file_path, std::ios::app);
+        if (log_file.is_open()) {
+            log_file << serialised_log << std::endl;
+            log_file.close();
+            return log_file_path;
+        } else {
+            throw std::runtime_error("Unable to open log file at " + log_file_path);
+        }
+    }
+
+    void build_directory_path(const std::string& directory) {
+        std::filesystem::path dir_path(directory);
+        if (!std::filesystem::exists(dir_path)) {
+            std::filesystem::create_directories(dir_path);
+        }
+    }
 }

@@ -12,6 +12,7 @@
 
 #include <list>
 #include <string>
+#include "../io/io.h"
 
 /// @brief LogBook constructor
 /// @param name 
@@ -20,7 +21,7 @@ LogBook::LogBook(const std::string& storage_directory)
     : storage_directory(storage_directory), system_logs(), //Empty init => uses the default constructor
     model_checkpoints(), debug_logs() {
         auto generate_path = [storage_directory](std::string subdir_name) {
-            return storage_directory + subdir_name;
+            return storage_directory + "/" + subdir_name;
         };
         this->system_logs_directory = generate_path("system_logs");
         this->checkpoint_directory = generate_path("checkpoints");
@@ -74,12 +75,21 @@ std::list<std::string> LogBook::read_log_type(const int& type) const {
     return std::list<std::string>();
 }
 
+/// @brief Logs a Model into a checkpoint file
+/// @param model 
+/// @return 
+std::string LogBook::log_checkpoint(const Model& model) {
+    return "";
+}
+
+
+
 /// @brief Serialises a log into json or binary using Protobuf
 /// @param log 
 /// @return 
 std::string LogBook::serialise_log(const LogEntry& log) const {
-
-
+    // TODO
+    return "";
 }
 
 // Deserialises a log using Protobuf

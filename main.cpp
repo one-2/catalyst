@@ -14,7 +14,7 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
+  // GOOGLE_PROTOBUF_VERIFY_VERSION; //TODO Un-comment when pbuf installed
   
   cout << "Hello world." << endl;
 
