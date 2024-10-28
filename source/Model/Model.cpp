@@ -1,59 +1,59 @@
-// Model.cpp
+// source/Model/Model.cpp
 //
-// Stephen Elliott, September 2024
+// Author: Stephen Elliott
 //
-// This file defines the Model abstract class, an interface to modelling classes. Onwards and upwards.
+// Date: 2024-10-28
+//
+// Description: Defines Model abstract superclass
+//
+// Usage: 
 //
 
 #include <vector>
 #include <variant>
 #include <iostream>
 
-#include "../ModelHistory"
-#include "../DataLoader/DataLoader.h"
-#include "../Log/Log.h"
-
-// Model class definition
-class Model
-{
-private:
-    ModelHistory training_history;
-    ModelHistory evaluation_history;
-
-public:
-    Model();
-    virtual void train(DataLoader data) = 0;
-    virtual void evaluate(DataLoader data) = 0;
-    friend std::ostream& operator<<(std::ostream& os, const Model& model);
-};
+#include "./Model.h"
 
 //
 // Constructor
 //
-Model(std::string type, std::string logging_path);
+Model::Model(std::string type, std::string storage_directory_path) {
+    this->type = type;
+    this->logbook = Logbook(storage_directory_path);
+}
 
 //
 // Run a training cycle
 //
-void train(DataLoader dataloader, int epochs, int batch_size);
+void Model::train(DataLoader dataloader, int epochs, int batch_size) = 0;
 
 //
 // Run an evaluation cycle
 //
-int evaluate(DataLoader dataloader);
+int Model::evaluate(DataLoader dataloader) = 0;
 
 //
 // Fetch the model logbook
 //
-const Logbook& get_logbook() const;
+std::shared_ptr<Logbook> Model::get_logbook() {
+    return std::make_shared<Logbook>(this->logbook);
+}
 
 //
 // Serialise the model (using Protobuf)
 //
-static void serialise() = 0; //NOTE: Abstract static
+virtual void Model::serialise() = 0;
 
 //
 // Deserialise the model (using Protobuf)
 //
-static Model deserialise(std::string) = 0;
+virtual Model deserialise(std::string) = 0;
 
+//
+// Write a checkpoint using the LogBook
+//
+void Model::write_checkpoint() final {
+    // Assuming logbook has a method to write a checkpoint
+    this->logbook.write_log("checkpoint", serialise());
+}
