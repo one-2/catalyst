@@ -44,41 +44,58 @@ std::string LogBook::log_info(const int& type, const std::list<Info>& info) {
     switch (type) {
         case SYSTEM:
             path = io::write_log(serialised_log, system_logs_directory);
-            system_logs.push_back(serialised_log);
+            system_logs.push_back(path);
             break;
         case CHECKPOINT:
             path = io::write_log(serialised_log, checkpoint_directory);
-            model_checkpoints.push_back(serialised_log);
+            model_checkpoints.push_back(path);
             break;
         case DEBUG:
             path = io::write_log(serialised_log, debug_directory);
-            debug_logs.push_back(serialised_log);
+            debug_logs.push_back(path);
             break;
     }
 
-    return serialised_log;
+    return path;
 }
 
 /// @brief Reads all logs of a given type from the logbook
 /// @param type 
 /// @return 
-std::list<std::string> LogBook::read_log_type(const int& type) const {
+std::list<LogEntry> LogBook::read_log_type(const int& type) const {
+    std::list<std::string> log_paths;
+
+    // Get log paths
     switch (type) {
         case SYSTEM:
-            return system_logs;
+            log_paths = system_logs;
+            break;
         case CHECKPOINT:
-            return model_checkpoints;
+            log_paths = model_checkpoints;
+            break;
         case DEBUG:
-            return debug_logs;
+            log_paths = debug_logs;
+            break;
+        default:
+            throw "Invalid log category selected.";
+    }
+
+    // Deserialise logs
+    std::list<LogEntry> logs;
+    for (auto path : log_paths) {
+        logs.push_back(deserialise_log(path));
     }
     
-    return std::list<std::string>();
+    return logs;
 }
 
 /// @brief Logs a Model into a checkpoint file
 /// @param model 
 /// @return 
 std::string LogBook::log_checkpoint(const Model& model) {
+    // Model.serialise
+    // Create log
+    // Log.serialise
     return "";
 }
 

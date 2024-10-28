@@ -42,7 +42,7 @@ public:
     LogBook(const std::string& storage_directory);
 
     std::string log_info(const int& type, const std::list<Info>& info);
-    std::list<std::string> read_log_type(const int& type) const;
+    std::list<LogEntry> read_log_type(const int& type) const;
     std::string log_checkpoint(const Model& model);
     // friend std::ostream& operator<<(std::ostream& os, const LogBook& logBook);
 
