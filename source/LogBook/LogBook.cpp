@@ -10,34 +10,49 @@
 //
 #include "LogBook.h"
 
+#include <list>
+#include <string>
+
 /// @brief LogBook constructor
 /// @param name 
 /// @param storage_directory 
-LogBook::LogBook(const std::string& name, const std::string& storage_directory) 
-    : storage_directory(storage_directory) {
-    // TODO
+LogBook::LogBook(const std::string& storage_directory)
+    : storage_directory(storage_directory), system_logs(), //Empty init => uses the default constructor
+    model_checkpoints(), debug_logs() {
+        auto generate_path = [storage_directory](std::string subdir_name) {
+            return storage_directory + subdir_name;
+        };
+        this->system_logs_directory = generate_path("system_logs");
+        this->checkpoint_directory = generate_path("checkpoints");
+        this->debug_directory = generate_path("debug_logs");
 }
 
 /// @brief Writes a log to the parent LogBook.
 /// @param type 
 /// @param info 
 /// @return 
-std::string LogBook::write_log(const std::string& type, std::list<Info> info) {
+std::string LogBook::log_info(const int& type, const std::list<Info>& info) {
     LogEntry log_entry;
     log_entry.timestamp = std::chrono::system_clock::now();
     log_entry.type = type;
     log_entry.info = info;
 
     std::string serialised_log = serialise_log(log_entry);
+    std::string path;
 
-    if (type == "system") {
-        system_logs.push_back(serialised_log);
-    } else if (type == "model_checkpoint") {
-        model_checkpoints.push_back(serialised_log);
-    } else if (type == "exception") {
-        exception_logs.push_back(serialised_log);
-    } else if (type == "debug") {
-        debug_logs.push_back(serialised_log);
+    switch (type) {
+        case SYSTEM:
+            path = io::write_log(serialised_log, system_logs_directory);
+            system_logs.push_back(serialised_log);
+            break;
+        case CHECKPOINT:
+            path = io::write_log(serialised_log, checkpoint_directory);
+            model_checkpoints.push_back(serialised_log);
+            break;
+        case DEBUG:
+            path = io::write_log(serialised_log, debug_directory);
+            debug_logs.push_back(serialised_log);
+            break;
     }
 
     return serialised_log;
@@ -46,29 +61,29 @@ std::string LogBook::write_log(const std::string& type, std::list<Info> info) {
 /// @brief Reads all logs of a given type from the logbook
 /// @param type 
 /// @return 
-std::list<std::string> LogBook::read_log_type(const std::string& type) const {
-    if (type == "system") {
-        return system_logs;
-    } else if (type == "model_checkpoint") {
-        return model_checkpoints;
-    } else if (type == "exception") {
-        return exception_logs;
-    } else if (type == "debug") {
-        return debug_logs;
+std::list<std::string> LogBook::read_log_type(const int& type) const {
+    switch (type) {
+        case SYSTEM:
+            return system_logs;
+        case CHECKPOINT:
+            return model_checkpoints;
+        case DEBUG:
+            return debug_logs;
     }
+    
     return std::list<std::string>();
 }
 
-/// @brief Serialises a log using Protobuf
+/// @brief Serialises a log into json or binary using Protobuf
 /// @param log 
 /// @return 
-std::string LogBook::serialise_log(const LogEntry log) {
-    // TODO
-    return "";
+std::string LogBook::serialise_log(const LogEntry& log) const {
+
+
 }
 
 // Deserialises a log using Protobuf
-LogEntry LogBook::deserialise_log(const std::string) {
+LogEntry LogBook::deserialise_log(const std::string& path) const {
     // TODO
     return LogEntry();
 }

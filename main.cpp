@@ -14,6 +14,8 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+  
   cout << "Hello world." << endl;
 
   torch::Tensor tensor = torch::rand({2, 3});
