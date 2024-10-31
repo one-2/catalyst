@@ -30,8 +30,8 @@ typedef std::chrono::time_point<std::chrono::system_clock> TimeStamp;
 
 class LogEntry {
 public:
-    LogEntry(const int& epoch, const int& cycle, const DataList& data);
-    LogEntry(TimeStamp& timestamp, int& epoch, int& cycle, DataList& data);
+    LogEntry(const int& epoch, const int& cycle, const DataList& data, std::string type);
+    LogEntry(TimeStamp& timestamp, int& epoch, int& cycle, DataList& data, std::string type);
 
     const std::string serialise() const;
     static const std::unique_ptr<LogEntry> deserialise(const std::string& data);
@@ -41,11 +41,14 @@ public:
     const int get_cycle() const;
     const DataList get_all_data() const;
 
+    const std::string get_type() const;
+
 protected:
     TimeStamp timestamp;
     int epoch;
     int cycle;
     DataList data;
+    std::string type = "LogEntry";
 
     std::string serialise_datum(Datum datum) const;
 };

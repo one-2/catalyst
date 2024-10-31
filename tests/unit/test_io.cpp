@@ -84,7 +84,7 @@ TEST(io, BuildDirectoryPath) {
     std::filesystem::remove_all(temp_directory);
 
     // Call the function to build the directory path
-    io::build_directory_path(temp_directory);
+    io::build_directory(temp_directory);
 
     // Check if the directory is created
     ASSERT_TRUE(std::filesystem::exists(temp_directory));

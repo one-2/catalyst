@@ -48,7 +48,7 @@ namespace io {
         return tensor_data;
     }
 
-    std::string write_log(const std::string& serialised_log, const std::string& directory) {
+    std::string write_log(const std::string& serialised_log, const std::string& path) {
         // Generate unique filename
         auto t = std::time(nullptr);
         auto tm = *std::localtime(&t);
@@ -57,21 +57,21 @@ namespace io {
         std::string timestamp = oss.str();
 
         // Build directory path, if it doesn't exist
-        build_directory_path(directory);
-        
-        // Build log file
-        std::string log_file_path = directory + "/log_" + timestamp + ".txt";
-        std::ofstream log_file(log_file_path, std::ios::app);
+        std::string directory = std::filesystem::path(path).parent_path().string();
+        build_directory(directory);
+
+        std::ofstream log_file(path, std::ios::app);
         if (log_file.is_open()) {
             log_file << serialised_log << std::endl;
             log_file.close();
-            return log_file_path;
         } else {
-            throw std::runtime_error("Unable to open log file at " + log_file_path);
+            throw std::runtime_error("Unable to open log file at " + path);
         }
+
+        return path;
     }
 
-    void build_directory_path(const std::string& directory) {
+    void build_directory(const std::string& directory) {
         std::filesystem::path dir_path(directory);
         if (!std::filesystem::exists(dir_path)) {
             std::filesystem::create_directories(dir_path);

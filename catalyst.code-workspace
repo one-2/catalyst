@@ -84,7 +84,9 @@
 			"csetjmp": "cpp",
 			"strstream": "cpp",
 			"regex": "cpp",
-			"cfenv": "cpp"
+			"cfenv": "cpp",
+			"filesystem": "cpp",
+			"*.ipp": "cpp"
 		}
 	}
 }

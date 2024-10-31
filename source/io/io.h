@@ -15,8 +15,8 @@
 
 namespace io {
     torch::Tensor load_tensor_from_csv(std::string path);
-    std::string write_log(const std::string& serialised_log, const std::string& directory);
-    void build_directory_path(const std::string& directory);
+    std::string write_log(const std::string& serialised_log, const std::string& path);
+    void build_directory(const std::string& directory);
 }
 
 #endif // IO_H

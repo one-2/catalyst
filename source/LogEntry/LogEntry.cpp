@@ -17,11 +17,12 @@
 #include <sstream>
 #include <fstream>
 
-LogEntry::LogEntry(const int& epoch, const int& cycle, const DataList& data) {
+LogEntry::LogEntry(const int& epoch, const int& cycle, const DataList& data, std::string type) {
     this->epoch = epoch;
     this->cycle = cycle;
     this->data = data;
     this->timestamp = std::chrono::system_clock::now();
+    this->type = type;
 }
 
 const std::string LogEntry::serialise() const {
@@ -35,7 +36,8 @@ const std::string LogEntry::serialise() const {
         int64_t timestamp_count = timestamp.time_since_epoch().count();
         archive(cereal::make_nvp("timestamp", timestamp_count),
                 cereal::make_nvp("epoch", epoch),
-                cereal::make_nvp("cycle", cycle));
+                cereal::make_nvp("cycle", cycle),
+                cereal::make_nvp("type", type));
         for (const auto& datum : data) {
             std::string serialisedDatum = serialise_datum(datum);
             archive(cereal::make_nvp("datum", serialisedDatum));
@@ -52,25 +54,28 @@ const std::unique_ptr<LogEntry> LogEntry::deserialise(const std::string& data) {
 
     int64_t timestamp_count;
     int epoch, cycle;
+    std::string type;
 
     archive(cereal::make_nvp("timestamp", timestamp_count),
             cereal::make_nvp("epoch", epoch),
-            cereal::make_nvp("cycle", cycle));
+            cereal::make_nvp("cycle", cycle),
+            cereal::make_nvp("type", type));
     TimeStamp timestamp = std::chrono::system_clock::time_point(std::chrono::milliseconds(timestamp_count));
-    DataList dataList;
+    DataList data_list;
     while (!ss.eof()) {
         std::string key, value;
         archive(cereal::make_nvp("datum", key), cereal::make_nvp("datum", value));
-        dataList.push_back(Datum{key, value});
+        data_list.push_back(Datum{key, value});
     }
-    return std::make_unique<LogEntry>(timestamp, epoch, cycle, dataList);
+    return std::make_unique<LogEntry>(timestamp, epoch, cycle, data_list, type);
 }
 
-LogEntry::LogEntry(TimeStamp& timestamp, int& epoch, int& cycle, DataList& data) {
+LogEntry::LogEntry(TimeStamp& timestamp, int& epoch, int& cycle, DataList& data, std::string type) {
     this->timestamp = timestamp;
     this->epoch = epoch;
     this->cycle = cycle;
     this->data = data;
+    this->type = type;
 }
 
 const TimeStamp LogEntry::get_timestamp() const {
@@ -97,4 +102,8 @@ std::string LogEntry::serialise_datum(Datum datum) const {
                 cereal::make_nvp("value", datum.value));
     }
     return ss.str();
+}
+
+const std::string LogEntry::get_type() const {
+    return type;
 }
