@@ -11,7 +11,9 @@ public:
     int validate();
     int test();
     int add_log(std::string type, std::string message);
-    std::list<int> get_epoch_and_cycle() const;
+    // std::list<int> get_epoch_and_cycle() const;
+    // std::string serialise();
+    // std::string deserialise();
 
 private:
     // std::vector<Log> logs;
