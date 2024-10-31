@@ -8,7 +8,7 @@ enable_testing()
 find_package(Torch REQUIRED)
 
 # Set C++ standard globally
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Set Torch-related flags globally
@@ -25,5 +25,5 @@ target_link_libraries(main PRIVATE ${TORCH_LIBRARIES} catalyst)
 add_subdirectory(source)
 add_subdirectory(tests)
 
-# Ensure Torch is found in all subdirectories
-set_property(TARGET main PROPERTY CXX_STANDARD 17)
+# Set main executable cpp standard
+set_property(TARGET main PROPERTY CXX_STANDARD 20)

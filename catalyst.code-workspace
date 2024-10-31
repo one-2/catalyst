@@ -77,7 +77,14 @@
 			"valarray": "cpp",
 			"variant": "cpp",
 			"csignal": "cpp",
-			"span": "cpp"
+			"span": "cpp",
+			"codecvt": "cpp",
+			"*.proto": "cpp",
+			"future": "cpp",
+			"csetjmp": "cpp",
+			"strstream": "cpp",
+			"regex": "cpp",
+			"cfenv": "cpp"
 		}
 	}
 }
