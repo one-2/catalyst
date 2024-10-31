@@ -1,6 +1,8 @@
 #ifndef MODEL_H // prevent multiple linking/reference errors
 #define MODEL_H
 
+#include <list>
+
 class Model
 {
 public:
@@ -9,10 +11,12 @@ public:
     int validate();
     int test();
     int add_log(std::string type, std::string message);
-    // std::ostream& operator<<;
+    std::list<int> get_epoch_and_cycle() const;
 
 private:
     // std::vector<Log> logs;
+    int epoch; // Default -1 (not running)
+    int cycle; // Default -1 (not running)
 };
 
 #endif // MODEL_H

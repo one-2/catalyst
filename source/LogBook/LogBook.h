@@ -27,6 +27,7 @@ public:
     LogBook(std::string& storage_directory_path);
     LogBook(std::string& storage_directory_path, LogsMap logs_map);
 
+    // Reading logs
     const std::list<LogEntry> read_logs(const std::string& type) const;
 
     // Log creation functions
@@ -40,13 +41,9 @@ private:
 
     LogsMap logs_map; // NOTE: this makes things way better
 
-    // Async logging
-    std::string add_log_to_map(const LogEntry& log);
-    std::string add_checkpoint_to_map(std::string& path);
-
-    // System monitoring
-    double LogBook::get_mem_usage() const;    // TODO: refactor somehow, class too big
-    double LogBook::get_cpu_usage() const; 
+    // Adding to LogBook internal objects
+    std::string add_log_to_map(const LogEntry& log); // Normal logs are written and stored on memory
+    std::string add_checkpoint_to_map(std::string& path); // Checkpoints are just written
 
     // Logbook serialisation functions
     const std::string serialise() const;
