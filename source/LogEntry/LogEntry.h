@@ -37,13 +37,13 @@ public:
     const DataList get_all_data() const;
 
     // Serialisation
-    const std::string serialise() const;
+    const std::string serialise() const; // NOTE: Propogates const down to Datum
     static const std::unique_ptr<LogEntry> deserialise(const std::string data);
 
 protected:
     // Protected constructor
     // For subclass instantiation subroutine.
-    LogEntry(int& epoch, int& cycle, DataList data, std::string& type);
+    LogEntry(int epoch, int cycle, DataList data, std::string type);
 
     // Protected attributes
     TimeStamp timestamp_;

@@ -25,7 +25,7 @@ public:
     //       Also too hard to encapsulate properly.
     //
 
-    const std::string serialise_datum(Datum datum);
+    const std::string serialise_datum() const; // NOTE: Const propogates down here from LogEntry.
     static std::unique_ptr<const Datum> deserialise_datum(const std::string& data);
     // To allow instantiation by deserialisation
 

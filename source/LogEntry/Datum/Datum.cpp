@@ -15,13 +15,13 @@
 Datum::Datum(std::string key, std::variant<int, double, std::string> value) {};
 
 // Serialisation
-const std::string Datum::serialise_datum(Datum datum)
+const std::string Datum::serialise_datum() const
 {
     std::stringstream ss;
     {
         cereal::JSONOutputArchive archive(ss);
-        archive(cereal::make_nvp("key", datum.key_),
-                cereal::make_nvp("value", datum.value_));
+        archive(cereal::make_nvp("key", key_),
+                cereal::make_nvp("value", value_));
     }
     return ss.str();
 }

@@ -22,8 +22,8 @@ public:
     void add_datum(std::string key, std::string value);
     
     // Iterators
-    std::list<Datum>::const_iterator begin();
-    std::list<Datum>::const_iterator end();
+    std::list<Datum>::const_iterator begin() const;
+    std::list<Datum>::const_iterator end() const;
 
     // Serialisation
     const std::string serialise(const DataList& data_list);

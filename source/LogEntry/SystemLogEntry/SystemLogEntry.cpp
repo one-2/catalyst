@@ -3,28 +3,21 @@
 #include <fstream>
 #include <sstream>
 
-// LogEntry(const int epoch, const int cycle, const DataList data, std::string type);
-SystemLogEntry::SystemLogEntry(const int epoch, const int cycle) : LogEntry(epoch, cycle, build_usage(), "system") {}
-{
-    float cpu_usage = get_cpu_usage();
-    float mem_usage = get_mem_usage();
-    float gpu_usage = get_gpu_usage();
-    
-}
+std::string type = "system";
 
-const DataList SystemLogEntry::build_usage()
+SystemLogEntry::SystemLogEntry(int epoch, int cycle) : LogEntry(epoch, cycle, build_usage(), type) {}
+
+DataList SystemLogEntry::build_usage()
 {
     Datum cpu_usage("cpu_usage", get_cpu_usage());
     Datum mem_usage("mem_usage", get_mem_usage());
     Datum gpu_usage("gpu_usage", get_gpu_usage());
-    DataList usage;
-    usage.add_datum(cpu_usage);
-    usage.add_datum(mem_usage);
-    usage.add_datum(gpu_usage);
-    return usage;
+    std::list<Datum> usage = {cpu_usage, mem_usage, gpu_usage};
+    return DataList(usage);
 }
 
-const float SystemLogEntry::get_cpu_usage() {
+const float SystemLogEntry::get_cpu_usage()
+{
     std::ifstream stat_file("/proc/stat");
     if (!stat_file.is_open()) {
         throw std::runtime_error("Failed to open /proc/stat");
@@ -43,7 +36,8 @@ const float SystemLogEntry::get_cpu_usage() {
     return static_cast<float>(user + nice + system) / (user + nice + system + idle) * 100.0f;  // return CPU usage percentage
 }
 
-const float SystemLogEntry::get_mem_usage() {
+const float SystemLogEntry::get_mem_usage()
+{
     std::ifstream meminfo("/proc/meminfo");
     if (!meminfo.is_open()) {
         throw std::runtime_error("Failed to open /proc/meminfo");

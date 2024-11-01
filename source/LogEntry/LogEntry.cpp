@@ -16,7 +16,7 @@
 #include <fstream>
 #include "LogEntry/LogEntry.h"
 
-LogEntry::LogEntry(const int epoch, const int cycle, const DataList data, std::string type) {
+LogEntry::LogEntry(int epoch, int cycle, DataList data, std::string type) {
     this->epoch_ = epoch;
     this->cycle_ = cycle;
     this->data_ = data;
@@ -37,8 +37,8 @@ const std::string LogEntry::serialise() const {
                 cereal::make_nvp("epoch", epoch_),
                 cereal::make_nvp("cycle", cycle_),
                 cereal::make_nvp("type", type_));
-        for (const auto datum : data_) {
-            std::string serialisedDatum = serialise_datum(datum);
+        for (const Datum datum : data_) {
+            std::string serialisedDatum = datum.serialise_datum();
             archive(cereal::make_nvp("datum", serialisedDatum));
         }
     }
@@ -64,7 +64,7 @@ const std::unique_ptr<LogEntry> LogEntry::deserialise(const std::string data) {
     while (!ss.eof()) {
         std::string key, value;
         archive(cereal::make_nvp("datum", key), cereal::make_nvp("datum", value));
-        data_list.push_back(Datum{key, value});
+        data_list.add_datum(key, value);
     }
     return std::make_unique<LogEntry>(timestamp, epoch, cycle, data_list, type);
 }

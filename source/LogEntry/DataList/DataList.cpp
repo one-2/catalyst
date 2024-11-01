@@ -4,15 +4,16 @@ DataList::DataList(std::list<Datum> data) : data_(data) {} // For deserialisatio
 
 // Add data
 void DataList::add_datum(std::string key, std::string value) {
+    // Used alternatively to parameterised contructor
     data_.push_back(Datum(key, value));
 }
 
 // (const) Iterators
-std::list<Datum>::const_iterator DataList::begin() {
+std::list<Datum>::const_iterator DataList::begin() const {
     return data_.begin();
 }
 
-std::list<Datum>::const_iterator DataList::end() {
+std::list<Datum>::const_iterator DataList::end() const {
     return data_.end();
 }
 
