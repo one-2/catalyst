@@ -54,9 +54,13 @@ private:
     // Private constructor
     // For deserialisation subroutine.
     LogEntry(TimeStamp timestamp, int epoch, int cycle, DataList data, std::string type);
-
     //
     // NOTE: Wow! Static methods can call private constructors - surreal.
+    //
+
+    class DataList;
+    //
+    // NOTE: Subclassing without inheritance - another powerful feature
     //
 };
 

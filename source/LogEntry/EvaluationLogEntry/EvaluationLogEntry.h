@@ -6,7 +6,7 @@
 #include <string>
 #include <list>
 #include <utility>
-#include "LogEntry/Datum.h"
+#include "LogEntry/DataList.h"
 #include "LogEntry/LogEntry.h"
 
 class EvaluationLogEntry : public LogEntry {

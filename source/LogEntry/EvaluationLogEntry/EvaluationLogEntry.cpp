@@ -1,4 +1,6 @@
 #include "LogEntry/EvaluationLogEntry/EvaluationLogEntry.h"
+#include "LogEntry/Datum.h"
+#include "LogEntry/DataList.h"
 
 EvaluationLogEntry::EvaluationLogEntry(
     const int epoch, const int cycle, std::string loss,
