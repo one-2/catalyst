@@ -16,25 +16,27 @@
 #include <cereal/types/list.hpp>
 #include "LogEntry/Datum/Datum.h"
 
-// Nested in DataList
 class DataList {
 public:
-    friend class LogEntry;
-
+    // Pusher
     void add_datum(std::string key, std::string value);
     
     // Iterators
     std::list<Datum>::const_iterator begin();
     std::list<Datum>::const_iterator end();
 
+    // Serialisation
     const std::string serialise(const DataList& data_list);
     static DataList deserialise(const std::string& data);
 
-protected:
-    DataList(); // For initial construction in LogEntry subclasses
+    // Constructors
+    DataList() = default; // For constructors
+    DataList(std::list<Datum> data); // For deserialisation subroutine and logentry constructors. And analysis later
+    //
+    // NOTE: Friendship didn't work for this because friendship is not inherited.
+    //
 
 private:
-    DataList(std::list<Datum> data); // For deserialisation subroutine
     std::list<Datum> data_;
 };
 

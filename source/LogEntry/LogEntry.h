@@ -26,6 +26,9 @@ typedef std::chrono::time_point<std::chrono::system_clock> TimeStamp;
 
 class LogEntry {
 public:
+    // Friend class to access private constructor
+    friend class DataList;
+
     // Getters
     const std::string get_type() const;
     const TimeStamp get_timestamp() const;
@@ -40,7 +43,7 @@ public:
 protected:
     // Protected constructor
     // For subclass instantiation subroutine.
-    LogEntry(const int epoch, const int cycle, const DataList data, std::string type);
+    LogEntry(int& epoch, int& cycle, DataList data, std::string& type);
 
     // Protected attributes
     TimeStamp timestamp_;
@@ -48,8 +51,6 @@ protected:
     int cycle_;
     DataList data_;
     std::string type_;
-
-    std::string serialise_datum(Datum datum) const;
 
 private:
     // Private constructor

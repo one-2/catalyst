@@ -12,7 +12,7 @@
 class EvaluationLogEntry : public LogEntry {
 public:
     EvaluationLogEntry(
-        const int epoch, const int cycle, std::string loss,
+        int epoch, int cycle, std::string loss,
         std::list<std::pair<std::string, float>> scores
     );
 

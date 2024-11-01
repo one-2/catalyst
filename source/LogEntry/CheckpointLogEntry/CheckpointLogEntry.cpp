@@ -3,7 +3,15 @@
 #include <fstream>
 #include "errors/DeserialisationError.h"
 
-CheckpointLogEntry::CheckpointLogEntry(int epoch, int cycle, Model model) : LogEntry(epoch, cycle, DataList{Datum{"model", model.serialise()}}, "checkpoint") {}
+std::string type = "checkpoint";
+
+CheckpointLogEntry::CheckpointLogEntry(int epoch, int cycle, Model model) 
+    : LogEntry(
+        epoch, 
+        cycle, 
+        DataList({Datum("checkpoint", model.serialise())}),
+        type) 
+{}
 
 std::shared_ptr<Model> CheckpointLogEntry::load_model()
 {
