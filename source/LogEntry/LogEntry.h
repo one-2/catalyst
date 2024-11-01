@@ -19,7 +19,8 @@
 #include <memory>
 #include <map>
 #include <cereal/archives/json.hpp>
-#include "LogEntry/Datum.h"
+#include "DataList/DataList.h"
+#include "LogEntry/Datum/Datum.h" // NOTE: Confusingly, include errors propogate.
 
 typedef std::chrono::time_point<std::chrono::system_clock> TimeStamp;
 
@@ -56,11 +57,6 @@ private:
     LogEntry(TimeStamp timestamp, int epoch, int cycle, DataList data, std::string type);
     //
     // NOTE: Wow! Static methods can call private constructors - surreal.
-    //
-
-    class DataList;
-    //
-    // NOTE: Subclassing without inheritance - another powerful feature
     //
 };
 

@@ -1,7 +1,7 @@
 #include "CheckpointLogEntry.h"
-#include "../../Model/Model.h"
+#include "Model/Model.h"
 #include <fstream>
-#include "errors/DeserializationError.h"
+#include "errors/DeserialisationError.h"
 
 CheckpointLogEntry::CheckpointLogEntry(int epoch, int cycle, Model model) : LogEntry(epoch, cycle, DataList{Datum{"model", model.serialise()}}, "checkpoint") {}
 
@@ -20,10 +20,10 @@ std::shared_ptr<Model> CheckpointLogEntry::load_model()
 std::string CheckpointLogEntry::retrieve_model_serial()
 {
     std::string search_key = "checkpoint";
-    auto result = std::find_if(data.begin(), data.end(), [&search_key](const Datum datum)
-                               { return datum.key == search_key; });
+    auto result = std::find_if(data_.begin(), data_.end(), [&search_key](const Datum datum)
+                               { return datum.get_key() == search_key; });
 
-    if (result == data.end())
+    if (result == data_.end())
     {
         throw std::domain_error(
             "ERROR: Log data does not contain key \"checkpoint\". \

@@ -19,11 +19,19 @@
 // Nested in DataList
 class DataList {
 public:
-    void push_back(std::string key, std::string value);
-    void pop_back();
+    friend class LogEntry;
+
+    void add_datum(std::string key, std::string value);
+    
+    // Iterators
+    std::list<Datum>::const_iterator begin();
+    std::list<Datum>::const_iterator end();
 
     const std::string serialise(const DataList& data_list);
     static DataList deserialise(const std::string& data);
+
+protected:
+    DataList(); // For initial construction in LogEntry subclasses
 
 private:
     DataList(std::list<Datum> data); // For deserialisation subroutine

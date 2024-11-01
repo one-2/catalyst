@@ -4,8 +4,8 @@
 #ifndef CHECKPOINTLOGENTRY_H
 #define CHECKPOINTLOGENTRY_H
 
-#include "../../Model/Model.h"
-#include "../LogEntry.h"
+#include "Model/Model.h"
+#include "LogEntry/LogEntry.h"
 
 class CheckpointLogEntry : LogEntry {
 public:

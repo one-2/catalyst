@@ -2,14 +2,12 @@
 
 DataList::DataList(std::list<Datum> data) : data_(data) {} // For deserialisation
 
-void DataList::push_back(std::string key, std::string value)
-{
-    data_.push_back(Datum(key, value));
+std::list<Datum>::const_iterator DataList::begin() {
+    return data_.begin();
 }
 
-void DataList::pop_back()
-{
-    data_.pop_back();
+std::list<Datum>::const_iterator DataList::end() {
+    return data_.end();
 }
 
 // Serialisation
