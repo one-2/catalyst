@@ -19,7 +19,7 @@ public:
     friend class DataList; // To allow instantiation in DataList
 
     // Constructor for DataList and deserialisation
-    Datum::Datum(std::string key, std::variant<int, double, std::string> value);
+    Datum(std::string key, std::variant<int, double, std::string> value);
     //
     // Note: Poorly encapsulated so I can use it in analysis classes later
     //       Also too hard to encapsulate properly.

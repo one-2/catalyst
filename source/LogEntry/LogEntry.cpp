@@ -46,7 +46,7 @@ const std::string LogEntry::serialise() const {
 
 }
 
-const std::unique_ptr<LogEntry> LogEntry::deserialise(const std::string data) {
+const LogEntry LogEntry::deserialise(std::string& data) {
     // Deserialise the file and Call LogEntry(TimeStamp timestamp, int epoch, int cycle, DataList data)
     std::stringstream ss(data);
     cereal::JSONInputArchive archive(ss);
@@ -66,7 +66,7 @@ const std::unique_ptr<LogEntry> LogEntry::deserialise(const std::string data) {
         archive(cereal::make_nvp("datum", key), cereal::make_nvp("datum", value));
         data_list.add_datum(key, value);
     }
-    return std::make_unique<LogEntry>(timestamp, epoch, cycle, data_list, type);
+    return LogEntry(timestamp, epoch, cycle, data_list, type);
 }
 
 LogEntry::LogEntry(TimeStamp timestamp, int epoch, int cycle, DataList data, std::string type) {

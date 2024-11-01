@@ -38,7 +38,7 @@ public:
 
     // Serialisation
     const std::string serialise() const; // NOTE: Propogates const down to Datum
-    static const std::unique_ptr<LogEntry> deserialise(const std::string data);
+    static const LogEntry deserialise(std::string& data);
 
 protected:
     // Protected constructor

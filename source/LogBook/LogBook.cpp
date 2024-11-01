@@ -2,41 +2,27 @@
 #include <string>
 #include <future>
 #include <stdexcept>
-#include "../io/io.h"
-#include "../LogEntry/SystemLogEntry/SystemLogEntry.h"
-#include "../LogEntry/CheckpointLogEntry/CheckpointLogEntry.h"
-#include "../LogEntry/EvaluationLogEntry/EvaluationLogEntry.h"
-#include "../LogEntry/DebugLogEntry/DebugLogEntry.h"
-
+#include "io/io.h"
+#include "LogEntry/SystemLogEntry/SystemLogEntry.h"
+#include "LogEntry/CheckpointLogEntry/CheckpointLogEntry.h"
+#include "LogEntry/EvaluationLogEntry/EvaluationLogEntry.h"
+#include "LogEntry/DebugLogEntry/DebugLogEntry.h"
 
 LogBook::LogBook(std::string& storage_directory_path) 
-    : storage_directory(storage_directory_path), logger(create_logger()) {
-}
+    : storage_directory(storage_directory_path) {}
 
 LogBook::LogBook(std::string& serialised_directory_root, LogsMap logs_map) 
-    : storage_directory(serialised_directory_root), logs_map(logs_map), logger(create_logger()) {
-}
+    : storage_directory(serialised_directory_root), logs_map(logs_map) {}
 
 void LogBook::add_log_to_map(const LogEntry& log) {
     // Put a mutex on the log map
-    std::lock_guard<std::mutex> lock(logs_mutex) {
-        if (logs_map.find(log.get_type()) == logs_map.end()) {
-            // Creates the list header if it doesn't yet exist
-            logs_map[log.get_type()] = std::list<LogEntry>();
-        }
-        logs_map[log.get_type()].push_back(log);
+    std::mutex logs_mutex;
+    std::lock_guard<std::mutex> lock(logs_mutex);
+    if (logs_map.find(log.get_type()) == logs_map.end()) {
+        // Creates the list header if it doesn't yet exist
+        logs_map[log.get_type()] = std::list<LogEntry>();
     }
-   
-}
-
-std::string LogBook::add_checkpoint_to_map(std::string& path) {
-    // Add the checkpoint to the map
-    if (logs_map.find("checkpoints") == logs_map.end()) {
-        logs_map["checkpoints"] = std::list<std::string>();
-    }
-    // Return the path
-    logs_map["checkpoints"].push_back(path);
-    return path;
+    logs_map[log.get_type()].push_back(log);
 }
 
 void LogBook::log_system() {
@@ -53,17 +39,6 @@ void LogBook::log_evaluation(std::string loss, std::list<std::pair<std::string, 
 
 void LogBook::log_debug(const std::string& message) {
     log_async<DebugLogEntry>(message);
-}
-
-template<typename LogEntryType, typename... Args>
-void LogBook::log_async(Args&&... args) {
-    auto future = std::async(std::launch::async, [this, args...]() {
-        LogEntryType log_entry(std::forward<Args>(args)...);
-        add_log_to_map(log_entry);
-        std::string serialised_log = log_entry.serialise();
-        std::string path = generate_log_path(log_entry);
-        io.write_log(serialised_log, path);
-    });
 }
 
 const std::list<LogEntry> LogBook::read_logs(const std::string& type) const {
@@ -85,11 +60,9 @@ const std::list<LogEntry> LogBook::read_logs(const std::string& type) const {
         }
     }
 
-
-
     // Else check storage for logs of the given type
-    std::string path = storage_directory + "/" + type;
-    std::list<std::string> log_files = io.get_files_in_directory(path);
+    const std::string path = storage_directory + "/" + type;
+    std::list<std::string> log_files = io::get_files_in_directory(path);
 
     // iF logs are not found, throw error
     if (log_files.empty()) {
@@ -97,7 +70,7 @@ const std::list<LogEntry> LogBook::read_logs(const std::string& type) const {
     } else {
         // Return logs found in storage
         for (const auto& log_file : log_files) {
-            std::string log_data = io.read_file(path + "/" + log_file);
+            std::string log_data = io::read_file(path + "/" + log_file);
             LogEntry log = LogEntry::deserialise(log_data);
             filtered_logs.push_back(log);
         }
@@ -107,22 +80,22 @@ const std::list<LogEntry> LogBook::read_logs(const std::string& type) const {
 
 std::string LogBook::generate_log_path(const LogEntry& log) {
     // Generate the path
-    auto epoch, cycle = model.get_epoch_and_cycle();
+    auto epoch = log.get_epoch();
+    auto cycle = log.get_cycle();
     int random_number = rand() % 1000;
-    return storage_directory + "/" + log.get_type() + "/e" + epoch + "c" + cycle + "-" + random_number + ".log"; // Random number helps prevent overwriting
+    return storage_directory + "/" + log.get_type() + "/e" + std::to_string(epoch) + "c" + std::to_string(cycle) + "-" + std::to_string(random_number) + ".log"; // Random number helps prevent overwriting
 }
 
 const std::string LogBook::serialise() const {
     // Implement logs_map serialisation
     // Implement storage_directory serialisation
     std::ostringstream oss;
-    {
-        std::lock_guard<std::mutex> lock(logs_mutex);
-        for (const auto& log_pair : logs_map) {
-            oss << log_pair.first << "\n";
-            for (const auto& log : log_pair.second) {
-                oss << log.serialise() << "\n";
-            }
+    std::mutex logs_mutex;
+    std::lock_guard<std::mutex> lock(logs_mutex);
+    for (const auto& log_pair : logs_map) {
+        oss << log_pair.first << "\n";
+        for (const auto& log : log_pair.second) {
+            oss << log.serialise() << "\n";
         }
     }
     oss << storage_directory;
