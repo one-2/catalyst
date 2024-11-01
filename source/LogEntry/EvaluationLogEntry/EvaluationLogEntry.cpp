@@ -1,18 +1,14 @@
-
-
-#include "EvaluationLogEntry.h"
-#include "LogEntry/LogEntry.h"
+#include "LogEntry/EvaluationLogEntry/EvaluationLogEntry.h"
 
 EvaluationLogEntry::EvaluationLogEntry(
     const int epoch, const int cycle, std::string loss,
-    std::list<std::pair<std::string, float>> scores) :
-    LogEntry(epoch, cycle, build_scores(), "evaluation") 
-{}
+    std::list<std::pair<std::string, float>> scores
+) : LogEntry(epoch, cycle, build_scores(scores), "evaluation") {}
 
 DataList EvaluationLogEntry::build_scores(std::list<std::pair<std::string, float>> scores) {
-    DataList data;
-    for (auto score : scores) {
-        data.push_back({score.first, std::to_string(score.second)});
+    DataList dataList;
+    for (const auto& score : scores) {
+        dataList.push_back(Datum(score.first, std::to_string(score.second)));
     }
-    return data;
+    return dataList;
 }

@@ -19,33 +19,29 @@
 #include <memory>
 #include <map>
 #include <cereal/archives/json.hpp>
+#include "LogEntry/Datum.h"
 
-struct Datum {
-    std::string key;
-    std::string value;
-};
-
-typedef std::list<Datum> DataList;
 typedef std::chrono::time_point<std::chrono::system_clock> TimeStamp;
 
 class LogEntry {
 public:
+    // Getters
     const std::string get_type() const;
     const TimeStamp get_timestamp() const;
     const int get_epoch() const;
     const int get_cycle() const;
     const DataList get_all_data() const;
 
-    // Serialisation functions
+    // Serialisation
     const std::string serialise() const;
     static const std::unique_ptr<LogEntry> deserialise(const std::string data);
 
 protected:
-    // Protected constructors
-    // Prevents the class from being instantiated, except by deserialise() and subclasses.
+    // Protected constructor
+    // For subclass instantiation subroutine.
     LogEntry(const int epoch, const int cycle, const DataList data, std::string type);
-    LogEntry(TimeStamp timestamp, int epoch, int cycle, DataList data, std::string type);
 
+    // Protected attributes
     TimeStamp timestamp_;
     int epoch_;
     int cycle_;
@@ -53,6 +49,15 @@ protected:
     std::string type_;
 
     std::string serialise_datum(Datum datum) const;
+
+private:
+    // Private constructor
+    // For deserialisation subroutine.
+    LogEntry(TimeStamp timestamp, int epoch, int cycle, DataList data, std::string type);
+
+    //
+    // NOTE: Wow! Static methods can call private constructors - surreal.
+    //
 };
 
 #endif // LOGENTRY_H

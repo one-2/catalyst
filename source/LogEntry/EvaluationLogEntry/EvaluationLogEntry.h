@@ -6,6 +6,8 @@
 #include <string>
 #include <list>
 #include <utility>
+#include "LogEntry/Datum.h"
+#include "LogEntry/LogEntry.h"
 
 class EvaluationLogEntry : public LogEntry {
 public:
@@ -13,12 +15,8 @@ public:
         const int epoch, const int cycle, std::string loss,
         std::list<std::pair<std::string, float>> scores
     );
-    static DataList EvaluationLogEntry::build_scores(std::list<std::pair<std::string, float>> scores);
-
-
 private:
-    std::string loss_;
-    std::list<std::pair<std::string, float>> scores_;
+    static DataList build_scores(std::list<std::pair<std::string, float>> scores);
 };
 
 #endif // EVALUATIONLOGENTRY_H

@@ -3,7 +3,7 @@
 #define DEBUGLOGENTRY_H
 
 #include <string>
-#include "../LogEntry.h"
+#include "LogEntry/LogEntry.h"
 
 class DebugLogEntry : public LogEntry {
 public:

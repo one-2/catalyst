@@ -9,13 +9,12 @@
 // Usage: 
 //
 
-#include "./LogEntry.h"
-
 #include <cereal/archives/json.hpp>
 #include <cereal/types/list.hpp>
 #include <cereal/types/memory.hpp>
 #include <sstream>
 #include <fstream>
+#include "LogEntry/LogEntry.h"
 
 LogEntry::LogEntry(const int epoch, const int cycle, const DataList data, std::string type) {
     this->epoch_ = epoch;
@@ -92,16 +91,6 @@ const int LogEntry::get_cycle() const {
 
 const DataList LogEntry::get_all_data() const {
     return data_;
-}
-
-std::string LogEntry::serialise_datum(Datum datum) const {
-    std::stringstream ss;
-    {
-        cereal::JSONOutputArchive archive(ss);
-        archive(cereal::make_nvp("key", datum.key),
-                cereal::make_nvp("value", datum.value));
-    }
-    return ss.str();
 }
 
 const std::string LogEntry::get_type() const {
