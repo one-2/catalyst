@@ -3,10 +3,11 @@
 #define DEBUGLOGENTRY_H
 
 #include <string>
+#include "../LogEntry.h"
 
-class DebugLogEntry {
+class DebugLogEntry : public LogEntry {
 public:
-    DebugLogEntry(std::string&, std::string& message);
-}
+    DebugLogEntry(int epoch, int cycle, std::string message);
+};
 
 #endif // DEBUGLOGENTRY_H

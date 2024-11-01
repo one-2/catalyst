@@ -7,9 +7,14 @@
 #include <list>
 #include <utility>
 
-class EvaluationLogEntry {
+class EvaluationLogEntry : public LogEntry {
 public:
-    EvaluationLogEntry(std::string loss, std::list<std::pair<std::string, float>> scores);
+    EvaluationLogEntry(
+        const int epoch, const int cycle, std::string loss,
+        std::list<std::pair<std::string, float>> scores
+    );
+    static DataList EvaluationLogEntry::build_scores(std::list<std::pair<std::string, float>> scores);
+
 
 private:
     std::string loss_;

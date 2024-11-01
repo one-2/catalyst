@@ -17,12 +17,12 @@
 #include <sstream>
 #include <fstream>
 
-LogEntry::LogEntry(const int& epoch, const int& cycle, const DataList& data, std::string type) {
-    this->epoch = epoch;
-    this->cycle = cycle;
-    this->data = data;
-    this->timestamp = std::chrono::system_clock::now();
-    this->type = type;
+LogEntry::LogEntry(const int epoch, const int cycle, const DataList data, std::string type) {
+    this->epoch_ = epoch;
+    this->cycle_ = cycle;
+    this->data_ = data;
+    this->timestamp_ = std::chrono::system_clock::now();
+    this->type_ = type;
 }
 
 const std::string LogEntry::serialise() const {
@@ -33,12 +33,12 @@ const std::string LogEntry::serialise() const {
     std::stringstream ss;
     {
         cereal::JSONOutputArchive archive(ss);
-        int64_t timestamp_count = timestamp.time_since_epoch().count();
+        int64_t timestamp_count = timestamp_.time_since_epoch().count();
         archive(cereal::make_nvp("timestamp", timestamp_count),
-                cereal::make_nvp("epoch", epoch),
-                cereal::make_nvp("cycle", cycle),
-                cereal::make_nvp("type", type));
-        for (const auto& datum : data) {
+                cereal::make_nvp("epoch", epoch_),
+                cereal::make_nvp("cycle", cycle_),
+                cereal::make_nvp("type", type_));
+        for (const auto datum : data_) {
             std::string serialisedDatum = serialise_datum(datum);
             archive(cereal::make_nvp("datum", serialisedDatum));
         }
@@ -47,8 +47,8 @@ const std::string LogEntry::serialise() const {
 
 }
 
-const std::unique_ptr<LogEntry> LogEntry::deserialise(const std::string& data) {
-    // Deserialise the file and Call LogEntry(TimeStamp& timestamp, int epoch, int cycle, DataList data)
+const std::unique_ptr<LogEntry> LogEntry::deserialise(const std::string data) {
+    // Deserialise the file and Call LogEntry(TimeStamp timestamp, int epoch, int cycle, DataList data)
     std::stringstream ss(data);
     cereal::JSONInputArchive archive(ss);
 
@@ -70,28 +70,28 @@ const std::unique_ptr<LogEntry> LogEntry::deserialise(const std::string& data) {
     return std::make_unique<LogEntry>(timestamp, epoch, cycle, data_list, type);
 }
 
-LogEntry::LogEntry(TimeStamp& timestamp, int& epoch, int& cycle, DataList& data, std::string type) {
-    this->timestamp = timestamp;
-    this->epoch = epoch;
-    this->cycle = cycle;
-    this->data = data;
-    this->type = type;
+LogEntry::LogEntry(TimeStamp timestamp, int epoch, int cycle, DataList data, std::string type) {
+    this->timestamp_ = timestamp;
+    this->epoch_ = epoch;
+    this->cycle_ = cycle;
+    this->data_ = data;
+    this->type_ = type;
 }
 
 const TimeStamp LogEntry::get_timestamp() const {
-    return timestamp;
+    return timestamp_;
 }
 
 const int LogEntry::get_epoch() const {
-    return epoch;
+    return epoch_;
 }
 
 const int LogEntry::get_cycle() const {
-    return cycle;
+    return cycle_;
 }
 
 const DataList LogEntry::get_all_data() const {
-    return data;
+    return data_;
 }
 
 std::string LogEntry::serialise_datum(Datum datum) const {
@@ -105,5 +105,5 @@ std::string LogEntry::serialise_datum(Datum datum) const {
 }
 
 const std::string LogEntry::get_type() const {
-    return type;
+    return type_;
 }

@@ -86,7 +86,8 @@
 			"regex": "cpp",
 			"cfenv": "cpp",
 			"filesystem": "cpp",
-			"*.ipp": "cpp"
+			"*.ipp": "cpp",
+			"source_location": "cpp"
 		}
 	}
 }

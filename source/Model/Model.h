@@ -2,18 +2,23 @@
 #define MODEL_H
 
 #include <list>
+#include <memory>
 
 class Model
 {
 public:
-    Model();
+    Model(std::string serialised_model);
+    
     int train();
     int validate();
     int test();
     int add_log(std::string type, std::string message);
     // std::list<int> get_epoch_and_cycle() const;
-    // std::string serialise();
-    // std::string deserialise();
+    std::string serialise();
+    static std::shared_ptr<Model> deserialise(std::string& serialised_model);
+
+protected:
+    Model();
 
 private:
     // std::vector<Log> logs;
