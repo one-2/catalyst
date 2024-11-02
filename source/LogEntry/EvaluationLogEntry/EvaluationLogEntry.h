@@ -6,7 +6,7 @@
 #include <string>
 #include <list>
 #include <utility>
-#include "datastores/DataList/DataList.h"
+#include "datastores/DataList.h"
 #include "LogEntry/LogEntry.h"
 
 namespace logging {
@@ -18,7 +18,7 @@ public:
     );
 
 private:
-    static datastores::DataList build_scores(std::list<std::pair<std::string, float>> scores);
+    static std::unique_ptr<DataList<std::string, float>> build_scores(std::list<std::pair<std::string, float>> scores);
 };
 }
 

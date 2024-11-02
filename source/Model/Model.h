@@ -7,15 +7,15 @@
 class Model
 {
 public:
-    Model(std::string serialised_model);
+    Model(std::string serialized_model);
     
     int train();
     int validate();
     int test();
     int add_log(std::string type, std::string message);
     // std::list<int> get_epoch_and_cycle() const;
-    std::string serialise();
-    static std::shared_ptr<Model> deserialise(std::string& serialised_model);
+    std::string serialize();
+    static std::shared_ptr<Model> deserialize(std::string& serialized_model);
 
 protected:
     Model();

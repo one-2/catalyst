@@ -48,7 +48,7 @@ namespace io {
         return tensor_data;
     }
 
-    std::string write_log(const std::string& serialised_log, const std::string& path) {
+    std::string write_log(const std::string& serialized_log, const std::string& path) {
         // Generate unique filename
         auto t = std::time(nullptr);
         auto tm = *std::localtime(&t);
@@ -62,7 +62,7 @@ namespace io {
 
         std::ofstream log_file(path, std::ios::app);
         if (log_file.is_open()) {
-            log_file << serialised_log << std::endl;
+            log_file << serialized_log << std::endl;
             log_file.close();
         } else {
             throw std::runtime_error("Unable to open log file at " + path);

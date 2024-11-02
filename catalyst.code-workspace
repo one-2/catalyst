@@ -87,7 +87,8 @@
 			"cfenv": "cpp",
 			"filesystem": "cpp",
 			"*.ipp": "cpp",
-			"source_location": "cpp"
+			"source_location": "cpp",
+			"*.tpp": "cpp"
 		}
 	}
 }

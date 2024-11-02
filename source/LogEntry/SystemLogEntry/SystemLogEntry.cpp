@@ -2,21 +2,28 @@
 #include "./SystemLogEntry.h"
 #include <fstream>
 #include <sstream>
+#include <memory>
 
 using namespace logging;
 using namespace datastores;
 
 std::string type = "system";
 
-SystemLogEntry::SystemLogEntry(int epoch, int cycle) : LogEntry(epoch, cycle, build_usage(), type) {}
+SystemLogEntry::SystemLogEntry(int epoch, int cycle)
+    : LogEntry(
+        epoch,
+        cycle, 
+        build_usage(), // NOTE: Bad signatures in header propogate type errors from called functions to caller
+        type
+    ) {}
 
-DataList SystemLogEntry::build_usage()
+std::unique_ptr<DataList<std::string, float>> SystemLogEntry::build_usage()
 {
-    Datum cpu_usage("cpu_usage", get_cpu_usage());
-    Datum mem_usage("mem_usage", get_mem_usage());
-    Datum gpu_usage("gpu_usage", get_gpu_usage());
-    std::list<Datum> usage = {cpu_usage, mem_usage, gpu_usage};
-    return DataList(usage);
+    Datum<std::string, float> cpu_usage("cpu_usage", get_cpu_usage());
+    Datum<std::string, float> mem_usage("mem_usage", get_mem_usage());
+    Datum<std::string, float> gpu_usage("gpu_usage", get_gpu_usage());
+    std::list<Datum<std::string, float>> usage = {cpu_usage, mem_usage, gpu_usage};
+    return std::make_unique<DataList<std::string, float>>(usage);
 }
 
 const float SystemLogEntry::get_cpu_usage()

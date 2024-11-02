@@ -13,8 +13,8 @@ using namespace logging;
 LogBook::LogBook(std::string& storage_directory_path) 
     : storage_directory(storage_directory_path) {}
 
-LogBook::LogBook(std::string& serialised_directory_root, LogsMap logs_map) 
-    : storage_directory(serialised_directory_root), logs_map(logs_map) {}
+LogBook::LogBook(std::string& serialized_directory_root, LogsMap logs_map) 
+    : storage_directory(serialized_directory_root), logs_map(logs_map) {}
 
 void LogBook::add_log_to_map(const LogEntry& log) {
     // Put a mutex on the log map
@@ -73,7 +73,7 @@ const std::list<LogEntry> LogBook::read_logs(const std::string& type) const {
         // Return logs found in storage
         for (const auto& log_file : log_files) {
             std::string log_data = io::read_file(path + "/" + log_file);
-            LogEntry log = LogEntry::deserialise(log_data);
+            LogEntry log = *LogEntry::deserialize(log_data);
             filtered_logs.push_back(log);
         }
         return filtered_logs;
@@ -88,46 +88,12 @@ std::string LogBook::generate_log_path(const LogEntry& log) {
     return storage_directory + "/" + log.get_type() + "/e" + std::to_string(epoch) + "c" + std::to_string(cycle) + "-" + std::to_string(random_number) + ".log"; // Random number helps prevent overwriting
 }
 
-const std::string LogBook::serialise() const {
-    // Implement logs_map serialisation
-    // Implement storage_directory serialisation
-    std::ostringstream oss;
-    std::mutex logs_mutex;
-    std::lock_guard<std::mutex> lock(logs_mutex);
-    for (const auto& log_pair : logs_map) {
-        oss << log_pair.first << "\n";
-        for (const auto& log : log_pair.second) {
-            oss << log.serialise() << "\n";
-        }
-    }
-    oss << storage_directory;
-    return oss.str();
-}
 
-const LogBook LogBook::deserialise(const std::string& data) {
-    // Implement logs_map deserialisation
-    // Implement storage_directory deserialisation
-    std::istringstream iss(data);
-    std::string line;
-    LogsMap logs_map;
-    std::string storage_directory;
-
-    while (std::getline(iss, line)) {
-        if (line.empty()) {
-            continue;
-        }
-        std::string log_type = line;
-        std::list<LogEntry> log_entries;
-        while (std::getline(iss, line) && !line.empty()) {
-            LogEntry log_entry = LogEntry::deserialise(line);
-            log_entries.push_back(log_entry);
-        }
-        logs_map[log_type] = log_entries;
-    }
-
-    if (std::getline(iss, line)) {
-        storage_directory = line;
-    }
-
-    return LogBook(storage_directory, logs_map);
+// Deserialization
+LogBook LogBook::deserialize(const std::string& json_str) {
+    std::istringstream is(json_str);
+    cereal::JSONInputArchive archive(is);
+    LogBook logbook;
+    archive(logbook);
+    return logbook;
 }

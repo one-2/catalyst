@@ -12,7 +12,9 @@
 #include <torch/torch.h>
 #include <array>
 #include "./Dataset.h"
-#include "../io/io.h"
+#include "io/io.h"
+
+using namespace datahandlers;
 
 //
 // Loads a dataset from a given csv path

@@ -9,10 +9,6 @@
 #include <future>
 #include "io/io.h"
 
-typedef std::list<LogEntry> ListOfLogs;
-typedef std::unordered_map<std::string, ListOfLogs> LogsMap;
-
-
 //
 // NOTE: Complexity of solution should not be considered for an auxilliary
 //       focus of the software. I should concentrate design time in
@@ -23,9 +19,13 @@ typedef std::unordered_map<std::string, ListOfLogs> LogsMap;
 //
 
 namespace logging {
+
+typedef std::list<logging::LogEntry> ListOfLogs;
+typedef std::unordered_map<std::string, ListOfLogs> LogsMap;
+
 class LogBook {
 public:
-    // Logging template
+    // Template member function for async logging
     template<typename LogEntryType, typename... Args>
     void log_async(Args&&... args);
 
@@ -34,7 +34,7 @@ public:
     LogBook(std::string& storage_directory_path, LogsMap logs_map);
 
     // Reading logs
-    const std::list<LogEntry> read_logs(const std::string& type) const;
+    const ListOfLogs read_logs(const std::string& type) const;
 
     // Log creation functions
     void log_system();
@@ -44,30 +44,26 @@ public:
 
     std::string generate_log_path(const LogEntry& log);
 
+    // Serialization
+    template <class Archive>
+    void serialize(Archive& ar) {
+        ar(CEREAL_NVP(storage_directory), CEREAL_NVP(logs_map));
+    }
+
+    // Deserialization
+    static LogBook deserialize(const std::string& json_str);
+
 private:
     std::string storage_directory;
+
+    LogBook() = default; // For deserialisation
 
     LogsMap logs_map; // NOTE: this makes things way better
 
     // Adding to LogBook internal objects
     void add_log_to_map(const LogEntry& log); // Normal logs are written and stored on memory
     std::string add_checkpoint_to_map(std::string& path); // Checkpoints are just written
-
-    // Logbook serialisation functions
-    const std::string serialise() const;
-    static const LogBook deserialise(const std::string&);
 };
-
-template<typename LogEntryType, typename... Args>
-void LogBook::log_async(Args&&... args) {
-    auto future = std::async(std::launch::async, [this, args...]() {
-        LogEntryType log_entry(std::forward<Args>(args)...);
-        add_log_to_map(log_entry);
-        std::string serialised_log = log_entry.serialise();
-        std::string path = generate_log_path(log_entry);
-        io::write_log(serialised_log, path);
-    });
-}
 }
 
 #endif // LOGBOOK_H

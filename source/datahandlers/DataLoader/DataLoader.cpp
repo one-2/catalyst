@@ -7,8 +7,10 @@
 // Description: Wraps the data class in an iterator 
 //
 
-#include "./DataLoader.h"
-#include "../Dataset/Dataset.h"
+#include "datahandlers/DataLoader/DataLoader.h"
+#include "datahandlers/Dataset/Dataset.h"
+
+using namespace datahandlers;
 
 DataLoader::DataLoader(std::shared_ptr<Dataset> dataset) : dataset_(dataset), current_index_(0) {}
 

@@ -9,5 +9,5 @@ std::string type = "debug";
 DebugLogEntry::DebugLogEntry(int epoch, int cycle, std::string message) : LogEntry(
     epoch,
     cycle,
-    DataList{{Datum{"message", message}}}, 
+    std::make_unique<DataList<std::string, std::string>>(Datum<std::string, std::string>{{Datum<std::string, std::string>{"message", message}}}), 
     type) {}
