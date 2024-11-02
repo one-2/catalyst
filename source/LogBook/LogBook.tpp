@@ -20,14 +20,14 @@ void LogBook::log_async(Args&&... args) {
         // Add the log entry to the internal map
         add_log_to_map(log_entry);
 
-        // Serialize the log entry
-        std::string serialized_log = log_entry.serialize();
+        // // Serialize the log entry
+        // std::string serialized_log = log_entry.serialize();
 
-        // Generate the log path (implementation assumed)
-        std::string path = generate_log_path(log_entry);
+        // // Generate the log path (implementation assumed)
+        // std::string path = generate_log_path(log_entry);
 
-        // Write the serialized log to the specified path
-        io::write_log(serialized_log, path);
+        // // Write the serialized log to the specified path
+        // io::write_log(serialized_log, path);
     });
 
     // Optionally, you can store the future if you need to manage it later

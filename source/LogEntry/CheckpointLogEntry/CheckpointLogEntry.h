@@ -10,8 +10,8 @@
 namespace logging {
 class CheckpointLogEntry : LogEntry {
 public:
-    CheckpointLogEntry(int epoch, int cycle, Model model);
-    std::shared_ptr<Model> load_model();
+    // CheckpointLogEntry(int epoch, int cycle, Model model);
+    // std::shared_ptr<Model> load_model();
 };
 }
 

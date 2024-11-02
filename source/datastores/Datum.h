@@ -18,6 +18,9 @@ namespace datastores {
 
 template<typename K, typename V>
 class Datum {
+    // Friends
+    friend class cereal::access;
+
 public:
     // Constructors
     Datum() = default; // empty
@@ -35,12 +38,8 @@ private:
     // Cereal serialization function
     template <class Archive>
     void serialize(Archive& ar) {
-        ar(cereal::make_nvp("key", key_),
-           cereal::make_nvp("value", value_));
+        ar(key_, value_);
     }
-
-    // Grant Cereal access to private members
-    friend class cereal::access;
 };
 
 } // namespace datastores

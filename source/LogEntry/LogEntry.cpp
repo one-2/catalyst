@@ -55,17 +55,17 @@ const std::string LogEntry::get_type() const {
     return type_;
 }
 
-std::unique_ptr<LogEntry> LogEntry::deserialize(const std::string& data, bool is_binary) {
-    std::istringstream is(data);
-    auto logEntry = std::make_unique<LogEntry>();
-    if (is_binary) {
-        cereal::BinaryInputArchive archive(is);
-        archive(cereal::make_nvp("logEntry", *logEntry));
-        archive(*logEntry);
-        return logEntry;
-    } else {
-        cereal::JSONInputArchive archive(is);
-        archive(*logEntry);
-        return logEntry;
-    }
-}
+// std::unique_ptr<LogEntry> LogEntry::deserialize(const std::string& data, bool is_binary) {
+//     std::istringstream is(data);
+//     auto logEntry = std::make_unique<LogEntry>();
+//     if (is_binary) {
+//         cereal::BinaryInputArchive archive(is);
+//         archive(cereal::make_nvp("logEntry", *logEntry));
+//         archive(*logEntry);
+//         return logEntry;
+//     } else {
+//         cereal::JSONInputArchive archive(is);
+//         archive(*logEntry);
+//         return logEntry;
+//     }
+// }

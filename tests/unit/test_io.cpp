@@ -39,39 +39,42 @@ TEST(io, LoadTensorFromCsv) {
 // Write log to a file and non-existent directory
 //
 TEST(io, WriteLog) {
-    std::string log_content = "This is a test log entry.";
-    std::string temp_directory = "/tmp/test_logs";
+//     std::string log_content = "This is a test log entry.";
+//     std::string temp_directory = "/tmp/test_logs";
 
-    // Set up
-    std::filesystem::remove_all(temp_directory); //Clean the directory
+//     // Set up
+//     std::filesystem::remove_all(temp_directory); //Clean the directory
     
-    // Write the log and check it exists
-    std::string path_written_existing = io::write_log(log_content, temp_directory); // includes directory builder
-    ASSERT_TRUE(std::filesystem::exists(path_written_existing)); //File exists
+//     // Write the log and check it exists
+//     std::string path_written_existing = io::write_log(log_content, temp_directory); // includes directory builder
+//     ASSERT_TRUE(std::filesystem::exists(path_written_existing)); //File exists
 
-    // Check it contains the expected content
-    std::ifstream log_file_existing(path_written_existing);
-    std::string file_content_existing((std::istreambuf_iterator<char>(log_file_existing)), std::istreambuf_iterator<char>());
-    log_file_existing.close();
-    ASSERT_EQ(file_content_existing, log_content + "\n");
+//     // Check it contains the expected content
+//     std::ifstream log_file_existing(path_written_existing);
+//     std::string file_content_existing((std::istreambuf_iterator<char>(log_file_existing)), std::istreambuf_iterator<char>());
+//     log_file_existing.close();
+//     ASSERT_EQ(file_content_existing, log_content + "\n");
 
+//     // Clean up
+//     std::filesystem::remove_all(temp_directory);
+
+//     // Test for non-existent directory
+//     std::string non_existent_directory = "/tmp/non_existent_directory";
+//     std::filesystem::remove_all(non_existent_directory); // clean the directory
+
+//     std::string path_written_non_existent = io::write_log(log_content, non_existent_directory); // includes directory builder
+//     ASSERT_TRUE(std::filesystem::exists(path_written_non_existent)); //File exists
+
+//     std::ifstream log_file_non_existent(path_written_non_existent); //Contains expected content
+//     std::string file_content_non_existent((std::istreambuf_iterator<char>(log_file_non_existent)), std::istreambuf_iterator<char>());
+//     log_file_non_existent.close();
+//     ASSERT_EQ(file_content_non_existent, log_content + "\n");
+
+    EXPECT_EQ(
+        0, 1
+    );
     // Clean up
-    std::filesystem::remove_all(temp_directory);
-
-    // Test for non-existent directory
-    std::string non_existent_directory = "/tmp/non_existent_directory";
-    std::filesystem::remove_all(non_existent_directory); // clean the directory
-
-    std::string path_written_non_existent = io::write_log(log_content, non_existent_directory); // includes directory builder
-    ASSERT_TRUE(std::filesystem::exists(path_written_non_existent)); //File exists
-
-    std::ifstream log_file_non_existent(path_written_non_existent); //Contains expected content
-    std::string file_content_non_existent((std::istreambuf_iterator<char>(log_file_non_existent)), std::istreambuf_iterator<char>());
-    log_file_non_existent.close();
-    ASSERT_EQ(file_content_non_existent, log_content + "\n");
-
-    // Clean up
-    std::filesystem::remove_all(non_existent_directory);
+    // std::filesystem::remove_all(non_existent_directory);
 }
 
 //

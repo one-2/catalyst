@@ -48,28 +48,28 @@ namespace io {
         return tensor_data;
     }
 
-    std::string write_log(const std::string& serialized_log, const std::string& path) {
-        // Generate unique filename
-        auto t = std::time(nullptr);
-        auto tm = *std::localtime(&t);
-        std::ostringstream oss;
-        oss << std::put_time(&tm, "%Y%m%d%H%M%S");
-        std::string timestamp = oss.str();
+    // std::string write_log(const std::string& serialized_log, const std::string& path) {
+    //     // Generate unique filename
+    //     auto t = std::time(nullptr);
+    //     auto tm = *std::localtime(&t);
+    //     std::ostringstream oss;
+    //     oss << std::put_time(&tm, "%Y%m%d%H%M%S");
+    //     std::string timestamp = oss.str();
 
-        // Build directory path, if it doesn't exist
-        std::string directory = std::filesystem::path(path).parent_path().string();
-        build_directory(directory);
+    //     // Build directory path, if it doesn't exist
+    //     std::string directory = std::filesystem::path(path).parent_path().string();
+    //     build_directory(directory);
 
-        std::ofstream log_file(path, std::ios::app);
-        if (log_file.is_open()) {
-            log_file << serialized_log << std::endl;
-            log_file.close();
-        } else {
-            throw std::runtime_error("Unable to open log file at " + path);
-        }
+    //     std::ofstream log_file(path, std::ios::app);
+    //     if (log_file.is_open()) {
+    //         log_file << serialized_log << std::endl;
+    //         log_file.close();
+    //     } else {
+    //         throw std::runtime_error("Unable to open log file at " + path);
+    //     }
 
-        return path;
-    }
+    //     return path;
+    // }
 
     void build_directory(const std::string& directory) {
         std::filesystem::path dir_path(directory);

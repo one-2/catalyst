@@ -4,54 +4,34 @@
 //
 // Date: 2024-11-01
 //
-// Description: Container for Datum objects. In LogEntry.
-
+// Description: Container for Datum objects.
 #ifndef DATALIST_H
 #define DATALIST_H
 
+#include "Datum.h"
 #include <list>
-#include <string>
-#include <sstream>
-#include <cereal/archives/json.hpp>
 #include <cereal/types/list.hpp>
-#include "datastores/Datum.h"
-#include "datastores/IDataList.h"
-
-namespace datastores {
 
 template <typename K, typename V>
 class DataList : public IDataList {
 public:
-    // Emplace data
-    void add_datum(const K& key, const V& value) {
-        data_.emplace_back(key, value);
-    }
-    
-    // Iterators
-    std::list<Datum<K, V>>::const_iterator begin() const;
-    std::list<Datum<K, V>>::const_iterator end() const;
+    using iterator = typename std::list<datastores::Datum<K, V>>::const_iterator;
 
-    // De/serialisation
-    template <class Archive>
-    void serialize(Archive& ar) {
-        ar(cereal::base_class<IDataList>(this),
-           cereal::make_nvp("data", data_));
-    }
+    iterator begin() const { return data_.begin(); }
+    iterator end() const { return data_.end(); }
 
     // Constructors
-    DataList() = default; // For constructors
-    DataList(std::list<Datum<K, V>> data); // For serialisation, constructors. And analysis classes later.
-    
-    //
-    // NOTE: Friendship is not inherited.
-    //
+    DataList() = default;
+    DataList(std::list<datastores::Datum<K, V>> data) : data_(std::move(data)) {}
 
 private:
-    std::list<Datum<K, V>> data_;
+    std::list<datastores::Datum<K, V>> data_;
 
-    // // Register with Cereal for polymorphic serialization
-    // CEREAL_REGISTER_TYPE(DataList<K, V>)
+    // Serialization
+    template <class Archive>
+    void serialize(Archive& ar) {
+        ar(data_);
+    }
 };
-}
 
 #endif // DATALIST_H

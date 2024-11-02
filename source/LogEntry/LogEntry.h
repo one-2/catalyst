@@ -41,26 +41,20 @@ public:
     const int get_cycle() const;
     const std::shared_ptr<IDataList> get_data() const;
 
-    // Serialisation
-    template <class Archive>
-    void serialize(Archive& archive) {
-        auto timestamp_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
-            timestamp_.time_since_epoch()).count();
-        archive(cereal::make_nvp("timestamp", timestamp_ms),
-                cereal::make_nvp("epoch", epoch_),
-                cereal::make_nvp("cycle", cycle_),
-                cereal::make_nvp("data", data_),
-                cereal::make_nvp("type", type_));
-    }
+    // // Serialisation
+    // template <class Archive>
+    // void serialize(Archive& ar) {
+    //     ar(CEREAL_NVP(timestamp_), CEREAL_NVP(epoch_)
+    //         , CEREAL_NVP(cycle_), CEREAL_NVP(type_)
+    //         , CEREAL_NVP(data_));
+    // }
 
-    // Static method for deserialization
-    static std::unique_ptr<LogEntry> deserialize(const std::string& data, bool is_binary = false);
-
+    // // Static method for deserialization
+    // static std::unique_ptr<LogEntry> deserialize(const std::string& data, bool is_binary = false);
 
 
 protected:
-    // Protected constructor
-    // For subclass instantiation subroutine.
+    // Protected constructor For subclass instantiation subroutine.
     LogEntry(int epoch, int cycle, std::shared_ptr<IDataList> data, std::string type);
 
     // Protected attributes
@@ -71,15 +65,18 @@ protected:
     std::string type_;
 
 private:
-    // Private constructor
+    // Private default constructor
     // For deserialisation subroutine.
+    // LogEntry() = default;
     LogEntry(TimeStamp timestamp, int epoch, int cycle, std::shared_ptr<IDataList> data, std::string type);
+    
+
     //
     // NOTE: Wow! Static methods can call private constructors - surreal.
     //
 
-    // Grant Cereal access to private members
-    friend class cereal::access;
+    // // Grant Cereal access to private members
+    // friend class cereal::access;
 };
 }
 

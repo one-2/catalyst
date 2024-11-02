@@ -9,6 +9,13 @@
 #include <future>
 #include "io/io.h"
 
+#include <cereal/cereal.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/types/list.hpp>
+#include <cereal/types/utility.hpp>
+#include <cereal/types/unordered_map.hpp>
+
 //
 // NOTE: Complexity of solution should not be considered for an auxilliary
 //       focus of the software. I should concentrate design time in
@@ -30,8 +37,8 @@ public:
     void log_async(Args&&... args);
 
     // Constructors
-    LogBook(std::string& storage_directory_path);
-    LogBook(std::string& storage_directory_path, LogsMap logs_map);
+    LogBook(std::string& storage_directory);
+    LogBook(std::string& storage_directory, LogsMap logs_map);
 
     // Reading logs
     const ListOfLogs read_logs(const std::string& type) const;
@@ -44,14 +51,13 @@ public:
 
     std::string generate_log_path(const LogEntry& log);
 
-    // Serialization
-    template <class Archive>
-    void serialize(Archive& ar) {
-        ar(CEREAL_NVP(storage_directory), CEREAL_NVP(logs_map));
-    }
+    // // Serialization
+    // template <class Archive>
+    // void serialize(Archive& ar);
 
-    // Deserialization
-    static LogBook deserialize(const std::string& json_str);
+
+    // // Deserialization
+    // static LogBook deserialize(const std::string& json_str);
 
 private:
     std::string storage_directory;
