@@ -9,7 +9,7 @@
 namespace logging {
 class CheckpointLogEntry : public LogEntry {
 public:
-    CheckpointLogEntry(int epoch, int cycle, Model& model, std::string &model_name);
+    CheckpointLogEntry(int epoch, int cycle, std::string& serial, std::string &model_name);
 };
 }
 

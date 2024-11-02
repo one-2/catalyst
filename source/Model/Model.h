@@ -9,7 +9,8 @@ class Model
 {
 public:
     Model(std::string serialized_model);
-    
+    Model();
+
     int train();
     int validate();
     int test();
@@ -19,7 +20,6 @@ public:
     static std::shared_ptr<Model> deserialize(std::string& serialized_model);
 
 protected:
-    Model();
 
 private:
     // std::vector<Log> logs;
