@@ -8,6 +8,10 @@
 //
 
 #include <gtest/gtest.h>
+#include "datahandlers/Dataset/Dataset.h"
+#include "datahandlers/DataLoader/DataLoader.h"
+
+using namespace datahandlers;
 
 // NOTE: v Thank you to this test! Caught a double-indexing bug
 //          Read through modified code at regular intervals. 
