@@ -19,36 +19,25 @@
 #include <memory>
 #include <map>
 #include <cereal/archives/json.hpp>
-#include "datastores/DataList.h"
-#include "datastores/Datum.h" // NOTE: Confusingly, include errors propogate.
-#include "datastores/IDataList.h"
-
-using namespace datastores;
+// NOTE: Confusingly, include errors propogate.
 
 namespace logging { // NOTE: Namespaces are not inherited.
 
 typedef std::chrono::time_point<std::chrono::system_clock> TimeStamp;
+typedef std::pair<std::string, std::variant<int, long, float, double, std::string>> Logdata;
 
 class LogEntry {
 public:
-<<<<<<< HEAD
-    // Friend class to access private constructor
-    friend class IDataList;
-
-    // Getters
-    const std::string get_type() const;
-=======
-    LogEntry(const int& epoch, const int& cycle, const DataList& data, std::string type);
-    LogEntry(TimeStamp& timestamp, int& epoch, int& cycle, DataList& data, std::string type);
+    LogEntry(int epoch, int cycle, std::shared_ptr<Logdata> data, std::string type);
+    LogEntry(TimeStamp timestamp, int epoch, int cycle, std::shared_ptr<Logdata> data, std::string type);
 
     const std::string serialise() const;
     static const std::unique_ptr<LogEntry> deserialise(const std::string& data);
 
->>>>>>> parent of 6f94ea2 (Add source-root pathing and more work on LogEntry subclasses)
     const TimeStamp get_timestamp() const;
     const int get_epoch() const;
     const int get_cycle() const;
-    const std::shared_ptr<IDataList> get_data() const;
+    const std::list<std::string, Logdata> get_data() const;
 
     // // Serialisation
     // template <class Archive>
@@ -61,34 +50,20 @@ public:
     // // Static method for deserialization
     // static std::unique_ptr<LogEntry> deserialize(const std::string& data, bool is_binary = false);
 
-<<<<<<< HEAD
-
-protected:
-    // Protected constructor For subclass instantiation subroutine.
-    LogEntry(int epoch, int cycle, std::shared_ptr<IDataList> data, std::string type);
-
-    // Protected attributes
-    TimeStamp timestamp_;
-    int epoch_;
-    int cycle_;
-    std::shared_ptr<IDataList> data_;
-    std::string type_;
-=======
     const std::string get_type() const;
 
 protected:
     TimeStamp timestamp;
     int epoch;
     int cycle;
-    DataList data;
+    Logdata data;
     std::string type = "LogEntry";
->>>>>>> parent of 6f94ea2 (Add source-root pathing and more work on LogEntry subclasses)
 
 private:
     // Private default constructor
     // For deserialisation subroutine.
     // LogEntry() = default;
-    LogEntry(TimeStamp timestamp, int epoch, int cycle, std::shared_ptr<IDataList> data, std::string type);
+    LogEntry(TimeStamp timestamp, int epoch, int cycle, std::shared_ptr<Logdata> data, std::string type);
     
 
     //

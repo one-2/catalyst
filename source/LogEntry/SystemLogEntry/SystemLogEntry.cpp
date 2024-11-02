@@ -5,7 +5,6 @@
 #include <memory>
 
 using namespace logging;
-using namespace datastores;
 
 std::string type = "system";
 
@@ -19,10 +18,10 @@ SystemLogEntry::SystemLogEntry(int epoch, int cycle)
 
 std::unique_ptr<DataList<std::string, float>> SystemLogEntry::build_usage()
 {
-    Datum<std::string, float> cpu_usage("cpu_usage", get_cpu_usage());
-    Datum<std::string, float> mem_usage("mem_usage", get_mem_usage());
-    Datum<std::string, float> gpu_usage("gpu_usage", get_gpu_usage());
-    std::list<Datum<std::string, float>> usage = {cpu_usage, mem_usage, gpu_usage};
+    Logdata cpu_usage("cpu_usage", get_cpu_usage());
+    Logdata mem_usage("mem_usage", get_mem_usage());
+    Logdata gpu_usage("gpu_usage", get_gpu_usage());
+    std::list<Logdata> usage = {cpu_usage, mem_usage, gpu_usage};
     return std::make_unique<DataList<std::string, float>>(usage);
 }
 

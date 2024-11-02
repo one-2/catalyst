@@ -1,23 +1,22 @@
 #include "./EvaluationLogEntry.h"
 
 using namespace logging;
-using namespace datastores;
 
 std::string type = "evaluation";
 
-EvaluationLogEntry::EvaluationLogEntry(
-    int epoch, int cycle, std::string loss, std::list<std::pair<std::string, float>> scores)
+EvaluationLogEntry::EvaluationLogEntry(int epoch, int cycle, std::string score_name, float score_value)
     : LogEntry(
-        epoch,
-        cycle,
-        build_scores(scores),
-        type)
-    {}
+    epoch,
+    cycle,
+    // std::shared_ptr<Logdata> data
+    std::make_shared<Logdata>(
+        std::pair<std::string, std::variant<int, long, float, double, std::string>>{
+            score_name,
+            score_value
+        }),
+    type
+    )
+{}
 
-std::unique_ptr<DataList<std::string, float>> EvaluationLogEntry::build_scores(std::list<std::pair<std::string, float>> scores) {
-    std::list<Datum<std::string, float>> d;
-    for (const auto& score : scores) {
-        d.emplace_back(Datum(score.first, score.second));
-    }
-    return std::make_unique<DataList<std::string, float>>(d);
-}
+
+//     LogEntry(int epoch, int cycle, const Logdata& data, std::string type);
