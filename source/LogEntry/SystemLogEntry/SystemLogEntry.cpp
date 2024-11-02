@@ -12,20 +12,24 @@ SystemLogEntry::SystemLogEntry(int epoch, int cycle)
     : LogEntry(
         epoch,
         cycle, 
-        build_usage(), // NOTE: Bad signatures in header propogate type errors from called functions to caller
+        build_usage(), // NOTE: Bad signatures in header propagate type errors from called functions to caller
         type
     ) {}
 
-std::unique_ptr<DataList<std::string, float>> SystemLogEntry::build_usage()
+std::unique_ptr<Logdata> SystemLogEntry::build_usage()
 {
-    Logdata cpu_usage("cpu_usage", get_cpu_usage());
-    Logdata mem_usage("mem_usage", get_mem_usage());
-    Logdata gpu_usage("gpu_usage", get_gpu_usage());
-    std::list<Logdata> usage = {cpu_usage, mem_usage, gpu_usage};
-    return std::make_unique<DataList<std::string, float>>(usage);
+    float cpu_usage = get_cpu_usage();
+    float mem_usage = get_mem_usage();
+    float gpu_usage = get_gpu_usage();
+
+    std::string message = "CPU:\t\t" + std::to_string(cpu_usage) + "%, "
+                        + "Memory:\t" + std::to_string(mem_usage) + "MB, "
+                        + "GPU:\t\t" + std::to_string(gpu_usage) + "MB";
+
+    return std::make_unique<Logdata>("usage", message);
 }
 
-const float SystemLogEntry::get_cpu_usage()
+float SystemLogEntry::get_cpu_usage()
 {
     std::ifstream stat_file("/proc/stat");
     if (!stat_file.is_open()) {
@@ -45,7 +49,7 @@ const float SystemLogEntry::get_cpu_usage()
     return static_cast<float>(user + nice + system) / (user + nice + system + idle) * 100.0f;  // return CPU usage percentage
 }
 
-const float SystemLogEntry::get_mem_usage()
+float SystemLogEntry::get_mem_usage()
 {
     std::ifstream meminfo("/proc/meminfo");
     if (!meminfo.is_open()) {
@@ -77,7 +81,7 @@ const float SystemLogEntry::get_mem_usage()
     return (total - available) / 1024.0;  // return used memory in MB
 }
 
-const float SystemLogEntry::get_gpu_usage()
+float SystemLogEntry::get_gpu_usage()
 {
     std::ifstream gpuinfo("/proc/gpuinfo");
     if (!gpuinfo.is_open()) {
