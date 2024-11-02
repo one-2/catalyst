@@ -32,7 +32,7 @@ public:
 
     static const std::unique_ptr<LogEntry> deserialise(const std::string& data);
 
-    const TimeStamp get_timestamp() const;
+    TimeStamp get_timestamp() const;
     int get_epoch() const;
     int get_cycle() const;
     std::shared_ptr<const Logdata> get_data() const;
