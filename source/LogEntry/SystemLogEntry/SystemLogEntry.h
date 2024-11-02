@@ -10,14 +10,19 @@ public:
 
 private:
     static Logdata build_usage();
-    static float get_cpu_usage();
-    static float get_mem_usage();
-    static float get_gpu_usage();
+
     //
     // NOTE: "Passing by value inherently restricts modifications to the copy, 
     //       const is optional and often omitted for simplicity.""
     //
 };
+
+float get_cpu_usage();
+
+float get_mem_usage();
+
+float get_gpu_usage();
+
 }
 
 #endif // SYSTEMLOGENTRY_H

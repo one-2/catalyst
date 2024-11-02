@@ -4,10 +4,9 @@
 #include <sstream>
 #include <memory>
 
-using namespace logging;
-
 std::string type = "system";
 
+namespace logging {
 SystemLogEntry::SystemLogEntry(int epoch, int cycle)
     : LogEntry(
         epoch,
@@ -29,7 +28,7 @@ Logdata SystemLogEntry::build_usage()
     return Logdata("usage", message);
 }
 
-float SystemLogEntry::get_cpu_usage()
+float get_cpu_usage()
 {
     std::ifstream stat_file("/proc/stat");
     if (!stat_file.is_open()) {
@@ -49,7 +48,7 @@ float SystemLogEntry::get_cpu_usage()
     return static_cast<float>(user + nice + system) / (user + nice + system + idle) * 100.0f;  // return CPU usage percentage
 }
 
-float SystemLogEntry::get_mem_usage()
+float get_mem_usage()
 {
     std::ifstream meminfo("/proc/meminfo");
     if (!meminfo.is_open()) {
@@ -81,7 +80,7 @@ float SystemLogEntry::get_mem_usage()
     return (total - available) / 1024.0;  // return used memory in MB
 }
 
-float SystemLogEntry::get_gpu_usage()
+float get_gpu_usage()
 {
     std::ifstream gpuinfo("/proc/gpuinfo");
     if (!gpuinfo.is_open()) {
@@ -112,3 +111,4 @@ float SystemLogEntry::get_gpu_usage()
 
     return (total - available) / 1024.0;  // return used memory in MB
 }
+} // namespace logging
