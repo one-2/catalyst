@@ -86,9 +86,13 @@
 			"regex": "cpp",
 			"cfenv": "cpp",
 			"filesystem": "cpp",
+<<<<<<< HEAD
 			"*.ipp": "cpp",
 			"source_location": "cpp",
 			"*.tpp": "cpp"
+=======
+			"*.ipp": "cpp"
+>>>>>>> parent of 6f94ea2 (Add source-root pathing and more work on LogEntry subclasses)
 		}
 	}
 }

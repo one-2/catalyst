@@ -31,11 +31,20 @@ typedef std::chrono::time_point<std::chrono::system_clock> TimeStamp;
 
 class LogEntry {
 public:
+<<<<<<< HEAD
     // Friend class to access private constructor
     friend class IDataList;
 
     // Getters
     const std::string get_type() const;
+=======
+    LogEntry(const int& epoch, const int& cycle, const DataList& data, std::string type);
+    LogEntry(TimeStamp& timestamp, int& epoch, int& cycle, DataList& data, std::string type);
+
+    const std::string serialise() const;
+    static const std::unique_ptr<LogEntry> deserialise(const std::string& data);
+
+>>>>>>> parent of 6f94ea2 (Add source-root pathing and more work on LogEntry subclasses)
     const TimeStamp get_timestamp() const;
     const int get_epoch() const;
     const int get_cycle() const;
@@ -52,6 +61,7 @@ public:
     // // Static method for deserialization
     // static std::unique_ptr<LogEntry> deserialize(const std::string& data, bool is_binary = false);
 
+<<<<<<< HEAD
 
 protected:
     // Protected constructor For subclass instantiation subroutine.
@@ -63,6 +73,16 @@ protected:
     int cycle_;
     std::shared_ptr<IDataList> data_;
     std::string type_;
+=======
+    const std::string get_type() const;
+
+protected:
+    TimeStamp timestamp;
+    int epoch;
+    int cycle;
+    DataList data;
+    std::string type = "LogEntry";
+>>>>>>> parent of 6f94ea2 (Add source-root pathing and more work on LogEntry subclasses)
 
 private:
     // Private default constructor

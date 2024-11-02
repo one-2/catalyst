@@ -1,17 +1,17 @@
 
 
-
 #ifndef CHECKPOINTLOGENTRY_H
 #define CHECKPOINTLOGENTRY_H
 
-#include "Model/Model.h"
-#include "LogEntry/LogEntry.h"
+#include "../../Model/Model.h"
 
-namespace logging {
-class CheckpointLogEntry : LogEntry {
+class CheckpointLogEntry {
 public:
-    // CheckpointLogEntry(int epoch, int cycle, Model model);
-    // std::shared_ptr<Model> load_model();
+    CheckpointLogEntry(Model model);
+//     void save();
+//     void load();
+// private:
+//     Model model;
 };
 }
 

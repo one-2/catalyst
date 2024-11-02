@@ -1,4 +1,5 @@
 #include "CheckpointLogEntry.h"
+<<<<<<< HEAD
 #include "Model/Model.h"
 #include <fstream>
 #include "errors/DeserialisationError.h"
@@ -27,3 +28,29 @@ std::string type = "checkpoint";
     //     throw e;
     // }
 // }
+=======
+#include "Model.h"
+#include <fstream>
+
+CheckpointLogEntry::CheckpointLogEntry(Model model) : model(model) {}
+
+void CheckpointLogEntry::save() {
+    // std::ofstream outFile("checkpoint.dat", std::ios::binary);
+    // if (outFile.is_open()) {
+    //     model.serialize(outFile);
+    //     outFile.close();
+    // } else {
+    //     // Handle error
+    // }
+}
+
+void CheckpointLogEntry::load() {
+    // std::ifstream inFile("checkpoint.dat", std::ios::binary);
+    // if (inFile.is_open()) {
+    //     Model m = model.deserialize(inFile);
+    //     inFile.close();
+    // } else {
+    //     // Handle error
+    // }
+}
+>>>>>>> parent of 6f94ea2 (Add source-root pathing and more work on LogEntry subclasses)
