@@ -9,7 +9,7 @@ public:
     SystemLogEntry(int epoch, int cycle);
 
 private:
-    static std::unique_ptr<Logdata> build_usage();
+    static Logdata build_usage();
     static float get_cpu_usage();
     static float get_mem_usage();
     static float get_gpu_usage();

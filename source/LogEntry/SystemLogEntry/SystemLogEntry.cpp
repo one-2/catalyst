@@ -16,7 +16,7 @@ SystemLogEntry::SystemLogEntry(int epoch, int cycle)
         type
     ) {}
 
-std::unique_ptr<Logdata> SystemLogEntry::build_usage()
+Logdata SystemLogEntry::build_usage()
 {
     float cpu_usage = get_cpu_usage();
     float mem_usage = get_mem_usage();
@@ -26,7 +26,7 @@ std::unique_ptr<Logdata> SystemLogEntry::build_usage()
                         + "Memory:\t" + std::to_string(mem_usage) + "MB, "
                         + "GPU:\t\t" + std::to_string(gpu_usage) + "MB";
 
-    return std::make_unique<Logdata>("usage", message);
+    return Logdata("usage", message);
 }
 
 float SystemLogEntry::get_cpu_usage()

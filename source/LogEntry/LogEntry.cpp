@@ -9,33 +9,20 @@
 // Usage: 
 //
 
-#include <cereal/archives/json.hpp>
-#include <cereal/types/list.hpp>
-#include <cereal/types/memory.hpp>
+#include "LogEntry.h"
 #include <sstream>
-#include <fstream>
-#include <cereal/archives/binary.hpp>
-#include "LogEntry/LogEntry.h"
 
-using namespace logging;
+namespace logging {
 
-LogEntry::LogEntry(int epoch, int cycle, std::shared_ptr<Logdata> data, std::string type) {
-    this->timestamp = std::chrono::system_clock::now();
+LogEntry::LogEntry(int epoch, int cycle, Logdata data, std::string type) {
+    this->timestamp = std::chrono::system_clock::now().time_since_epoch().count();
     this->epoch = epoch;
     this->cycle = cycle;
     this->data = data;
     this->type = type;
 }
 
-LogEntry::LogEntry(TimeStamp timestamp, int epoch, int cycle, Logdata data, std::string type) {
-    this->timestamp = timestamp;
-    this->epoch = epoch;
-    this->cycle = cycle;
-    this->data = std::shared_ptr<Logdata>(new Logdata(data));
-    this->type = type;
-}
-
-TimeStamp LogEntry::get_timestamp() const {
+int LogEntry::get_timestamp() const {
     return timestamp;
 }
 
@@ -48,25 +35,19 @@ int LogEntry::get_cycle() const {
 }
 
 std::shared_ptr<const Logdata> LogEntry::get_data() const {
-    Logdata copy = *data;
-    return std::shared_ptr<const Logdata>(new Logdata(*data));
+    return std::shared_ptr<const Logdata>(new Logdata(data));
 }
 
 std::string LogEntry::get_type() const {
     return type;
 }
 
-// std::unique_ptr<LogEntry> LogEntry::deserialize(const std::string& data, bool is_binary) {
-//     std::istringstream is(data);
-//     auto logEntry = std::make_unique<LogEntry>();
-//     if (is_binary) {
-//         cereal::BinaryInputArchive archive(is);
-//         archive(cereal::make_nvp("logEntry", *logEntry));
-//         archive(*logEntry);
-//         return logEntry;
-//     } else {
-//         cereal::JSONInputArchive archive(is);
-//         archive(*logEntry);
-//         return logEntry;
-//     }
-// }
+LogEntry deserialize_logentry(const std::string& json_str) {
+    std::istringstream iss(json_str);
+    cereal::JSONInputArchive archive(iss);
+    LogEntry log_entry;
+    archive(log_entry);
+    return log_entry;
+}
+
+} // namespace logging

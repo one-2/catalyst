@@ -8,68 +8,61 @@
 //
 // Usage: 
 //
-
 #ifndef LOGENTRY_H
 #define LOGENTRY_H
 
 #include <string>
-#include <list>
-#include <variant>
-#include <chrono>
 #include <memory>
-#include <map>
+#include <chrono>
+#include <variant>
 #include <cereal/archives/json.hpp>
-// NOTE: Confusingly, include errors propogate.
+#include <cereal/types/memory.hpp>
+#include <cereal/types/utility.hpp>
+#include <cereal/types/variant.hpp> // Include this header for variant support
 
-namespace logging { // NOTE: Namespaces are not inherited.
+namespace logging {
 
 typedef std::chrono::time_point<std::chrono::system_clock> TimeStamp;
 typedef std::pair<std::string, std::variant<int, long, float, double, std::string>> Logdata;
 
 class LogEntry {
 public:
-    LogEntry(int epoch, int cycle, std::shared_ptr<Logdata> data, std::string type);
+    LogEntry(int epoch, int cycle, Logdata data, std::string type);
+    LogEntry() = default; // Default constructor for deserialization
 
-    static const std::unique_ptr<LogEntry> deserialise(const std::string& data);
-
-    TimeStamp get_timestamp() const;
+    int get_timestamp() const;
     int get_epoch() const;
     int get_cycle() const;
     std::shared_ptr<const Logdata> get_data() const;
     std::string get_type() const;
 
-    // // Serialisation
-    // template <class Archive>
-    // void serialize(Archive& ar) {
-    //     ar(CEREAL_NVP(timestamp_), CEREAL_NVP(epoch_)
-    //         , CEREAL_NVP(cycle_), CEREAL_NVP(type_)
-    //         , CEREAL_NVP(data_));
-    // }
-
-    // // Static method for deserialization
-    // static std::unique_ptr<LogEntry> deserialize(const std::string& data, bool is_binary = false);
+    // Serialization
+    template <class Archive>
+    void serialize(Archive& ar)
+    {
+        ar(CEREAL_NVP(timestamp), CEREAL_NVP(epoch), CEREAL_NVP(cycle), CEREAL_NVP(data), CEREAL_NVP(type));
+    }
 
 protected:
-    TimeStamp timestamp;
+    int timestamp;
     int epoch;
     int cycle;
-    std::shared_ptr<Logdata> data;
+    Logdata data;
     std::string type = "LogEntry";
 
 private:
-    // Private default constructor
-    // For deserialisation subroutine.
-    // LogEntry() = default;
-    LogEntry(TimeStamp timestamp, int epoch, int cycle, Logdata data, std::string type);
-    
-
-    //
-    // NOTE: Wow! Static methods can call private constructors - surreal.
-    //
-
-    // // Grant Cereal access to private members
-    // friend class cereal::access;
+    // Grant Cereal access to private members
+    friend class cereal::access;
 };
+
+// Serialization function for Logdata
+template <class Archive>
+void serialize(Archive& ar, Logdata& logdata) {
+    ar(CEREAL_NVP(logdata.first), CEREAL_NVP(logdata.second));
 }
+
+LogEntry deserialize_logentry(const std::string& json_str);
+
+} // namespace logging
 
 #endif // LOGENTRY_H

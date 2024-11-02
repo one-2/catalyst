@@ -9,6 +9,6 @@ DebugLogEntry::DebugLogEntry(int epoch, int cycle, std::string message)
     : LogEntry(
         epoch,
         cycle,
-        std::make_shared<Logdata>("message", message),
+        Logdata("message", message),
         type)
     {}

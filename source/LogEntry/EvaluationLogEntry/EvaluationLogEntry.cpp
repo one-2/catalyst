@@ -9,11 +9,11 @@ EvaluationLogEntry::EvaluationLogEntry(int epoch, int cycle, std::string score_n
     epoch,
     cycle,
     // std::shared_ptr<Logdata> data
-    std::make_shared<Logdata>(
-        std::pair<std::string, std::variant<int, long, float, double, std::string>>{
+    Logdata(
+        std::pair<std::string, std::variant<int, long, float, double, std::string>> {
             score_name,
             score_value
-        }),
+    }),
     type
     )
 {}

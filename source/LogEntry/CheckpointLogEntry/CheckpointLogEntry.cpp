@@ -8,7 +8,7 @@ CheckpointLogEntry::CheckpointLogEntry(int epoch, int cycle, Model& model, std::
     : LogEntry(
         epoch,
         cycle,
-        std::make_shared<Logdata>(model_name, model.serialize()),
+        Logdata(model_name, model.serialize()),
         type)
     {}
 
