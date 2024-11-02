@@ -29,15 +29,14 @@ typedef std::pair<std::string, std::variant<int, long, float, double, std::strin
 class LogEntry {
 public:
     LogEntry(int epoch, int cycle, std::shared_ptr<Logdata> data, std::string type);
-    LogEntry(TimeStamp timestamp, int epoch, int cycle, std::shared_ptr<Logdata> data, std::string type);
 
-    const std::string serialise() const;
     static const std::unique_ptr<LogEntry> deserialise(const std::string& data);
 
     const TimeStamp get_timestamp() const;
-    const int get_epoch() const;
-    const int get_cycle() const;
-    const std::list<std::string, Logdata> get_data() const;
+    int get_epoch() const;
+    int get_cycle() const;
+    std::shared_ptr<const Logdata> get_data() const;
+    std::string get_type() const;
 
     // // Serialisation
     // template <class Archive>
@@ -50,20 +49,18 @@ public:
     // // Static method for deserialization
     // static std::unique_ptr<LogEntry> deserialize(const std::string& data, bool is_binary = false);
 
-    const std::string get_type() const;
-
 protected:
     TimeStamp timestamp;
     int epoch;
     int cycle;
-    Logdata data;
+    std::shared_ptr<Logdata> data;
     std::string type = "LogEntry";
 
 private:
     // Private default constructor
     // For deserialisation subroutine.
     // LogEntry() = default;
-    LogEntry(TimeStamp timestamp, int epoch, int cycle, std::shared_ptr<Logdata> data, std::string type);
+    LogEntry(TimeStamp timestamp, int epoch, int cycle, Logdata data, std::string type);
     
 
     //

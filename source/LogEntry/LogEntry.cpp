@@ -18,41 +18,41 @@
 #include "LogEntry/LogEntry.h"
 
 using namespace logging;
-using namespace datastores;
 
-LogEntry::LogEntry(int epoch, int cycle, std::shared_ptr<IDataList> data, std::string type) {
-    this->epoch_ = epoch;
-    this->cycle_ = cycle;
-    this->data_ = data;
-    this->timestamp_ = std::chrono::system_clock::now();
-    this->type_ = type;
+LogEntry::LogEntry(int epoch, int cycle, std::shared_ptr<Logdata> data, std::string type) {
+    this->timestamp = std::chrono::system_clock::now();
+    this->epoch = epoch;
+    this->cycle = cycle;
+    this->data = data;
+    this->type = type;
 }
 
-LogEntry::LogEntry(TimeStamp timestamp, int epoch, int cycle, std::shared_ptr<IDataList> data, std::string type) {
-    this->timestamp_ = timestamp;
-    this->epoch_ = epoch;
-    this->cycle_ = cycle;
-    this->data_ = data;
-    this->type_ = type;
+LogEntry::LogEntry(TimeStamp timestamp, int epoch, int cycle, Logdata data, std::string type) {
+    this->timestamp = timestamp;
+    this->epoch = epoch;
+    this->cycle = cycle;
+    this->data = std::shared_ptr<Logdata>(new Logdata(data));
+    this->type = type;
 }
 
-const TimeStamp LogEntry::get_timestamp() const {
+TimeStamp LogEntry::get_timestamp() const {
     return timestamp;
 }
 
-const int LogEntry::get_epoch() const {
+int LogEntry::get_epoch() const {
     return epoch;
 }
 
-const int LogEntry::get_cycle() const {
+int LogEntry::get_cycle() const {
     return cycle;
 }
 
-const DataList LogEntry::get_all_data() const {
-    return data;
+std::shared_ptr<const Logdata> LogEntry::get_data() const {
+    Logdata copy = *data;
+    return std::shared_ptr<const Logdata>(new Logdata(*data));
 }
 
-const std::string LogEntry::get_type() const {
+std::string LogEntry::get_type() const {
     return type;
 }
 
