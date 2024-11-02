@@ -8,6 +8,8 @@
 #include "LogEntry/EvaluationLogEntry/EvaluationLogEntry.h"
 #include "LogEntry/DebugLogEntry/DebugLogEntry.h"
 
+using namespace logging;
+
 LogBook::LogBook(std::string& storage_directory_path) 
     : storage_directory(storage_directory_path) {}
 

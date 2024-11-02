@@ -7,6 +7,7 @@
 #include "Model/Model.h"
 #include "LogEntry/LogEntry.h"
 
+namespace logging {
 class CheckpointLogEntry : LogEntry {
 public:
     CheckpointLogEntry(int epoch, int cycle, Model model);
@@ -15,5 +16,6 @@ public:
 private:
     std::string retrieve_model_serial();
 };
+}
 
 #endif // CHECKPOINTLOGENTRY_H

@@ -14,8 +14,9 @@
 #include <sstream>
 #include <cereal/archives/json.hpp>
 #include <cereal/types/list.hpp>
-#include "LogEntry/Datum/Datum.h"
+#include "datastores/Datum/Datum.h"
 
+namespace datastores {
 class DataList {
 public:
     // Pusher
@@ -39,5 +40,6 @@ public:
 private:
     std::list<Datum> data_;
 };
+}
 
 #endif // DATALIST_H

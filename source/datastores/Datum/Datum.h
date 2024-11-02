@@ -14,6 +14,7 @@
 #include <list>
 #include <variant>
 
+namespace datastores {
 class Datum {
 public:
     friend class DataList; // To allow instantiation in DataList
@@ -37,5 +38,6 @@ private:
     std::string key_;
     std::variant<int, double, std::string> value_;
 };
+}
 
 #endif // DATUM_H

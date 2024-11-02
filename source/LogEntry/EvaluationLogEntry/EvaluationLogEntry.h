@@ -6,9 +6,10 @@
 #include <string>
 #include <list>
 #include <utility>
-#include "LogEntry/DataList/DataList.h"
+#include "datastores/DataList/DataList.h"
 #include "LogEntry/LogEntry.h"
 
+namespace logging {
 class EvaluationLogEntry : public LogEntry {
 public:
     EvaluationLogEntry(
@@ -17,7 +18,8 @@ public:
     );
 
 private:
-    static DataList build_scores(std::list<std::pair<std::string, float>> scores);
+    static datastores::DataList build_scores(std::list<std::pair<std::string, float>> scores);
 };
+}
 
 #endif // EVALUATIONLOGENTRY_H

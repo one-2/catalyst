@@ -2,13 +2,14 @@
 #define SYSTEMLOGENTRY_H
 
 #include "LogEntry/LogEntry.h"
-#include "LogEntry/DataList/DataList.h"
+#include "datastores/DataList/DataList.h"
 
+namespace logging {
 class SystemLogEntry : public LogEntry {
 public:
     SystemLogEntry(int epoch, int cycle);
 
-    static DataList build_usage();
+    static datastores::DataList build_usage();
     static const float get_cpu_usage();
     static const float get_mem_usage();
     static const float get_gpu_usage();
@@ -17,5 +18,6 @@ public:
     //       so in this case const is optional and often omitted for simplicity.""
     //
 };
+}
 
 #endif // SYSTEMLOGENTRY_H

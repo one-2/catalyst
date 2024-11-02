@@ -16,6 +16,9 @@
 #include <fstream>
 #include "LogEntry/LogEntry.h"
 
+using namespace logging;
+using namespace datastores;
+
 LogEntry::LogEntry(int epoch, int cycle, DataList data, std::string type) {
     this->epoch_ = epoch;
     this->cycle_ = cycle;
@@ -82,17 +85,17 @@ const TimeStamp LogEntry::get_timestamp() const {
 }
 
 const int LogEntry::get_epoch() const {
-    return epoch_;
+    return const_cast<const decltype(epoch_)&>(epoch_);
 }
 
 const int LogEntry::get_cycle() const {
-    return cycle_;
+    return const_cast<const decltype(cycle_)&>(cycle_);
 }
 
 const DataList LogEntry::get_all_data() const {
-    return data_;
+    return const_cast<const decltype(data_)&>(data_);
 }
 
 const std::string LogEntry::get_type() const {
-    return type_;
+    return const_cast<const decltype(type_)&>(type_);
 }

@@ -3,6 +3,9 @@
 #include <fstream>
 #include "errors/DeserialisationError.h"
 
+using namespace logging;
+using namespace datastores;
+
 std::string type = "checkpoint";
 
 CheckpointLogEntry::CheckpointLogEntry(int epoch, int cycle, Model model) 

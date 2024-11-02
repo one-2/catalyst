@@ -19,11 +19,11 @@
 #include <memory>
 #include <map>
 #include <cereal/archives/json.hpp>
-#include "DataList/DataList.h"
-#include "LogEntry/Datum/Datum.h" // NOTE: Confusingly, include errors propogate.
+#include "datastores/DataList/DataList.h"
+#include "datastores/Datum/Datum.h" // NOTE: Confusingly, include errors propogate.
 
+namespace logging { // NOTE: Namespaces do not inherit.
 typedef std::chrono::time_point<std::chrono::system_clock> TimeStamp;
-
 class LogEntry {
 public:
     // Friend class to access private constructor
@@ -34,7 +34,7 @@ public:
     const TimeStamp get_timestamp() const;
     const int get_epoch() const;
     const int get_cycle() const;
-    const DataList get_all_data() const;
+    const datastores::DataList get_all_data() const;
 
     // Serialisation
     const std::string serialise() const; // NOTE: Propogates const down to Datum
@@ -43,22 +43,23 @@ public:
 protected:
     // Protected constructor
     // For subclass instantiation subroutine.
-    LogEntry(int epoch, int cycle, DataList data, std::string type);
+    LogEntry(int epoch, int cycle, datastores::DataList data, std::string type);
 
     // Protected attributes
     TimeStamp timestamp_;
     int epoch_;
     int cycle_;
-    DataList data_;
+    datastores::DataList data_;
     std::string type_;
 
 private:
     // Private constructor
     // For deserialisation subroutine.
-    LogEntry(TimeStamp timestamp, int epoch, int cycle, DataList data, std::string type);
+    LogEntry(TimeStamp timestamp, int epoch, int cycle, datastores::DataList data, std::string type);
     //
     // NOTE: Wow! Static methods can call private constructors - surreal.
     //
 };
+}
 
 #endif // LOGENTRY_H

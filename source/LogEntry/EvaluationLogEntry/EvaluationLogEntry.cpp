@@ -1,5 +1,7 @@
 #include "./EvaluationLogEntry.h"
 
+using namespace logging;
+
 std::string type = "evaluation";
 
 EvaluationLogEntry::EvaluationLogEntry(

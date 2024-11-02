@@ -3,6 +3,9 @@
 #include <fstream>
 #include <sstream>
 
+using namespace logging;
+using namespace datastores;
+
 std::string type = "system";
 
 SystemLogEntry::SystemLogEntry(int epoch, int cycle) : LogEntry(epoch, cycle, build_usage(), type) {}

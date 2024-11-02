@@ -22,7 +22,7 @@ typedef std::unordered_map<std::string, ListOfLogs> LogsMap;
 //       On the other hand, the initial design was crap, and this is way better.
 //
 
-
+namespace logging {
 class LogBook {
 public:
     // Logging template
@@ -67,6 +67,7 @@ void LogBook::log_async(Args&&... args) {
         std::string path = generate_log_path(log_entry);
         io::write_log(serialised_log, path);
     });
+}
 }
 
 #endif // LOGBOOK_H
