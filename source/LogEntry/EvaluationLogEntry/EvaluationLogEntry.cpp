@@ -17,6 +17,3 @@ EvaluationLogEntry::EvaluationLogEntry(int epoch, int cycle, std::string score_n
     type
     )
 {}
-
-
-//     LogEntry(int epoch, int cycle, const Logdata& data, std::string type);
