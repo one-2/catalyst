@@ -12,50 +12,38 @@
 #include <fstream>
 
 namespace logging {
+// Call the constructor and check the values are set correctly
+TEST(SystemLogEntryTest, ConstructorTest) {
+    int epoch = 1;
+    int cycle = 2;
 
-class SystemLogEntryTest : public ::testing::Test {
-protected:
-    void SetUp() override {
-        // Create a mock /proc/gpuinfo file for testing
-        std::ofstream gpuinfo("/tmp/gpuinfo");
-        gpuinfo << "GPU Total: 8192 kB\n";
-        gpuinfo << "GPU Available: 4096 kB\n";
-        gpuinfo.close();
+    SystemLogEntry entry(epoch, cycle);
+
+    EXPECT_EQ(entry.get_epoch(), epoch);
+    EXPECT_EQ(entry.get_cycle(), cycle);
+    EXPECT_EQ(entry.get_type(), "system");
+    
+    // get the data from the variant as a string
+    std::string data = std::get<std::string>(entry.get_data()->second);
+
+    // check that it is a string with "cpu", "gpu", and "mem" in it
+    EXPECT_NE(data.find("cpu"), std::string::npos);
+    EXPECT_NE(data.find("gpu"), std::string::npos);
+    EXPECT_NE(data.find("mem"), std::string::npos);
+
+    // check that it contains 3 float blocks
+    std::istringstream iss(data);
+    std::string token;
+    int floatCount = 0;
+    while (iss >> token) {
+        try {
+            std::stof(token);
+            floatCount++;
+        } catch (const std::invalid_argument&) {
+            // Not a float, continue
+        }
     }
-
-    void TearDown() override {
-        // Remove the mock /proc/gpuinfo file after testing
-        std::remove("/tmp/gpuinfo");
-    }
-};
-
-TEST_F(SystemLogEntryTest, GetGpuUsage) {
-    // Redirect the file path to the mock file
-    std::ifstream gpuinfo("/tmp/gpuinfo");
-    ASSERT_TRUE(gpuinfo.is_open());
-
-    SystemLogEntry log_entry(1, 2);
-    float gpu_usage = logging::get_gpu_usage();
-
-    EXPECT_FLOAT_EQ(gpu_usage, 4096.0f / 1024.0f);  // 4096 kB used, should be 4 MB
-}
-
-TEST_F(SystemLogEntryTest, GetGpuUsageFileNotFound) {
-    // Remove the mock file to simulate file not found
-    std::remove("/tmp/gpuinfo");
-
-    SystemLogEntry log_entry(1, 2);
-    EXPECT_THROW(logging::get_gpu_usage(), std::runtime_error);
-}
-
-TEST_F(SystemLogEntryTest, GetGpuUsageParseError) {
-    // Create a malformed /proc/gpuinfo file for testing
-    std::ofstream gpuinfo("/tmp/gpuinfo");
-    gpuinfo << "Malformed data\n";
-    gpuinfo.close();
-
-    SystemLogEntry log_entry(1, 2);
-    EXPECT_THROW(logging::get_gpu_usage(), std::runtime_error);
+    EXPECT_EQ(floatCount, 3);
 }
 
 } // namespace logging

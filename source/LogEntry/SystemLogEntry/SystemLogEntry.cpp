@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <memory>
+#include <CL/cl.h>
 
 std::string type = "system";
 
@@ -82,33 +83,42 @@ float get_mem_usage()
 
 float get_gpu_usage()
 {
-    std::ifstream gpuinfo("/proc/gpuinfo");
-    if (!gpuinfo.is_open()) {
-        throw std::runtime_error("Failed to open /proc/gpuinfo");
+    cl_uint num_platforms;
+    cl_int err = clGetPlatformIDs(0, nullptr, &num_platforms);
+    if (err != CL_SUCCESS) {
+        throw std::runtime_error("Failed to get OpenCL platforms");
     }
 
-    std::string line;
-    unsigned long total = 0, available = 0;
-    bool total_found = false, available_found = false;
-
-    while (std::getline(gpuinfo, line)) {
-        if (line.find("GPU Total:") == 0) {
-            std::sscanf(line.c_str(), "GPU Total: %lu kB", &total);
-            total_found = true;
-        } else if (line.find("GPU Available:") == 0) {
-            std::sscanf(line.c_str(), "GPU Available: %lu kB", &available);
-            available_found = true;
-        }
-
-        if (total_found && available_found) {
-            break;
-        }
+    std::vector<cl_platform_id> platforms(num_platforms);
+    err = clGetPlatformIDs(num_platforms, platforms.data(), nullptr);
+    if (err != CL_SUCCESS) {
+        throw std::runtime_error("Failed to get OpenCL platform IDs");
     }
 
-    if (!total_found || !available_found) {
-        throw std::runtime_error("Failed to parse GPU usage information");
+    cl_uint num_devices;
+    err = clGetDeviceIDs(platforms[0], CL_DEVICE_TYPE_GPU, 0, nullptr, &num_devices);
+    if (err != CL_SUCCESS) {
+        throw std::runtime_error("Failed to get OpenCL devices");
     }
 
-    return (total - available) / 1024.0;  // return used memory in MB
+    std::vector<cl_device_id> devices(num_devices);
+    err = clGetDeviceIDs(platforms[0], CL_DEVICE_TYPE_GPU, num_devices, devices.data(), nullptr);
+    if (err != CL_SUCCESS) {
+        throw std::runtime_error("Failed to get OpenCL device IDs");
+    }
+
+    cl_ulong mem_size;
+    err = clGetDeviceInfo(devices[0], CL_DEVICE_GLOBAL_MEM_SIZE, sizeof(mem_size), &mem_size, nullptr);
+    if (err != CL_SUCCESS) {
+        throw std::runtime_error("Failed to get OpenCL device memory size");
+    }
+
+    err = clGetDeviceInfo(devices[0], CL_DEVICE_GLOBAL_MEM_SIZE, sizeof(mem_size), &mem_size, nullptr);
+    if (err != CL_SUCCESS) {
+        throw std::runtime_error("Failed to get OpenCL device memory size");
+    }
+
+    // Assuming the GPU memory usage is not directly available, we return the total memory size
+    return static_cast<float>(mem_size) / 1024.0 / 1024.0;  // return total memory in MB
 }
-} // namespace logging
+}

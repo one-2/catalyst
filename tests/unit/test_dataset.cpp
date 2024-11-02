@@ -74,21 +74,3 @@ TEST(Dataset, Split) {
     EXPECT_EQ(rounded_splits[1]->get_length(), 34);
     EXPECT_EQ(rounded_splits[2]->get_length(), 33);
 }
-
-//
-// Test operator<<
-//
-TEST(Dataset, OutputOperator) {
-    // torch::Tensor input = torch::rand({100, 10});
-    // torch::Tensor target = torch::rand({100, 1});
-    // Dataset dataset(input, target, 0, 100);
-
-    // std::ostringstream os;
-    // os << dataset;
-    // EXPECT_EQ(os.str(), "Dataset details: length = 100");
-    EXPECT_EQ
-    (
-        0,
-        1
-    );
-}

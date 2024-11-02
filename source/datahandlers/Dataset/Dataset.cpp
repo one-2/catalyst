@@ -106,11 +106,3 @@ std::array<int, 3> Dataset::compute_split_lengths_(float train, float validate, 
 int Dataset::get_length() {
     return this->input.size(0); //Queries dimension 0 (rows)
 }
-
-//
-// Output dataset info to ostream
-//
-std::ostream& operator<<(std::ostream& os, const Dataset& dataset) {
-    os << "Dataset details: " << "length = " << dataset.input.size(0);
-    return os;
-}
