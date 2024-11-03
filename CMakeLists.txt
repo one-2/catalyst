@@ -11,7 +11,8 @@ enable_testing() # TODO: remove in prod
 
 #### CUDA
 # cpp libtorch is bundled as cpu-only and with cuda. I'm planning to use opencl initially
-# and learn cuda later. Using bundled from the start to avoid issues later.
+# and learn cuda later (open standard = better?). Using bundled from the start to avoid issues later.
+# CUDA could be removed by installing the non-cuda libtorch and removing the find_package(CUDA REQUIRED) line.
 # 
 # Configure CUDA
 set(CMAKE_CUDA_STANDARD 11)
