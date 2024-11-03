@@ -8,7 +8,11 @@
 namespace logging {
 class DebugLogEntry : public LogEntry {
 public:
-    DebugLogEntry(int epoch, int cycle, std::string message);
+    DebugLogEntry(
+        int epoch,
+        int cycle,
+        std::string& message
+    );
 };
 }
 

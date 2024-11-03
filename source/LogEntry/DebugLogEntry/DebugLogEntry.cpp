@@ -3,12 +3,14 @@
 
 using namespace logging;
 
-std::string type = "debug";
+DebugLogEntry::DebugLogEntry(
+    int epoch,
+    int cycle,
+    std::string& message
 
-DebugLogEntry::DebugLogEntry(int epoch, int cycle, std::string message)
-    : LogEntry(
-        epoch,
-        cycle,
-        Logdata("message", message),
-        type)
-    {}
+) : LogEntry(
+    epoch,
+    cycle,
+    Logdata("message", message),
+    "debug"
+) {}
