@@ -14,6 +14,9 @@ enable_testing() # TODO: remove in prod
 # and learn cuda later (open standard = better?). Using bundled from the start to avoid issues later.
 # CUDA could be removed by installing the non-cuda libtorch and removing the find_package(CUDA REQUIRED) line.
 # 
+# Dependency is CUDA 12.4 version of libtorch
+# Installed Nov 3 2024 from https://download.pytorch.org/libtorch/cu124/libtorch-cxx11-abi-shared-with-deps-2.5.1%2Bcu124.zip
+#
 # Configure CUDA
 set(CMAKE_CUDA_STANDARD 11)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
