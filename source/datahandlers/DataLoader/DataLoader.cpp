@@ -10,6 +10,8 @@
 #include "./DataLoader.h"
 #include "../Dataset/Dataset.h"
 
+using namespace datahandlers;
+
 DataLoader::DataLoader(std::shared_ptr<Dataset> dataset) : dataset_(dataset), current_index_(0) {}
 
 DataLoader::Observation DataLoader::get_next_observation() {

@@ -3,7 +3,8 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/build/compile_commands.json"
+                "${workspaceFolder}/build/compile_commands.json",
+                "${workspaceFolder}/third_party/cereal"
             ],
             "defines": [],
             "cStandard": "c17",

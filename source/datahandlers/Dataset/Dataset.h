@@ -17,6 +17,7 @@
 #include <iostream>
 #include <torch/torch.h>
 
+namespace datahandlers {
 class Dataset
 {
 public:
@@ -31,5 +32,6 @@ public:
 private:
     std::array<int, 3> compute_split_lengths_(float train, float validate, float test);
 };
+}
 
 #endif // DATASET_H

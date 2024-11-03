@@ -11,8 +11,10 @@
 
 #include <torch/torch.h>
 #include <array>
-#include "./Dataset.h"
-#include "../io/io.h"
+#include "datahandlers/Dataset/Dataset.h"
+#include "io/io.h"
+
+using namespace datahandlers;
 
 //
 // Loads a dataset from a given csv path
@@ -103,12 +105,4 @@ std::array<int, 3> Dataset::compute_split_lengths_(float train, float validate, 
 // 
 int Dataset::get_length() {
     return this->input.size(0); //Queries dimension 0 (rows)
-}
-
-//
-// Output dataset info to ostream
-//
-std::ostream& operator<<(std::ostream& os, const Dataset& dataset) {
-    os << "Dataset details: " << "length = " << dataset.input.size(0);
-    return os;
 }

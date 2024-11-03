@@ -11,27 +11,30 @@
 #ifndef MODEL_H // prevent multiple linking/reference errors
 #define MODEL_H
 
-#include <vector>
-#include <variant>
-#include <iostream>
-#include "../DataLoader/DataLoader.h"
-#include "../Logbook/Logbook.h"
+#include <list>
+#include <string>
+#include <memory>
 
 class Model
 {
-private:
-    std::string type;
-    Logbook logbook;
-
 public:
-    Model(std::string type, std::string storage_directory_path);
-    void train(DataLoader dataloader, int epochs, int batch_size) = 0;
-    void evaluate(DataLoader dataloader) = 0;
-    std::shared_ptr<Logbook> get_logbook();
-    virtual void serialise() = 0; //NOTE: Pure virtual <=> Abstract function
-    virtual Model deserialise(std::string) = 0;
-    void write_checkpoint() final; //NOTE: Impure virtual, final => no override
-    // friend std::ostream& operator<<(std::ostream& os, const Model& model);
+    Model(std::string serialized_model);
+    Model();
+
+    int train();
+    int validate();
+    int test();
+    int add_log(std::string type, std::string message);
+    // std::list<int> get_epoch_and_cycle() const;
+    std::string serialize();
+    static std::shared_ptr<Model> deserialize(std::string& serialized_model);
+
+protected:
+
+private:
+    // std::vector<Log> logs;
+    int epoch; // Default -1 (not running)
+    int cycle; // Default -1 (not running)
 };
 
 #endif // MODEL_H

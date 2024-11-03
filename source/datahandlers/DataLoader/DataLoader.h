@@ -18,6 +18,7 @@
 #include "../Dataset/Dataset.h"
 #include <memory>
 
+namespace datahandlers {
 class DataLoader {
 public:
     struct Observation {
@@ -36,5 +37,6 @@ private:
     int current_index_;
     void reset_head_();
 };
+}
 
 #endif // DATALOADER_H
