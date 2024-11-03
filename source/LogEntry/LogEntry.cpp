@@ -15,14 +15,14 @@
 namespace logging {
 
 LogEntry::LogEntry(int epoch, int cycle, Logdata data, std::string type) {
-    this->timestamp = std::chrono::system_clock::now().time_since_epoch().count();
+    this->timestamp = std::chrono::system_clock::now();
     this->epoch = epoch;
     this->cycle = cycle;
     this->data = data;
     this->type = type;
 }
 
-int LogEntry::get_timestamp() const {
+TimeStamp LogEntry::get_timestamp() const {
     return timestamp;
 }
 

@@ -10,7 +10,8 @@ public:
         return "mock_serialized_data";
     }
 };
-
+#include <iostream>
+using namespace std;
 TEST(CheckpointLogEntryTest, ConstructorTest) {
     int epoch = 1;
     int cycle = 2;
@@ -18,13 +19,13 @@ TEST(CheckpointLogEntryTest, ConstructorTest) {
     MockModel model;
     std::string serial = model.serialize();
 
-    CheckpointLogEntry entry(epoch, cycle, serial, model_name);
+    CheckpointLogEntry entry(epoch, cycle, std::ref(serial), model_name);
 
-    // EXPECT_EQ(entry.get_epoch(), epoch);
-    // EXPECT_EQ(entry.get_cycle(), cycle);
+    EXPECT_EQ(entry.get_epoch(), epoch);
+    EXPECT_EQ(entry.get_cycle(), cycle);
     // EXPECT_EQ(entry.get_type(), "checkpoint");
 
-    // auto data = entry.get_data();
+    // auto data = entry.get_data(); // Causing SEGFAUTL In gtest
     // EXPECT_EQ(data->first, model_name);
     // EXPECT_EQ(std::get<std::string>(data->second), model.serialize());
 }

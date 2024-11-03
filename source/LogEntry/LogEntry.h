@@ -19,10 +19,11 @@
 #include <cereal/types/memory.hpp>
 #include <cereal/types/utility.hpp>
 #include <cereal/types/variant.hpp> // Include this header for variant support
+#include <cereal/types/chrono.hpp>
 
 namespace logging {
 
-typedef std::chrono::time_point<std::chrono::system_clock> TimeStamp;
+typedef std::chrono::system_clock::time_point TimeStamp;
 typedef std::pair<std::string, std::variant<int, long, float, double, std::string>> Logdata;
 
 class LogEntry {
@@ -30,7 +31,7 @@ public:
     LogEntry(int epoch, int cycle, Logdata data, std::string type);
     LogEntry() = default; // Default constructor for deserialization
 
-    int get_timestamp() const;
+    TimeStamp get_timestamp() const;
     int get_epoch() const;
     int get_cycle() const;
     std::shared_ptr<const Logdata> get_data() const;
@@ -44,7 +45,7 @@ public:
     }
 
 protected:
-    int timestamp;
+    TimeStamp timestamp;
     int epoch;
     int cycle;
     Logdata data;
