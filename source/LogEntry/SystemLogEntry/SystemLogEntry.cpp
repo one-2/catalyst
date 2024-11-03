@@ -5,16 +5,17 @@
 #include <memory>
 #include <CL/cl.h>
 
-std::string type = "system";
-
 namespace logging {
-SystemLogEntry::SystemLogEntry(int epoch, int cycle)
-    : LogEntry(
-        epoch,
-        cycle, 
-        build_usage(), // NOTE: Bad signatures in header propagate type errors from called functions to caller
-        type
-    ) {}
+
+SystemLogEntry::SystemLogEntry(
+    int epoch,
+    int cycle
+) : LogEntry(
+    epoch,
+    cycle, 
+    build_usage(), // NOTE: Bad signatures in header propagate type errors from called functions to caller
+    "system"
+) {}
 
 Logdata SystemLogEntry::build_usage()
 {
@@ -23,7 +24,7 @@ Logdata SystemLogEntry::build_usage()
     float gpu_usage = get_gpu_usage();
 
     std::string message = "CPU:\t\t" + std::to_string(cpu_usage) + "%, "
-                        + "Memory:\t" + std::to_string(mem_usage) + "MB, "
+                        + "RAM:\t" + std::to_string(mem_usage) + "MB, "
                         + "GPU:\t\t" + std::to_string(gpu_usage) + "MB";
 
     return Logdata("usage", message);
