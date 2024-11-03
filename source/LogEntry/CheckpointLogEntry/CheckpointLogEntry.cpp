@@ -1,12 +1,12 @@
 #include "LogEntry/CheckpointLogEntry/CheckpointLogEntry.h"
 
-using namespace logging;
-
-// std::string type = "checkpoint"; 
 //
 // NOTE: Out-of-scope non-constant declaration is a bad idea.
+//       > std::string type = "checkpoint"; // BAD
 //       This causes scope issues and random Segfaults. Whoops.
 //
+
+namespace logging {
 
 CheckpointLogEntry::CheckpointLogEntry(
     int epoch,
@@ -21,4 +21,4 @@ CheckpointLogEntry::CheckpointLogEntry(
     "checkpoint"
 ) {}
 
-
+}

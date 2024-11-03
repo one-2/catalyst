@@ -9,10 +9,17 @@
 #include "LogEntry/LogEntry.h"
 
 namespace logging {
+
 class EvaluationLogEntry : public LogEntry {
 public:
-    EvaluationLogEntry(int epoch, int cycle, std::string score_name, float score_value);
+    EvaluationLogEntry(
+        int epoch, 
+        int cycle, 
+        std::string score_name, 
+        float score_value
+    );
 };
+
 }
 
 #endif // EVALUATIONLOGENTRY_H

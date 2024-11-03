@@ -6,6 +6,7 @@
 #include "LogEntry/LogEntry.h"
 
 namespace logging {
+
 class DebugLogEntry : public LogEntry {
 public:
     DebugLogEntry(
@@ -14,6 +15,7 @@ public:
         std::string& message
     );
 };
+
 }
 
 #endif // DEBUGLOGENTRY_H
