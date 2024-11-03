@@ -8,13 +8,17 @@ using namespace logging;
 //       This causes scope issues and random Segfaults. Whoops.
 //
 
-CheckpointLogEntry::CheckpointLogEntry(int epoch, int cycle, std::string serial, std::string model_name)
-    : LogEntry(
+CheckpointLogEntry::CheckpointLogEntry(
+    int epoch,
+    int cycle,
+    std::string& serial,
+    std::string& model_name
+
+) : LogEntry(
     epoch,
     cycle,
     Logdata(model_name, serial),
     "checkpoint"
-    )
-{}
+) {}
 
 

@@ -12,8 +12,8 @@ public:
     CheckpointLogEntry(
         int epoch,
         int cycle,
-        std::string serial,
-        std::string model_name
+        std::string& serial,
+        std::string& model_name
     );
 };
 }
