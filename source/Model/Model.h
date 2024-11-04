@@ -15,6 +15,8 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <cereal/archives/json.hpp>
+
 #include "Block/Block.h" // TODO: unmet dependency
 #include "datahandlers/DataLoader/DataLoader.h"
 #include "LogBook/LogBook.h"
@@ -34,12 +36,24 @@ public:
     
     // Getters
     const LogBook get_logbook() const;
-    const std::list<LogEntry> get_train_logs();
-    const std::list<LogEntry> get_validation_logs();
-    const std::list<LogEntry> get_test_logs();
+    const std::list<LogEntry> get_train_logs() const;
+    const std::list<LogEntry> get_validation_logs() const;
+    const std::list<LogEntry> get_test_logs() const;
     const std::vector<Block> get_blocks() const;
 
-    const serialise();
+    // Serialisation
+    template <class Archive>
+    void serialize(Archive& ar)
+    {
+        ar(
+            // LogBook not serialised, as that is the primary archive
+            // (it contains the checkpoints). 
+            // NOTE: What is this hierarchical serialisation pattern called?
+            blocks,
+            execute_on_gpu
+        )
+    }
+
     static deserialise(std::string);
 
 private:
