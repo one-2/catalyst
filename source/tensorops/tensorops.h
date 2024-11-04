@@ -1,30 +1,37 @@
-// testtensorops.h
+// source/tensorops/CPUTensorStrategy.h
 //
 // Stephen Elliott, 2024-10-06
 //
-// This file contains the declarations for tensor operations
+// Description: This file contains the declarations for tensor operations
 //
 
-#ifndef TESTTENSOROPS_H
-#define TESTTENSOROPS_H
+#ifndef CPUTENSORSTRATEGY_H
+#define CPUTENSORSTRATEGY_H
 
 #include <torch/torch.h>
 #include <ostream>
+#include "tensorops/maths_typedefs.h"
+
+
+/////////// TODO TODO RENAME RENAME
+
 
 // Function declarations
-    namespace tensorops
-    {
-        torch::Tensor matmul(torch::Tensor a, torch::Tensor b);
-        torch::Tensor reLu(torch::Tensor a);
-        torch::Tensor softmax(torch::Tensor a);
-        torch::Tensor identity(int n);
-        torch::Tensor sum(torch::Tensor a, torch::Tensor b);
-        torch::Tensor multiple(torch::Tensor a, double scalar);
-        torch::Tensor scalar_product(torch::Tensor a, torch::Tensor b);
-        torch::Tensor tensor_product(torch::Tensor a, torch::Tensor b);
+namespace maths
+{
 
-        // Overloaded operator<< for the tensor library
-        std::ostream& operator<<(std::ostream& os, const torch::Tensor& tensor);
-    }
+class CPUTensorStrategy
+{
+    CallbackTensor matmul(Tensor& a, Tensor& b);
+    CallbackTensor reLu(Tensor& a);
+    CallbackTensor softmax(Tensor& a);
+    CallbackTensor identity(int n);
+    CallbackTensor sum(Tensor& a, Tensor& b);
+    CallbackTensor multiple(Tensor& a, Tensor& scalar);
+    CallbackTensor scalar_product(Tensor& a, Tensor& b);
+    CallbackTensor tensor_product(Tensor& a, Tensor& b);
+}
 
-#endif // TESTTENSOROPS_H
+}
+
+#endif // CPUTENSORSTRATEGY_H
