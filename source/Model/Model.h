@@ -22,11 +22,23 @@
 class Model
 {
 public:
+    // Constructor
     Model(std::string storage_directory_path, std::string device);
+
+    // Compose model
     void add_block(std::string type);
-    void train(DataLoader dataloader, int batch_size);
-    void evaluate(DataLoader dataloader, int batch_size);
-    const LogBook get_logbook();
+    
+    // Train/inference
+    void train(DataLoader dataloader, int batch_size, int epochs, int cycles_per_epoch);
+    void evaluate(DataLoader dataloader, int batch_size, int cycles_per_epoch);
+    
+    // Getters
+    const LogBook get_logbook() const;
+    const std::list<LogEntry> get_train_logs();
+    const std::list<LogEntry> get_validation_logs();
+    const std::list<LogEntry> get_test_logs();
+    const std::vector<Block> get_blocks() const;
+
     const serialise();
     static deserialise(std::string);
 
