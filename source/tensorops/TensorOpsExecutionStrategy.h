@@ -26,14 +26,14 @@ public:
     // NOTE: Should call only when compiling blocks, storing the pointers
     //       on the CG. Must avoid regular reinitialisation.
     //
-    virtual CallbackTensor zero(int rows, int cols);
-    virtual CallbackTensor identity(int dimension);
-    virtual CallbackTensor sum(const Tensor& a, const Tensor& b);
-    virtual CallbackTensor multiple(const Tensor& a);
-    virtual CallbackTensor scalar_product(const Tensor& a, const Tensor& b);
-    virtual CallbackTensor tensor_product(const Tensor& a, const Tensor& b);
-    virtual CallbackTensor reLu(const Tensor& a);
-    virtual CallbackTensor softmax(const Tensor& a);
+    virtual Tensor zero(int rows, int cols);
+    virtual Tensor identity(int dimension);
+    virtual Tensor sum(const Tensor& a, const Tensor& b);
+    virtual Tensor multiple(const Tensor& a);
+    virtual Tensor scalar_product(const Tensor& a, const Tensor& b);
+    virtual Tensor tensor_product(const Tensor& a, const Tensor& b);
+    virtual Tensor reLu(const Tensor& a);
+    virtual Tensor softmax(const Tensor& a);
 
 };
   
