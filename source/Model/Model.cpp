@@ -1,59 +1,66 @@
-// source/Model/Model.cpp
+// source/Model/Model.h
 //
 // Author: Stephen Elliott
 //
 // Date: 2024-10-28
 //
-// Description: Defines Model abstract superclass
-//
-// Usage: 
+// Description: 
 //
 
-#include <vector>
-#include <variant>
-#include <iostream>
+// class Model
+// {
+// public:
+//     Model(std::string storage_directory_path, std::string device);
+//     void add_block(std::string type);
+//     void train(DataLoader dataloader, int batch_size);
+//     void evaluate(DataLoader dataloader, int batch_size);
+//     const LogBook get_logbook();
+//     const serialise();
+//     static deserialise(std::string);
 
+// private:
+//     void compile();
+
+//     LogBook logbook;
+//     std::vector<Block> blocks; // TODO: unmet dependency
+//     bool execute_on_gpu;
+// };
 #include "./Model.h"
 
-//
-// Constructor
-//
-Model::Model(std::string type, std::string storage_directory_path) {
-    this->type = type;
-    this->logbook = Logbook(storage_directory_path);
+
+
+Model::Model(std::string storage_directory_path, std::string device)
+{
+    execute_on_gpu = device == "gpu"; // declare the gpu attribute
+    logbook = LogBook(storage_directory_path); // create the logbook
 }
 
-//
-// Run a training cycle
-//
-void Model::train(DataLoader dataloader, int epochs, int batch_size) = 0;
-
-//
-// Run an evaluation cycle
-//
-int Model::evaluate(DataLoader dataloader) = 0;
-
-//
-// Fetch the model logbook
-//
-std::shared_ptr<Logbook> Model::get_logbook() {
-    return std::make_shared<Logbook>(this->logbook);
+void Model::add_block(std::string type)
+{
+    // Todo
 }
 
-//
-// Serialise the model (using Protobuf)
-//
-virtual void Model::serialise() = 0;
+void Model::train(DataLoader dataloader, int batch_size)
+{
+    // Todo
+}
 
-//
-// Deserialise the model (using Protobuf)
-//
-virtual Model deserialise(std::string) = 0;
+void Model::evaluate(DataLoader dataloader, int batch_size)
+{
+    // Todo
+}
 
-//
-// Write a checkpoint using the LogBook
-//
-void Model::write_checkpoint() final {
-    // Assuming logbook has a method to write a checkpoint
-    this->logbook.write_log("checkpoint", serialise());
+const Model::LogBook get_logbook()
+{
+    // Todo
+}
+
+const Model::serialise()
+{
+    // Todo
+}
+
+static Model::deserialise(std::string)
+{
+    // Todo
 }

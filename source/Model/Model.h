@@ -14,27 +14,28 @@
 #include <list>
 #include <string>
 #include <memory>
+#include <vector>
+#include "Block/Block.h" // TODO: unmet dependency
+#include "datahandlers/DataLoader/DataLoader.h"
+#include "LogBook/LogBook.h"
 
 class Model
 {
 public:
-    Model(std::string serialized_model);
-    Model();
-
-    int train();
-    int validate();
-    int test();
-    int add_log(std::string type, std::string message);
-    // std::list<int> get_epoch_and_cycle() const;
-    std::string serialize();
-    static std::shared_ptr<Model> deserialize(std::string& serialized_model);
-
-protected:
+    Model(std::string storage_directory_path, std::string device);
+    void add_block(std::string type);
+    void train(DataLoader dataloader, int batch_size);
+    void evaluate(DataLoader dataloader, int batch_size);
+    const LogBook get_logbook();
+    const serialise();
+    static deserialise(std::string);
 
 private:
-    // std::vector<Log> logs;
-    int epoch; // Default -1 (not running)
-    int cycle; // Default -1 (not running)
+    void compile();
+
+    LogBook logbook;
+    std::vector<Block> blocks; // TODO: unmet dependency
+    bool execute_on_gpu;
 };
 
 #endif // MODEL_H
