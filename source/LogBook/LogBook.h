@@ -63,12 +63,12 @@ private:
 
     void log_async(const LogEntry& log_entry);
 
-    LogsMap logs_map; // NOTE: this makes things way better
     std::string storage_directory;
+    LogsMap logs_map; // NOTE: this makes things way better
 
     // Adding to LogBook internal objects
     void add_log_to_map(const LogEntry& log); // Normal logs are written and stored on memory
-    std::string add_checkpoint_to_map(std::string& path); // Checkpoints are just written
+    // TODO: std::string add_checkpoint_to_map(std::string& path); // Checkpoints are just written
 };
 
 }
