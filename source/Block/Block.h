@@ -17,6 +17,9 @@
 
 class Block
 {
+public:
+    std::string get_type();
+
 protected: // NOTE: Had a bug here. Methods/attributes default to PRIVATE scope. Not public.
     Block(std::string& type);
 

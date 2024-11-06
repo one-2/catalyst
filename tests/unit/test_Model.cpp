@@ -46,6 +46,7 @@ protected:
 //       indicates that your call is wrong.
 //
 
+
 TEST_F(TestModel, Constructor)
 {
     // Check if the model is correctly initialized
@@ -57,79 +58,83 @@ TEST_F(TestModel, Constructor)
 }
 
 
+
 TEST_F(TestModel, AddBlock)
 {
-    // int block_length_initial = m->get_blocks().size();
+    // Initial block count should be zero
+    int block_length_initial = m->get_blocks().size();
+    EXPECT_EQ(block_length_initial, 0);
 
-    // // Build a block
-    // std::shared_ptr<Block> block = std::make_shared<MockBlock>();
+    // Build a block
+    std::shared_ptr<Block> block = std::make_shared<MockBlock>();
 
-    // // Add the block 
-    // m->add_block(block);
-    // int block_length_ultimate = m->get_blocks().size();
-    
-    // EXPECT_EQ(
-    //     block_length_initial, block_length_ultimate
-    // );
+    // Add the block 
+    m->add_block(block);
+
+    // Block count should increase by one
+    int block_length_ultimate = m->get_blocks().size();
+    EXPECT_EQ(block_length_ultimate, block_length_initial + 1);
+
+    // Verify the added block is the same as the mock block
+    EXPECT_EQ(m->get_blocks().back()->get_type(), "mock");
 }
 
 
-// TEST_F(TestModel, Compile)
-// {
-//     // Add a block
-//     // Compile the model
-//     // Assert no errors thrown
-// }
+TEST_F(TestModel, Compile)
+{
+    // Add a block
+    // Compile the model
+    // Assert no errors thrown
+    EXPECT_TRUE(false);
+}
 
 
-// TEST_F(TestModel, Train)
-// {
-//     // Add a DEBUG block (friend of the test)
-//     // Train it for a few epochs on some random data
-//     // Test invalid arg 0, negative
-//     // Test no blocks edge case
-//     // Assert no errors thrown
-//     // Get train losses from logs
-//     // Assert nonempty and contain expected values (debug => constant)
-// }
+TEST_F(TestModel, Train)
+{
+    // Add a DEBUG block (friend of the test)
+    // Train it for a few epochs on some random data
+    // Test invalid arg 0, negative
+    // Test no blocks edge case
+    // Assert no errors thrown
+    // Get train losses from logs
+    // Assert nonempty and contain expected values (debug => constant)
+    EXPECT_TRUE(false);
+}
 
 
-// // Set to not run if above fails
-// TEST_F(TestModel, EvaluateAndCheckLogs)
-// {
-//     // Add a block
-//     // Train for a bit
-//     // Validate for a bit
-//     // Assert no errors
-//     // Get validation logs
-//     // Assert nonempty and contain expected values (debug => constant)
-//     // Get test logs
-//     // Assert nonempty and contain expected values (debug => constant)
-// }
+TEST_F(TestModel, Evaluate)
+{
+    EXPECT_TRUE(false);
+}
 
 
-// TEST_F(TestModel, GetExecutionLogs)
-// {
-//     // Add a block
-//     // Train on some dummy data
-//     // Validate on some dummy data
-//     // Test on some dummy data
-//     // Get train, validate and test logs
-//     // Assert counts are as expected
-//     // Assert all nonempty
-// }
+// Set to not run if above fails
+TEST_F(TestModel, TrainingAndInferenceLogsAdded)
+{
+    // Add a block
+    // Train for a bit
+    // Validate for a bit
+    // Assert no errors
+    // Get validation logs
+    // Assert nonempty and contain expected values (debug => constant)
+    // Get test logs
+    // Assert nonempty and contain expected values (debug => constant)
+    EXPECT_TRUE(false);
+}
 
 
-// TEST_F(TestModel, TestGetters)
-// {
-//     // Train for a bit
-//     // Get logbook and check training losses
-// }
+TEST_F(TestModel, TestGetters)
+{
+    // Train for a bit
+    // Get logbook and check training losses
+    EXPECT_TRUE(false);
+}
 
 
-// TEST_F(TestModel, SerialiseDeserialise)
-// {
-//     // Serialise the model
-//     // Assert no errors
-//     // Assert model can be deserialise and retrieved, with all relevant data the same
-// }
+TEST_F(TestModel, SerialiseDeserialise)
+{
+    // Serialise the model
+    // Assert no errors
+    // Assert model can be deserialise and retrieved, with all relevant data the same
+    EXPECT_TRUE(false);
+}
