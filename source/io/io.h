@@ -23,8 +23,6 @@ namespace io {
     // Write
     std::string write_log(const std::string& serialized_log, const std::string& path);
 
-    // Fetch
-    std::list<std::string> get_files_in_directory(const std::string& path);
 }
 
 #endif // IO_H

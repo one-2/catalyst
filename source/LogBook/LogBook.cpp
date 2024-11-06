@@ -99,27 +99,9 @@ const std::list<LogEntry> LogBook::read_logs(const std::string& type) const
         }
     }
 
-    // Else check for the logs in memory
+    // Else check for the logs in storage
     
     throw std::range_error("Log type not found in memory.");
 }
-
-//     // Else check storage for logs of the given type
-//     const std::string path = storage_directory + "/" + type;
-//     std::list<std::string> log_files = io::get_files_in_directory(path);
-
-//     // iF logs are not found, throw error
-//     if (log_files.empty()) {
-//         throw std::invalid_argument("No logs of type " + type + " found.");
-//     } else {
-//         // Return logs found in storage
-//         for (const auto& log_file : log_files) {
-//             std::string log_data = io::read_file(path + "/" + log_file);
-//             LogEntry log = *LogEntry::deserialize(log_data);
-//             filtered_logs.push_back(log);
-//         }
-//         return filtered_logs;
-//     }
-// }
 
 } // namespace logging
