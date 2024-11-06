@@ -1,14 +1,13 @@
 #include <gtest/gtest.h>
 
 #include "logging/LogEntry/CheckpointLogEntry/CheckpointLogEntry.h"
-#include "Model/Model.h"
 
 #include <iostream>
 
 using namespace logging;
 
 
-class MockModel : public Model {
+class MockModel {
 public:
     std::string msg = "mock_serialized_data";
     std::string serialize() const {

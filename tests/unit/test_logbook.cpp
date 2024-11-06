@@ -6,7 +6,6 @@
 #include "logging/LogEntry/CheckpointLogEntry/CheckpointLogEntry.h"
 #include "logging/LogEntry/EvaluationLogEntry/EvaluationLogEntry.h"
 #include "logging/LogEntry/DebugLogEntry/DebugLogEntry.h"
-#include "Model/Model.h"
 
 #include <string>
 
@@ -20,6 +19,15 @@ public:
     }
 };
 
+class MockModel { // NOTE: Always use mocks. Coupled tests are really annoying.
+public:
+    int get_epoch() const {
+        return 1;
+    }
+    int get_cycle() const {
+        return 1;
+    }
+}
 
 // Model and logbook fixture
 class LogBookTest : public ::testing::Test {
@@ -27,7 +35,7 @@ protected:
     void SetUp() override {
         storage_directory = "test_logs";
         logBook = new logging::LogBook(storage_directory);
-        model = new Model();
+        model = new MockModel();
     }
 
     void TearDown() override {
@@ -37,7 +45,7 @@ protected:
 
     std::string storage_directory;
     logging::LogBook* logBook;
-    Model* model;
+    MockModel* model;
 
 };
 

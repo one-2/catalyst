@@ -2,7 +2,7 @@
 #ifndef LOGBOOK_H
 #define LOGBOOK_H
 
-#include "../LogEntry/LogEntry.h"
+#include "logging/LogEntry/LogEntry.h"
 #include "io/io.h"
 
 #include <string>
@@ -19,7 +19,7 @@
 //       On the other hand, the initial design was crap, and this is way better.
 //
 
-class Model; // Forward declaration for checkpoint log builder
+// class Model; // Forward declaration for checkpoint log builder
 
 namespace logging {
 

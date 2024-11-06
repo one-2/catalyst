@@ -2,13 +2,13 @@
 #define MODEL_H
 
 #include "logging/LogBook/LogBook.h"
+#include "Block/Block.h"
 
 #include <list>
 #include <string>
 #include <memory>
 
 
-class Block;
 namespace datahandlers {
     class DataLoader;
 }
@@ -18,6 +18,7 @@ class Model
 {
 public:
     // Construction
+    Model() = default;
     Model(std::string& storage_directory, std::string& device);
 
     // Inference
@@ -31,7 +32,7 @@ public:
     int get_epoch() const;
     int get_cycle() const;
     std::string get_name() const;
-    logging::LogBook get_LogBook() const;
+    // logging::LogBook get_LogBook() const;
 
     // // Serialisation
     // std::string serialize();
@@ -39,14 +40,11 @@ public:
 
 
 private:
-    // Private default constructor for deserialisation
-    Model() = default;
-
     // Inference
     void compile();
 
     // Data
-    logging::LogBook LogBook;
+    // logging::LogBook LogBook;
     std::vector<Block> blocks;
     int epoch; // Default -1 (not running)
     int cycle; // Default -1 (not running)
