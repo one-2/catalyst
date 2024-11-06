@@ -1,35 +1,60 @@
 #ifndef MODEL_H // prevent multiple linking/reference errors
 #define MODEL_H
 
+#include "logging/LogBook/LogBook.h"
+
 #include <list>
 #include <string>
 #include <memory>
 
+
+class Block;
+namespace datahandlers {
+    class DataLoader;
+}
+
+
 class Model
 {
 public:
-    Model(std::string serialized_model);
-    Model();
+    // Construction
+    Model(std::string& storage_directory, std::string& device);
 
-    int train();
-    int validate();
-    int test();
+    // Inference
+    int train(datahandlers::DataLoader& dataloader, int batch_size, int epochs);
+    int evaluate(datahandlers::DataLoader& dataloader, int batch_size, int epochs);
+
+    // Logging
     int add_log(std::string type, std::string message);
-    // std::list<int> get_epoch_and_cycle() const;
-    std::string serialize();
-    static std::shared_ptr<Model> deserialize(std::string& serialized_model);
 
+    // Getters
     int get_epoch() const;
     int get_cycle() const;
-
     std::string get_name() const;
+    logging::LogBook get_LogBook() const;
 
-protected:
+    // // Serialisation
+    // std::string serialize();
+    // static std::shared_ptr<Model> deserialize(std::string& serialized_model);
+
 
 private:
-    // std::vector<Log> logs;
+    // Private default constructor for deserialisation
+    Model() = default;
+
+    // Inference
+    void compile();
+
+    // Data
+    logging::LogBook LogBook;
+    std::vector<Block> blocks;
     int epoch; // Default -1 (not running)
     int cycle; // Default -1 (not running)
+    std::string name = "Model"; // TODO: Initialise as unique identifier (hash or code) in constructor
+
+    // Flags
+    bool execute_on_gpu;
+
 };
 
 #endif // MODEL_H

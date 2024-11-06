@@ -9,51 +9,48 @@
 // Onwards and upwards.
 //
 
-#include <vector>
-// #include "../log/log.h"
-#include <string>
 #include "./Model.h"
 
-Model::Model() {}
+Model::Model(std::string& storage_directory, std::string& device) {
+    this->execute_on_gpu = device == "gpu";
+    this->LogBook = logging::LogBook(storage_directory);
+}
 
-int add_layer(std::string activation,
-              std::string out_connection,
-              int width)
-{
+Model::Model() : epoch(-1), cycle(-1), execute_on_gpu(false) {
+    // TODO
+}
+
+int Model::train(datahandlers::DataLoader& dataloader, int batch_size, int epochs) {
+    // TODO
     return 0;
 }
 
-int Model::train()
-{
+int Model::evaluate(datahandlers::DataLoader& dataloader, int batch_size, int epochs) {
+    // TODO
     return 0;
 }
 
-int Model::validate()
-{
+int Model::add_log(std::string type, std::string message) {
+    // TODO
     return 0;
 }
 
-int Model::test()
-{
-    return 0;
-}
-
-int Model::add_log(std::string type, std::string message)
-{
-    return 0;
-}
-
-int Model::get_epoch() const
-{
+int Model::get_epoch() const {
     return epoch;
 }
 
-int Model::get_cycle() const
-{
+int Model::get_cycle() const {
     return cycle;
 }
 
-std::string Model::get_name() const
-{
-    return "dummy"; // TODO
+std::string Model::get_name() const {
+    return name;
+}
+
+logging::Logbook Model::get_logbook() const {
+    return logbook;
+}
+
+void Model::compile() {
+    // Compile method implementation
 }
