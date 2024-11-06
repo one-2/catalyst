@@ -27,7 +27,7 @@ public:
     int get_cycle() const {
         return 1;
     }
-}
+};
 
 // Model and logbook fixture
 class LogBookTest : public ::testing::Test {
