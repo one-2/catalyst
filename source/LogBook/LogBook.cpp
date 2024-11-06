@@ -27,40 +27,55 @@ void LogBook::add_log_to_map(const LogEntry& log) {
     logs_map[log.get_type()].push_back(log);
 }
 
-void LogBook::log_system() {
-    log_async<SystemLogEntry>();
+void LogBook::log_system(int epoch, int cycle) {
+    SystemLogEntry e(epoch, cycle);
+    log_async(e);
 }
 
-void LogBook::log_checkpoint(const Model model) {
-    log_async<CheckpointLogEntry>(model);
+void LogBook::log_checkpoint(int epoch, int cycle, std::string& serial, std::string& name) {
+    CheckpointLogEntry e(epoch, cycle, serial, name);
+    log_async(e);
 }
 
-void LogBook::log_evaluation(std::string loss, std::list<std::pair<std::string, float>> scores) {
-    log_async<EvaluationLogEntry>(loss, scores);
+void LogBook::log_evaluation(int epoch, int cycle, std::string& score_name, float score_value) {
+    EvaluationLogEntry e(epoch, cycle, score_name, score_value);
+    log_async(e);
 }
 
-void LogBook::log_debug(const std::string& message) {
-    log_async<DebugLogEntry>(message);
+void LogBook::log_debug(int epoch, int cycle, std::string& message) {
+    DebugLogEntry e(epoch, cycle, message);
+    log_async(e);
 }
 
-// const std::list<LogEntry> LogBook::read_logs(const std::string& type) const {
-//     std::list<LogEntry> filtered_logs;
+void LogBook::log_async(const LogEntry& log_entry) {
+    auto log_task = std::async(std::launch::async, [this, log_entry]() {
+        add_log_to_map(log_entry);
+    });
 
-//     // If the log is held in memory, read it from there
-//     for (const auto& log_pair : logs_map) {
+    // TODO: implement local write as well
+}
 
-//         // Checks the first entry in the current log key. If the same, returns those logs
-//         LogEntry first_type = log_pair.second.front();
-//         if (first_type.get_type() == type) {
-//             for (const auto& log : log_pair.second) {
-//                 filtered_logs.push_back(log);
-//             }
-//             // Return logs found in memory
-//             if (!(filtered_logs.empty())) {
-//                 return filtered_logs;
-//             }
-//         }
-//     }
+const std::list<LogEntry> LogBook::read_logs(const std::string& type) const {
+    std::list<LogEntry> filtered_logs;
+
+    // If the log is held in memory, read it from there
+    for (const auto& log_pair : logs_map) {
+
+        // Check the first entry in the current log key.
+        LogEntry first_type = log_pair.second.front();
+        if (first_type.get_type() == type) {
+            // Type found. Get all these logs and return.
+            for (const auto& log : log_pair.second) {
+                filtered_logs.push_back(log);
+            }
+            // Return logs found in memory
+            if (!(filtered_logs.empty())) {
+                return filtered_logs;
+            }
+        }
+    }
+    throw std::range_error("Log type not found in memory.");
+}
 
 //     // Else check storage for logs of the given type
 //     const std::string path = storage_directory + "/" + type;
