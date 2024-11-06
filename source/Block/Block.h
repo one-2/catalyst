@@ -12,9 +12,15 @@
 #define BLOCK_H
 
 
+#include <string>
+
+
 class Block
 {
-    Block();
+protected: // NOTE: Had a bug here. Methods/attributes default to PRIVATE scope. Not public.
+    Block(std::string& type);
+
+    std::string type;
 };
 
 

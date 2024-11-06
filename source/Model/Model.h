@@ -32,36 +32,40 @@ class Model
 public:
     // Construction
     Model() = default;
-    Model(std::string& storage_directory, std::string& device);
+    Model(std::string& storage_directory, std::string& device, std::string& name);
+
+    // Compose model
+    void add_block(std::shared_ptr<Block> block);
 
     // Inference
     int train(datahandlers::DataLoader& dataloader, int batch_size, int epochs);
     int evaluate(datahandlers::DataLoader& dataloader, int batch_size, int epochs);
 
-    // Logging
-    int add_log(std::string type, std::string message);
-
     // Getters
     int get_epoch() const;
     int get_cycle() const;
     std::string get_name() const;
-    // logging::LogBook get_LogBook() const;
+    std::string get_timestamp() const;
+    std::string get_device() const;
+    logging::LogBook get_logbook() const;
+    std::vector<std::shared_ptr<Block>> get_blocks();
 
-    // // Serialisation
+    // Serialisation                                TODO: LAST
     // std::string serialize();
     // static std::shared_ptr<Model> deserialize(std::string& serialized_model);
 
 
 private:
-    // Inference
+    // Compile method for CG
     void compile();
 
     // Data
     logging::LogBook logbook;
-    std::vector<Block> blocks;
-    int epoch; // Default -1 (not running)
-    int cycle; // Default -1 (not running)
-    std::string name = "Model"; // TODO: Initialise as unique identifier (hash or code) in constructor
+    std::vector<std::shared_ptr<Block>> blocks;
+    int epoch;
+    int cycle;
+    std::string name;
+    std::string timestamp;
 
     // Flags
     bool execute_on_gpu;
