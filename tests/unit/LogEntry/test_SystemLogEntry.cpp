@@ -11,9 +11,26 @@
 #include "LogEntry/SystemLogEntry/SystemLogEntry.h"
 #include <fstream>
 
+
 namespace logging {
 
-// Call the constructor and check the values are set correctly
+/**
+ * @brief Unit test for the SystemLogEntry class constructor.
+ *
+ * This test verifies that the SystemLogEntry constructor correctly initializes
+ * the epoch and cycle values, sets the type to "system", and ensures that the
+ * data contains the strings "CPU", "RAM", and "GPU". Additionally, it checks
+ * that the data contains exactly three float values.
+ *
+ * @test
+ * - Creates a SystemLogEntry object with epoch and cycle values.
+ * - Verifies that the epoch and cycle values are correctly set.
+ * - Verifies that the type is set to "system".
+ * - Extracts the data from the entry and checks that it contains the strings
+ *   "CPU", "RAM", and "GPU".
+ * - Parses the data to count the number of float values and verifies that there
+ *   are exactly three float values.
+ */
 TEST(SystemLogEntryTest, ConstructorTest) {
     int epoch = 1;
     int cycle = 2;
