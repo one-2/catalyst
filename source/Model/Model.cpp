@@ -37,11 +37,11 @@ int Model::evaluate(datahandlers::DataLoader& dataloader, int batch_size, int ep
     return 0;
 }
 
-const Model::LogBook get_logbook()
-{
-    // TODO
-    return 0;
-}
+// logging::LogBook Model::get_logbook() const
+// {
+//     // TODO
+//     return 0;
+// }
 
 
 int Model::get_epoch() const

@@ -11,7 +11,7 @@
 #ifndef MODEL_H // prevent multiple linking/reference errors
 #define MODEL_H
 
-#include "logging/LogBook/LogBook.h"
+// #include "logging/LogBook/LogBook.h"
 #include "Block/Block.h"
 
 #include <list>
@@ -20,9 +20,6 @@
 #include <vector>
 #include <cereal/archives/json.hpp>
 
-#include "Block/Block.h" // TODO: unmet dependency
-#include "datahandlers/DataLoader/DataLoader.h"
-#include "LogBook/LogBook.h"
 
 
 namespace datahandlers {
