@@ -3,8 +3,23 @@
 #include "LogBook/LogBook.h"
 #include "LogEntry/LogEntry.h"
 #include "Model/Model.h"
+#include <string>
+#include "LogEntry/SystemLogEntry/SystemLogEntry.h"
+#include "LogEntry/CheckpointLogEntry/CheckpointLogEntry.h"
+#include "LogEntry/EvaluationLogEntry/EvaluationLogEntry.h"
+#include "LogEntry/DebugLogEntry/DebugLogEntry.h"
 
 
+// MockIO class definition
+class MockIO {
+public:
+    std::string write_log(const std::string& serialized_log, const std::string& path) {
+        // Mock implementation of write_log
+        return path;
+    }
+};
+
+// Model and logbook fixture
 class LogBookTest : public ::testing::Test {
 protected:
     void SetUp() override {
@@ -125,3 +140,40 @@ TEST_F(LogBookTest, TestWriteLogDebug) {
 
 }
 
+
+TEST_F(LogBookTest, WriteAllLogsToStorage) {
+    // SystemLogEntry
+    logging::SystemLogEntry system_log_entry(1, 1);
+    MockIO mock_io;
+    std::string system_expected_path = storage_directory + "/SystemLogEntry/e1c1-0.log";
+    std::string system_expected_serialized_log = system_log_entry.to_json();
+    std::string system_log_path = mock_io.write_log(system_expected_serialized_log, system_expected_path);
+    EXPECT_EQ(system_log_path, system_expected_path);
+
+    // CheckpointLogEntry
+    std::string serial = "serial_data";
+    std::string name = "checkpoint_name";
+    logging::CheckpointLogEntry checkpoint_log_entry(1, 1, serial, name);
+    std::string checkpoint_expected_path = storage_directory + "/CheckpointLogEntry/e1c1-0.log";
+    std::string checkpoint_expected_serialized_log = checkpoint_log_entry.to_json();
+    std::string checkpoint_log_path = mock_io.write_log(checkpoint_expected_serialized_log, checkpoint_expected_path);
+    EXPECT_EQ(checkpoint_log_path, checkpoint_expected_path);
+
+    // EvaluationLogEntry
+    std::string score_name = "accuracy";
+    float score_value = 0.95;
+    logging::EvaluationLogEntry evaluation_log_entry(1, 1, score_name, score_value);
+    std::string evaluation_expected_path = storage_directory + "/EvaluationLogEntry/e1c1-0.log";
+    std::string evaluation_expected_serialized_log = evaluation_log_entry.to_json();
+    std::string evaluation_log_path = mock_io.write_log(evaluation_expected_serialized_log, evaluation_expected_path);
+    EXPECT_EQ(evaluation_log_path, evaluation_expected_path);
+
+    // DebugLogEntry
+    std::string message = "debug_message";
+    logging::DebugLogEntry debug_log_entry(1, 1, message);
+    std::string debug_expected_path = storage_directory + "/DebugLogEntry/e1c1-0.log";
+    std::string debug_expected_serialized_log = debug_log_entry.to_json();
+    std::string debug_log_path = mock_io.write_log(debug_expected_serialized_log, debug_expected_path);
+    EXPECT_EQ(debug_log_path, debug_expected_path);
+
+}

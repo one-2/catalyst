@@ -16,6 +16,7 @@
 #include <chrono>
 #include <variant>
 #include <cereal/archives/json.hpp>
+#include <cereal/archives/binary.hpp> // Include this header for BinaryOutputArchive
 #include <cereal/types/memory.hpp>
 #include <cereal/types/utility.hpp>
 #include <cereal/types/variant.hpp> // Include this header for variant support
@@ -42,6 +43,15 @@ public:
     void serialize(Archive& ar)
     {
         ar(CEREAL_NVP(timestamp), CEREAL_NVP(epoch), CEREAL_NVP(cycle), CEREAL_NVP(data), CEREAL_NVP(type));
+    }
+
+    std::string to_json() const {
+        std::ostringstream os;
+        {
+            cereal::JSONOutputArchive archive(os);
+            archive(cereal::make_nvp("log_entry", *this));
+        }
+        return os.str();
     }
 
 protected:

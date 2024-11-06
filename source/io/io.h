@@ -14,12 +14,17 @@
 #include "../Model/Model.h"
 
 namespace io {
+    // Load
     torch::Tensor load_tensor_from_csv(std::string path);
-    // std::string write_log(const std::string& serialized_log, const std::string& path);
+
+    // Pathing
     void build_directory(const std::string& directory);
 
+    // Write
+    std::string write_log(const std::string& serialized_log, const std::string& path);
+
+    // Fetch
     std::list<std::string> get_files_in_directory(const std::string& path);
-    // std::string read_file(const std::string& path);
 }
 
 #endif // IO_H

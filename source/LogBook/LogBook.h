@@ -50,14 +50,6 @@ public:
 
     std::string generate_log_path(const LogEntry& log);
 
-    // // Serialization
-    // template <class Archive>
-    // void serialize(Archive& ar);
-
-
-    // // Deserialization
-    // static LogBook deserialize(const std::string& json_str);
-
 private:
     LogBook() = default; // For deserialisation
 
@@ -66,9 +58,9 @@ private:
     std::string storage_directory;
     LogsMap logs_map; // NOTE: this makes things way better
 
-    // Adding to LogBook internal objects
-    void add_log_to_map(const LogEntry& log); // Normal logs are written and stored on memory
-    // TODO: std::string add_checkpoint_to_map(std::string& path); // Checkpoints are just written
+    // Writing logs to memory and storage
+    void add_log_to_map(const LogEntry& log);
+    std::string write_log_to_storage(const LogEntry& log);
 };
 
 }
