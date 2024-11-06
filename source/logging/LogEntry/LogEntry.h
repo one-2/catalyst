@@ -11,19 +11,17 @@
 #ifndef LOGENTRY_H
 #define LOGENTRY_H
 
-#include <string>
-#include <memory>
-#include <chrono>
-#include <variant>
-
-// Serialisation - TODO: Move to tpp
-#include <cereal/archives/json.hpp>
+#include <cereal/archives/json.hpp> // TODO: Move serialisation to tpp
 #include <cereal/archives/binary.hpp>
 #include <cereal/types/memory.hpp>
 #include <cereal/types/utility.hpp>
 #include <cereal/types/variant.hpp>
 #include <cereal/types/chrono.hpp>
 
+#include <string>
+#include <memory>
+#include <chrono>
+#include <variant>
 
 namespace logging {
 

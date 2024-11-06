@@ -1,12 +1,14 @@
 #include "./LogBook.h"
+#include "logging/LogEntry/SystemLogEntry/SystemLogEntry.h"
+#include "logging/LogEntry/CheckpointLogEntry/CheckpointLogEntry.h"
+#include "logging/LogEntry/EvaluationLogEntry/EvaluationLogEntry.h"
+#include "logging/LogEntry/DebugLogEntry/DebugLogEntry.h"
+#include "io/io.h"
+
 #include <string>
 #include <future>
 #include <stdexcept>
-#include "io/io.h"
-#include "LogEntry/SystemLogEntry/SystemLogEntry.h"
-#include "LogEntry/CheckpointLogEntry/CheckpointLogEntry.h"
-#include "LogEntry/EvaluationLogEntry/EvaluationLogEntry.h"
-#include "LogEntry/DebugLogEntry/DebugLogEntry.h"
+
 
 namespace logging {
 
@@ -19,11 +21,15 @@ LogBook::LogBook(std::string& storage_directory)
     : storage_directory(storage_directory) {}
 
 
-
-
-
+/**
+ * @brief Logs a checkpoint asynchronously.
+ * 
+ * @param serialized_directory_root The directory where log files will be stored.
+ * @param logs_map A map of log entries.
+ */
 LogBook::LogBook(std::string& serialized_directory_root, LogsMap logs_map) 
     : storage_directory(serialized_directory_root), logs_map(logs_map) {}
+
 
 /**
  * @brief Logs a system event with the specified epoch and cycle.
@@ -39,6 +45,7 @@ void LogBook::log_system(int epoch, int cycle)
     SystemLogEntry e(epoch, cycle);
     log_async(e);
 }
+
 
 /**
  * @brief Logs a checkpoint asynchronously.
@@ -57,6 +64,7 @@ void LogBook::log_checkpoint(int epoch, int cycle, std::string& serial, std::str
     log_async(e);
 }
 
+
 /**
  * @brief Logs an evaluation entry asynchronously.
  *
@@ -74,6 +82,7 @@ void LogBook::log_evaluation(int epoch, int cycle, std::string& score_name, floa
     log_async(e);
 }
 
+
 /**
  * @brief Logs a debug message asynchronously.
  * 
@@ -90,6 +99,7 @@ void LogBook::log_debug(int epoch, int cycle, std::string& message)
     log_async(e);
 }
 
+
 /**
  * @brief Logs a log entry asynchronously.
  *
@@ -105,6 +115,7 @@ void LogBook::log_async(const LogEntry& log_entry)
         write_log_to_storage(log_entry);
     });
 }
+
 
 /**
  * @brief Adds a log entry to the log map.
@@ -128,6 +139,7 @@ void LogBook::add_log_to_map(const LogEntry& log)
     logs_map[log.get_type()].push_back(log);
 }
 
+
 /**
  * @brief Writes a log entry to storage.
  *
@@ -143,6 +155,7 @@ std::string LogBook::write_log_to_storage(const LogEntry& log)
     std::string log_path = generate_log_path(log);
     return io::write_log(serialized_log, log_path);
 }
+
 
 /**
  * @brief Generates a log file path based on the log entry details.
@@ -161,6 +174,7 @@ std::string LogBook::generate_log_path(const LogEntry& log)
     int timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     return storage_directory + "/" + log.get_type() + "/e" + std::to_string(epoch) + "c" + std::to_string(cycle) + "-" + std::to_string(timestamp) + ".log";
 }
+
 
 /**
  * @brief Reads logs of a specified type from the log book.

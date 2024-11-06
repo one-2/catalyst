@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
-#include "LogEntry/CheckpointLogEntry/CheckpointLogEntry.h"
+
+#include "logging/LogEntry/CheckpointLogEntry/CheckpointLogEntry.h"
 #include "Model/Model.h"
+
 #include <iostream>
 
 using namespace logging;

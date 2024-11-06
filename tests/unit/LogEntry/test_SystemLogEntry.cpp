@@ -8,7 +8,9 @@
 //
 
 #include <gtest/gtest.h>
-#include "LogEntry/SystemLogEntry/SystemLogEntry.h"
+
+#include "logging/LogEntry/SystemLogEntry/SystemLogEntry.h"
+
 #include <fstream>
 
 

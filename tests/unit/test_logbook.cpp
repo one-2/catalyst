@@ -1,13 +1,14 @@
-
 #include "gtest/gtest.h"
-#include "LogBook/LogBook.h"
-#include "LogEntry/LogEntry.h"
+
+#include "logging/LogBook/LogBook.h"
+#include "logging/LogEntry/LogEntry.h"
+#include "logging/LogEntry/SystemLogEntry/SystemLogEntry.h"
+#include "logging/LogEntry/CheckpointLogEntry/CheckpointLogEntry.h"
+#include "logging/LogEntry/EvaluationLogEntry/EvaluationLogEntry.h"
+#include "logging/LogEntry/DebugLogEntry/DebugLogEntry.h"
 #include "Model/Model.h"
+
 #include <string>
-#include "LogEntry/SystemLogEntry/SystemLogEntry.h"
-#include "LogEntry/CheckpointLogEntry/CheckpointLogEntry.h"
-#include "LogEntry/EvaluationLogEntry/EvaluationLogEntry.h"
-#include "LogEntry/DebugLogEntry/DebugLogEntry.h"
 
 
 // MockIO class definition
@@ -18,6 +19,7 @@ public:
         return path;
     }
 };
+
 
 // Model and logbook fixture
 class LogBookTest : public ::testing::Test {
@@ -59,6 +61,7 @@ TEST_F(LogBookTest, ReadSystemLogs) {
     ASSERT_EQ(logs.front().get_cycle(), 1);
 }
 
+
 /**
  * @brief Unit test for reading checkpoint logs from the LogBook.
  *
@@ -79,6 +82,7 @@ TEST_F(LogBookTest, ReadCheckpointLogs) {
     ASSERT_EQ(logs.front().get_epoch(), 1);
     ASSERT_EQ(logs.front().get_cycle(), 1);
 }
+
 
 /**
  * @brief Test case for reading evaluation logs from the LogBook.
@@ -102,6 +106,7 @@ TEST_F(LogBookTest, ReadEvaluationLogs) {
     ASSERT_EQ(logs.front().get_cycle(), 1);
 }
 
+
 /**
  * @brief Unit test for reading debug logs from the LogBook.
  *
@@ -121,6 +126,7 @@ TEST_F(LogBookTest, ReadDebugLogs) {
     ASSERT_EQ(logs.front().get_cycle(), 1);
 }
 
+
 /**
  * @brief Test case to verify the behavior of reading non-existent logs.
  *
@@ -132,6 +138,7 @@ TEST_F(LogBookTest, ReadDebugLogs) {
 TEST_F(LogBookTest, ReadNonExistentLogs) {
     ASSERT_THROW(logBook->read_logs("nonexistent"), std::range_error);
 }
+
 
 /**
  * @brief Unit test for the LogBook class to verify the log_system function.
@@ -155,6 +162,7 @@ TEST_F(LogBookTest, TestWriteLogSystem) {
 
 }
 
+
 /**
  * @brief Unit test for the LogBook class to verify the functionality of writing a log checkpoint.
  *
@@ -177,6 +185,7 @@ TEST_F(LogBookTest, TestWriteLogCheckpoint) {
     ASSERT_EQ(logs.front().get_cycle(), 1);
 
 }
+
 
 /**
  * @brief Unit test for the LogBook class to verify the log_evaluation method.
@@ -211,6 +220,7 @@ TEST_F(LogBookTest, TestWriteLogEvaluation) {
     ASSERT_EQ(variant, 0.6);
 
 }
+
 
 /**
  * @brief Unit test for the LogBook class to verify the functionality of writing a debug log.

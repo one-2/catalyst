@@ -1,4 +1,4 @@
-#include "LogEntry/CheckpointLogEntry/CheckpointLogEntry.h"
+#include "logging/LogEntry/CheckpointLogEntry/CheckpointLogEntry.h"
 
 //
 // NOTE: Out-of-scope non-constant declaration is a bad idea.

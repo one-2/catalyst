@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
-#include "LogEntry/EvaluationLogEntry/EvaluationLogEntry.h"
+
+#include "logging/LogEntry/EvaluationLogEntry/EvaluationLogEntry.h"
 
 using namespace logging;
 

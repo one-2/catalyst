@@ -8,8 +8,10 @@
 //
 
 #include <gtest/gtest.h>
-#include "LogEntry/LogEntry.h"
 #include <cereal/archives/json.hpp>
+
+#include "logging/LogEntry/LogEntry.h"
+
 #include <sstream>
 
 namespace logging {

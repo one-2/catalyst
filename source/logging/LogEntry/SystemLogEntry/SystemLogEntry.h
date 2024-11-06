@@ -1,7 +1,7 @@
 #ifndef SYSTEMLOGENTRY_H
 #define SYSTEMLOGENTRY_H
 
-#include "LogEntry/LogEntry.h"
+#include "logging/LogEntry/LogEntry.h"
 
 //
 // NOTE: "Passing by value inherently restricts modifications to the copy, 

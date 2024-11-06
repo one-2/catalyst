@@ -1,9 +1,10 @@
+#include <CL/cl.h>
 
 #include "./SystemLogEntry.h"
+
 #include <fstream>
 #include <sstream>
 #include <memory>
-#include <CL/cl.h>
 
 namespace logging {
 
@@ -24,6 +25,7 @@ SystemLogEntry::SystemLogEntry(
     build_usage(), // NOTE: Bad signatures in header propagate type errors from called functions to caller
     "system"
 ) {}
+
 
 /**
  * @brief Constructs a Logdata object containing system usage information.
@@ -46,6 +48,7 @@ Logdata SystemLogEntry::build_usage()
 
     return Logdata("usage", message);
 }
+
 
 /**
  * @brief Retrieves the current CPU usage percentage.
@@ -76,6 +79,7 @@ float get_cpu_usage()
 
     return static_cast<float>(user + nice + system) / (user + nice + system + idle) * 100.0f;  // return CPU usage percentage
 }
+
 
 /**
  * @brief Retrieves the current memory usage of the system.
@@ -119,6 +123,7 @@ float get_mem_usage()
 
     return (total - available) / 1024.0;  // return used memory in MB
 }
+
 
 /**
  * @brief Retrieves the GPU usage by querying the OpenCL platform and device information.

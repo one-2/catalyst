@@ -1,5 +1,5 @@
 
-#include "LogEntry/DebugLogEntry/DebugLogEntry.h"
+#include "logging/LogEntry/DebugLogEntry/DebugLogEntry.h"
 
 using namespace logging;
 

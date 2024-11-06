@@ -9,7 +9,8 @@
 // Usage: 
 //
 
-#include "LogEntry.h"
+#include "./LogEntry.h"
+
 #include <sstream>
 
 namespace logging {
@@ -30,6 +31,7 @@ LogEntry::LogEntry(int epoch, int cycle, Logdata data, std::string type) {
     this->type = type;
 }
 
+
 /**
  * @brief Retrieves the timestamp of the log entry.
  * 
@@ -38,6 +40,7 @@ LogEntry::LogEntry(int epoch, int cycle, Logdata data, std::string type) {
 TimeStamp LogEntry::get_timestamp() const {
     return timestamp;
 }
+
 
 /**
  * @brief Retrieves the epoch time of the log entry.
@@ -48,6 +51,7 @@ int LogEntry::get_epoch() const {
     return epoch;
 }
 
+
 /**
  * @brief Retrieves the cycle value of the LogEntry.
  * 
@@ -56,6 +60,7 @@ int LogEntry::get_epoch() const {
 int LogEntry::get_cycle() const {
     return cycle;
 }
+
 
 /**
  * @brief Retrieves a shared pointer to a constant Logdata object.
@@ -66,6 +71,7 @@ std::shared_ptr<const Logdata> LogEntry::get_data() const {
     return std::shared_ptr<const Logdata>(new Logdata(data));
 }
 
+
 /**
  * @brief Retrieves the type of the log entry.
  * 
@@ -74,6 +80,7 @@ std::shared_ptr<const Logdata> LogEntry::get_data() const {
 std::string LogEntry::get_type() const {
     return type;
 }
+
 
 /**
  * @brief Deserializes a JSON string into a LogEntry object.
@@ -91,5 +98,6 @@ LogEntry LogEntry::deserialize_logentry(const std::string& json_str) {
     archive(log_entry);
     return log_entry;
 }
+
 
 } // namespace logging

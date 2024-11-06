@@ -2,18 +2,16 @@
 #ifndef LOGBOOK_H
 #define LOGBOOK_H
 
+#include "../LogEntry/LogEntry.h"
+#include "io/io.h"
+
 #include <string>
 #include <list>
 #include <future>
 
 
-
-#include "../LogEntry/LogEntry.h"
-#include "io/io.h"
-
-
 //
-// NOTE: Complexity of solution should not be considered for an auxilliary
+// NOTE: Complex solutions should not be considered for an auxilliary
 //       focus of the software. I should concentrate design time in
 //       areas which are highly used, fragile, or central to program
 //       execution. Not the logger.
