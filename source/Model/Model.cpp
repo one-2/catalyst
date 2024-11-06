@@ -7,60 +7,67 @@
 // Description: 
 //
 
-// class Model
-// {
-// public:
-//     Model(std::string storage_directory_path, std::string device);
-//     void add_block(std::string type);
-//     void train(DataLoader dataloader, int batch_size);
-//     void evaluate(DataLoader dataloader, int batch_size);
-//     const LogBook get_logbook();
-//     const serialise();
-//     static deserialise(std::string);
-
-// private:
-//     void compile();
-
-//     LogBook logbook;
-//     std::vector<Block> blocks; // TODO: unmet dependency
-//     bool execute_on_gpu;
-// };
 #include "./Model.h"
 
-
-
-Model::Model(std::string storage_directory_path, std::string device)
+Model::Model(std::string& storage_directory, std::string& device)
+    // : LogBook(storage_directory)
 {
-    execute_on_gpu = device == "gpu"; // declare the gpu attribute
-    logbook = LogBook(storage_directory_path); // create the logbook
+    this->execute_on_gpu = device == "gpu";
+}
+//
+// NOTE: Copped a bug here because I didn't explicitly initialise the LogBook.
+//       "In C++, member variables are initialized in the order they are declared
+//       in the class, and this initialization happens before the constructor body
+//       is executed. If you don't explicitly initialize a member variable in the
+//       constructor's initializer list, the compiler will try to use the default
+//       constructor for that member.""
+//
+
+
+int Model::train(datahandlers::DataLoader& dataloader, int batch_size, int epochs)
+{
+    // TODO
+    return 0;
 }
 
-void Model::add_block(std::string type)
-{
-    // Todo
-}
 
-void Model::train(DataLoader dataloader, int batch_size)
+int Model::evaluate(datahandlers::DataLoader& dataloader, int batch_size, int epochs)
 {
-    // Todo
-}
-
-void Model::evaluate(DataLoader dataloader, int batch_size)
-{
-    // Todo
+    // TODO
+    return 0;
 }
 
 const Model::LogBook get_logbook()
 {
-    // Todo
+    // TODO
+    return 0;
 }
 
-const Model::serialise()
+
+int Model::get_epoch() const
 {
-    // Todo
+    return epoch;
 }
 
-static Model::deserialise(std::string)
+
+int Model::get_cycle() const
 {
-    // Todo
+    return cycle;
+}
+
+
+std::string Model::get_name() const
+{
+    return name;
+}
+
+// logging::LogBook Model::get_LogBook() const
+// {
+//     return LogBook;
+// }
+
+
+void Model::compile()
+{
+    // Compile method implementation
 }

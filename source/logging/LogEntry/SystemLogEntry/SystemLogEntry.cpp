@@ -1,12 +1,21 @@
+#include <CL/cl.h>
 
 #include "./SystemLogEntry.h"
+
 #include <fstream>
 #include <sstream>
 #include <memory>
-#include <CL/cl.h>
 
 namespace logging {
 
+/**
+ * @brief Constructs a new SystemLogEntry object.
+ * 
+ * @param epoch The epoch time at which the log entry is created.
+ * @param cycle The cycle count associated with the log entry.
+ * 
+ * @note Calls base class constructor.
+ */
 SystemLogEntry::SystemLogEntry(
     int epoch,
     int cycle
@@ -17,6 +26,16 @@ SystemLogEntry::SystemLogEntry(
     "system"
 ) {}
 
+
+/**
+ * @brief Constructs a Logdata object containing system usage information.
+ *
+ * This function retrieves the current CPU, memory, and GPU usage, formats
+ * them into a human-readable string, and returns a Logdata object with
+ * the usage information.
+ *
+ * @return Logdata object containing the system usage information.
+ */
 Logdata SystemLogEntry::build_usage()
 {
     float cpu_usage = get_cpu_usage();
@@ -30,6 +49,17 @@ Logdata SystemLogEntry::build_usage()
     return Logdata("usage", message);
 }
 
+
+/**
+ * @brief Retrieves the current CPU usage percentage.
+ *
+ * This function reads the CPU statistics from the /proc/stat file and calculates
+ * the CPU usage percentage based on the user, nice, system, and idle times.
+ *
+ * @return float The CPU usage percentage.
+ *
+ * @throws std::runtime_error If the /proc/stat file cannot be opened or if the CPU usage information cannot be parsed.
+ */
 float get_cpu_usage()
 {
     std::ifstream stat_file("/proc/stat");
@@ -50,6 +80,18 @@ float get_cpu_usage()
     return static_cast<float>(user + nice + system) / (user + nice + system + idle) * 100.0f;  // return CPU usage percentage
 }
 
+
+/**
+ * @brief Retrieves the current memory usage of the system.
+ *
+ * This function reads the memory information from the /proc/meminfo file
+ * and calculates the used memory in megabytes (MB).
+ *
+ * @return float The used memory in MB.
+ *
+ * @throws std::runtime_error If the /proc/meminfo file cannot be opened or
+ *         if the memory usage information cannot be parsed.
+ */
 float get_mem_usage()
 {
     std::ifstream meminfo("/proc/meminfo");
@@ -82,6 +124,18 @@ float get_mem_usage()
     return (total - available) / 1024.0;  // return used memory in MB
 }
 
+
+/**
+ * @brief Retrieves the GPU usage by querying the OpenCL platform and device information.
+ * 
+ * This function uses the OpenCL API to get the number of platforms and devices available,
+ * and then retrieves the global memory size of the first GPU device found. The memory size
+ * is returned in megabytes (MB).
+ * 
+ * @return float The total global memory size of the first GPU device in MB.
+ * 
+ * @throws std::runtime_error If any OpenCL API call fails, an exception is thrown with an appropriate error message.
+ */
 float get_gpu_usage()
 {
     cl_uint num_platforms;
@@ -122,4 +176,5 @@ float get_gpu_usage()
     // Assuming the GPU memory usage is not directly available, we return the total memory size
     return static_cast<float>(mem_size) / 1024.0 / 1024.0;  // return total memory in MB
 }
+
 }

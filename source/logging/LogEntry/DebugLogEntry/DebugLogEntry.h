@@ -2,8 +2,10 @@
 #ifndef DEBUGLOGENTRY_H
 #define DEBUGLOGENTRY_H
 
+#include "logging/LogEntry/LogEntry.h"
+
 #include <string>
-#include "LogEntry/LogEntry.h"
+
 
 namespace logging {
 

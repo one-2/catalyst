@@ -8,15 +8,14 @@
 //
 // Usage: 
 //
-
 #ifndef BLOCK_H
 #define BLOCK_H
 
 
-
 class Block
 {
-    // Stubbed for Model.h
-}
+    Block();
+};
+
 
 #endif // BLOCK_H
