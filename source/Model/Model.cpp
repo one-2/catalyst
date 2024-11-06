@@ -10,7 +10,7 @@
 #include "./Model.h"
 
 Model::Model(std::string& storage_directory, std::string& device)
-    // : LogBook(storage_directory)
+    : logbook(logging::LogBook(storage_directory)) // Initialize LogBook member variable
 {
     this->execute_on_gpu = device == "gpu";
 }
@@ -20,7 +20,7 @@ Model::Model(std::string& storage_directory, std::string& device)
 //       in the class, and this initialization happens before the constructor body
 //       is executed. If you don't explicitly initialize a member variable in the
 //       constructor's initializer list, the compiler will try to use the default
-//       constructor for that member.""
+//       constructor for that member."
 //
 
 

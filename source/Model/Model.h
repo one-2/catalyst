@@ -11,7 +11,7 @@
 #ifndef MODEL_H // prevent multiple linking/reference errors
 #define MODEL_H
 
-// #include "logging/LogBook/LogBook.h"
+#include "logging/LogBook/LogBook.h"
 #include "Block/Block.h"
 
 #include <list>
@@ -57,7 +57,7 @@ private:
     void compile();
 
     // Data
-    // logging::LogBook LogBook;
+    logging::LogBook logbook;
     std::vector<Block> blocks;
     int epoch; // Default -1 (not running)
     int cycle; // Default -1 (not running)
