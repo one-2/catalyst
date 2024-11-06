@@ -6,12 +6,7 @@
 #include <list>
 #include <future>
 
-#include <cereal/cereal.hpp>
-#include <cereal/archives/json.hpp>
-#include <cereal/types/string.hpp>
-#include <cereal/types/list.hpp>
-#include <cereal/types/utility.hpp>
-#include <cereal/types/unordered_map.hpp>
+
 
 #include "../LogEntry/LogEntry.h"
 #include "io/io.h"

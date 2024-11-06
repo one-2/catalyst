@@ -15,12 +15,15 @@
 #include <memory>
 #include <chrono>
 #include <variant>
+
+// Serialisation - TODO: Move to tpp
 #include <cereal/archives/json.hpp>
-#include <cereal/archives/binary.hpp> // Include this header for BinaryOutputArchive
+#include <cereal/archives/binary.hpp>
 #include <cereal/types/memory.hpp>
 #include <cereal/types/utility.hpp>
-#include <cereal/types/variant.hpp> // Include this header for variant support
+#include <cereal/types/variant.hpp>
 #include <cereal/types/chrono.hpp>
+
 
 namespace logging {
 
@@ -54,6 +57,8 @@ public:
         return os.str();
     }
 
+    static LogEntry deserialize_logentry(const std::string& json_str);
+
 protected:
     TimeStamp timestamp;
     int epoch;
@@ -62,7 +67,7 @@ protected:
     std::string type = "LogEntry";
 
 private:
-    // Grant Cereal access to private members
+    // Grant Cereal access to protected members
     friend class cereal::access;
 };
 
@@ -72,7 +77,6 @@ void serialize(Archive& ar, Logdata& logdata) {
     ar(CEREAL_NVP(logdata.first), CEREAL_NVP(logdata.second));
 }
 
-LogEntry deserialize_logentry(const std::string& json_str);
 
 } // namespace logging
 

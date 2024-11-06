@@ -42,7 +42,7 @@ std::string LogEntry::get_type() const {
     return type;
 }
 
-LogEntry deserialize_logentry(const std::string& json_str) {
+LogEntry LogEntry::deserialize_logentry(const std::string& json_str) {
     std::istringstream iss(json_str);
     cereal::JSONInputArchive archive(iss);
     LogEntry log_entry;

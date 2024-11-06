@@ -79,7 +79,7 @@ TEST(LogEntryTest, SerializationAndDeserialization) {
     }
 
     std::string json_str = oss.str();
-    LogEntry deserialized_log_entry = deserialize_logentry(json_str);
+    LogEntry deserialized_log_entry = LogEntry::deserialize_logentry(json_str);
 
     EXPECT_EQ(deserialized_log_entry.get_epoch(), log_entry.get_epoch());
     EXPECT_EQ(deserialized_log_entry.get_cycle(), log_entry.get_cycle());
