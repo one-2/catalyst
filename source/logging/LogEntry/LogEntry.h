@@ -11,15 +11,17 @@
 #ifndef LOGENTRY_H
 #define LOGENTRY_H
 
+#include <cereal/archives/json.hpp> // TODO: Move serialisation to tpp
+#include <cereal/archives/binary.hpp>
+#include <cereal/types/memory.hpp>
+#include <cereal/types/utility.hpp>
+#include <cereal/types/variant.hpp>
+#include <cereal/types/chrono.hpp>
+
 #include <string>
 #include <memory>
 #include <chrono>
 #include <variant>
-#include <cereal/archives/json.hpp>
-#include <cereal/types/memory.hpp>
-#include <cereal/types/utility.hpp>
-#include <cereal/types/variant.hpp> // Include this header for variant support
-#include <cereal/types/chrono.hpp>
 
 namespace logging {
 
@@ -44,6 +46,17 @@ public:
         ar(CEREAL_NVP(timestamp), CEREAL_NVP(epoch), CEREAL_NVP(cycle), CEREAL_NVP(data), CEREAL_NVP(type));
     }
 
+    std::string to_json() const {
+        std::ostringstream os;
+        {
+            cereal::JSONOutputArchive archive(os);
+            archive(cereal::make_nvp("log_entry", *this));
+        }
+        return os.str();
+    }
+
+    static LogEntry deserialize_logentry(const std::string& json_str);
+
 protected:
     TimeStamp timestamp;
     int epoch;
@@ -52,7 +65,7 @@ protected:
     std::string type = "LogEntry";
 
 private:
-    // Grant Cereal access to private members
+    // Grant Cereal access to protected members
     friend class cereal::access;
 };
 
@@ -62,7 +75,6 @@ void serialize(Archive& ar, Logdata& logdata) {
     ar(CEREAL_NVP(logdata.first), CEREAL_NVP(logdata.second));
 }
 
-LogEntry deserialize_logentry(const std::string& json_str);
 
 } // namespace logging
 

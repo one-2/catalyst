@@ -43,4 +43,17 @@ int Model::add_log(std::string type, std::string message)
     return 0;
 }
 
-// std::ostream& operator<<;
+int Model::get_epoch() const
+{
+    return epoch;
+}
+
+int Model::get_cycle() const
+{
+    return cycle;
+}
+
+std::string Model::get_name() const
+{
+    return "dummy"; // TODO
+}

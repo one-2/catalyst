@@ -3,10 +3,12 @@
 #ifndef EVALUATIONLOGENTRY_H
 #define EVALUATIONLOGENTRY_H
 
+#include "logging/LogEntry/LogEntry.h"
+
 #include <string>
 #include <list>
 #include <utility>
-#include "LogEntry/LogEntry.h"
+
 
 namespace logging {
 

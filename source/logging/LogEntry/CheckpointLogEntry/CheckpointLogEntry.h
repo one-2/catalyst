@@ -4,9 +4,11 @@
 #define CHECKPOINTLOGENTRY_H
 
 #include "Model/Model.h"
-#include "LogEntry/LogEntry.h"
+#include "logging/LogEntry/LogEntry.h"
+
 
 namespace logging {
+
 class CheckpointLogEntry : public LogEntry {
 public:
     CheckpointLogEntry(

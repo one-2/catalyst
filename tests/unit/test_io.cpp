@@ -14,7 +14,6 @@
 #include <fstream>
 #include <filesystem>
 
-// Test cases
 
 //
 // Load csv to a tensor
@@ -33,49 +32,8 @@ TEST(io, LoadTensorFromCsv) {
 
     // Clean up
     std::filesystem::remove(temp_csv_path);
+
 }
-
-//
-// Write log to a file and non-existent directory
-//
-// TEST(io, WriteLog) {
-//     std::string log_content = "This is a test log entry.";
-//     std::string temp_directory = "/tmp/test_logs";
-
-//     // Set up
-//     std::filesystem::remove_all(temp_directory); //Clean the directory
-    
-//     // Write the log and check it exists
-//     std::string path_written_existing = io::write_log(log_content, temp_directory); // includes directory builder
-//     ASSERT_TRUE(std::filesystem::exists(path_written_existing)); //File exists
-
-//     // Check it contains the expected content
-//     std::ifstream log_file_existing(path_written_existing);
-//     std::string file_content_existing((std::istreambuf_iterator<char>(log_file_existing)), std::istreambuf_iterator<char>());
-//     log_file_existing.close();
-//     ASSERT_EQ(file_content_existing, log_content + "\n");
-
-//     // Clean up
-//     std::filesystem::remove_all(temp_directory);
-
-//     // Test for non-existent directory
-//     std::string non_existent_directory = "/tmp/non_existent_directory";
-//     std::filesystem::remove_all(non_existent_directory); // clean the directory
-
-//     std::string path_written_non_existent = io::write_log(log_content, non_existent_directory); // includes directory builder
-//     ASSERT_TRUE(std::filesystem::exists(path_written_non_existent)); //File exists
-
-//     std::ifstream log_file_non_existent(path_written_non_existent); //Contains expected content
-//     std::string file_content_non_existent((std::istreambuf_iterator<char>(log_file_non_existent)), std::istreambuf_iterator<char>());
-//     log_file_non_existent.close();
-//     ASSERT_EQ(file_content_non_existent, log_content + "\n");
-
-//     EXPECT_EQ(
-//         0, 1
-//     );
-//     // Clean up
-//     // std::filesystem::remove_all(non_existent_directory);
-// }
 
 //
 // Build directory path
@@ -94,4 +52,25 @@ TEST(io, BuildDirectoryPath) {
 
     // Clean up
     std::filesystem::remove_all(temp_directory);
+
+}
+
+
+TEST(TestIO, WriteLogTest) {
+    std::string test_file_path = "/tmp/test_log.txt";
+    std::string log_content = "This is a test log.";
+    std::string returned_path = io::write_log(log_content, test_file_path);
+
+    // Check if the file is created
+    std::ifstream infile(test_file_path);
+    ASSERT_TRUE(infile.good());
+
+    // Check if the content is written correctly
+    std::string file_content((std::istreambuf_iterator<char>(infile)), std::istreambuf_iterator<char>());
+    infile.close();
+    EXPECT_EQ(log_content, file_content);
+
+    // Check if the returned path is correct
+    EXPECT_EQ(returned_path, test_file_path);
+
 }

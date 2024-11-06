@@ -19,6 +19,11 @@ public:
     std::string serialize();
     static std::shared_ptr<Model> deserialize(std::string& serialized_model);
 
+    int get_epoch() const;
+    int get_cycle() const;
+
+    std::string get_name() const;
+
 protected:
 
 private:
