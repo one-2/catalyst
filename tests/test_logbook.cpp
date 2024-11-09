@@ -209,11 +209,13 @@ TEST_F(LogBookTest, TestWriteLogCheckpoint) {
  */
 TEST_F(LogBookTest, TestWriteLogEvaluation) {
     std::string score_name = "accuracy";
+    float score_value = 0.6;
+
     logBook->log_evaluation(
         model->get_epoch(),
         model->get_cycle(),
         score_name,
-        0.6
+        score_value
     );
     auto logs = logBook->read_logs("evaluation");
     ASSERT_EQ(logs.size(), 1);
@@ -224,8 +226,8 @@ TEST_F(LogBookTest, TestWriteLogEvaluation) {
     
     ASSERT_EQ(data->first, score_name);
 
-    auto variant = std::get<double>(data->second);
-    ASSERT_EQ(variant, 0.6);
+    auto variant = std::get<float>(data->second);
+    ASSERT_EQ(variant, score_value);
 
 }
 
