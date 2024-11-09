@@ -57,7 +57,7 @@ std::string write_log(const std::string& serialized_log, const std::string& path
     if (!log_file.is_open()) {
         throw std::runtime_error("Could not open log file: " + path);
     }
-    log_file << serialized_log << std::endl; // Write the log entry
+    log_file << serialized_log; // Write the log entry
     log_file.close();
     return path;
 
