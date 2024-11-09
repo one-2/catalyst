@@ -46,3 +46,4 @@ target_link_libraries(main PRIVATE ${TORCH_LIBRARIES} catalyst)
 # Add subdirectories to build tree
 add_subdirectory(source)
 add_subdirectory(tests)
+add_subdirectory(third_party/cereal)

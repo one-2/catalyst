@@ -4,8 +4,6 @@ file(GLOB_RECURSE SOURCE_FILES *.cpp)
 list(FILTER SOURCE_FILES EXCLUDE REGEX "source/third_party/cereal/sandbox/.*")
 add_library(catalyst ${SOURCE_FILES})
 
-add_subdirectory(third_party/cereal)
-
 # Find Boost libraries
 find_package(Boost 1.74 REQUIRED COMPONENTS serialization)
 
