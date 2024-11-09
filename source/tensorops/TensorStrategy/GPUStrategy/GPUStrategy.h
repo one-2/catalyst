@@ -1,27 +1,31 @@
-// source/tensorops/TensorOps.h
+// source/tensorops/GPUStrategy.h
 //
 // Author: Stephen Elliott
 //
-// Date: 2024-11-04
+// Date: 2024-11-05
 //
-// Description: Public interface to mathematics operations
+// Description: 
 //
 
 
-#ifndef TENSOROPS_H
-#define TENSOROPS_H
+#ifndef GPUSTRATEGY_H
+#define GPUSTRATEGY_H
 
-#include <torch/torch.h>
+
 #include "tensorops/TensorStrategy/TensorStrategy.h"
 #include "tensorops/tensor_types.h"
+#include "GPUOps/GPUOps_types.h"
 
-namespace tensor {
+#include <memory>
+#include <string>
 
-class TensorOps
+namespace tensor
+{
+
+class GPUStrategy : public TensorStrategy
 {
 public:
-    // Constructor
-    TensorOps(bool execute_on_gpu);
+    GPUStrategy();
 
     Tensor zero(int rows, int cols);
     Tensor identity(int dimension);
@@ -33,10 +37,10 @@ public:
     Tensor softmax(const Tensor& a);
 
 private:
-    TensorStrategy big_daddy();
+    KernelPointer get_kernel(std::string type);
 
 };
-  
-}
 
-#endif // TENSOROPS_H
+} // namespace tensor
+
+#endif // GPUSTRATEGY_H

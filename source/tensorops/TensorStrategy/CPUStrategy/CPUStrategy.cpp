@@ -10,7 +10,7 @@
 //
 
 #include <torch/torch.h>
-#include "tensorops.h"
+#include "./CPUStrategy.h"
 
 namespace tensorops
 {

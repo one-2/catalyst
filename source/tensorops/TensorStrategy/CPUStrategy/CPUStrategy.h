@@ -8,25 +8,17 @@
 #ifndef CPUTENSORSTRATEGY_H
 #define CPUTENSORSTRATEGY_H
 
+#include "tensorops/tensor_types.h"
+#include "tensorops/TensorStrategy/TensorStrategy.h"
+
 #include <torch/torch.h>
 #include <ostream>
-#include "tensorops/maths_typedefs.h"
-#include "tensorops/TensorOpsExecutionStrategy"
-    
 
 
-
-
-/////////// TODO TODO RENAME RENAME THIS FILE TO CPUTensorStrategy
-
-
-
-
-// Function declarations
-namespace maths
+namespace tensor
 {
 
-class CPUTensorStrategy : public TensorOpsExecutionStrategy
+class CPUTensorStrategy : public TensorStrategy
 {
     Tensor zero(int rows, int cols);
     Tensor identity(int dimension);
@@ -36,8 +28,8 @@ class CPUTensorStrategy : public TensorOpsExecutionStrategy
     Tensor tensor_product(const Tensor& a, const Tensor& b);
     Tensor reLu(const Tensor& a);
     Tensor softmax(const Tensor& a);
-}
+};
 
-} // namespace maths
+} // namespace tensor
 
 #endif // CPUTENSORSTRATEGY_H
