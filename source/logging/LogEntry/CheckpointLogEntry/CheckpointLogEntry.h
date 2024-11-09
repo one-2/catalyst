@@ -3,7 +3,6 @@
 #ifndef CHECKPOINTLOGENTRY_H
 #define CHECKPOINTLOGENTRY_H
 
-#include "Model/Model.h"
 #include "logging/LogEntry/LogEntry.h"
 
 

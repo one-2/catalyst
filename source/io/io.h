@@ -9,9 +9,9 @@
 #ifndef IO_H
 #define IO_H
 
-#include <string>
 #include <torch/torch.h>
-#include "../Model/Model.h"
+
+#include <string>
 
 namespace io {
     // Load
