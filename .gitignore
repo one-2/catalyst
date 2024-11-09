@@ -1,6 +1,14 @@
-# 
+# Project nuisance files
 build
 localbuildcommands.txt
+
+# Runtime & test generated
+Testing
+
+# Workspace settings
+catalyst.code-workspace
+
+
 
 # Prerequisites
 *.d
