@@ -37,11 +37,6 @@ TEST(Dataset, ConstructorWithCSVPath) {
     EXPECT_EQ(dataset.input.size(1), 10);
     EXPECT_EQ(dataset.target.size(0), 100);
 
-    int x = 0;
-    int y = 1;
-
-    EXPECT_EQ(x, y);
-
     // Cleanup
     std::remove("./constructor_test_temp.csv");
 }
