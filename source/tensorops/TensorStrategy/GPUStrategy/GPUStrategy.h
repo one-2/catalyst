@@ -1,3 +1,13 @@
+// source/tensorops/TensorStrategy/GPUStrategy/GPUStrategy.h
+//
+// Author: Stephen Elliott
+//
+// Date: 2024-11-11
+//
+// Description: 
+//
+// Usage: 
+//
 // source/tensorops/GPUStrategy.h
 //
 // Author: Stephen Elliott
@@ -30,7 +40,7 @@ public:
     TensorPtr zero(int rows, int cols);
     TensorPtr identity(int dimension);
     TensorPtr sum(TensorPtr a, TensorPtr b);
-    TensorPtr multiple(TensorPtr a);
+    TensorPtr multiple(TensorPtr a, TensorPtr scalar);
     TensorPtr scalar_product(TensorPtr a, TensorPtr b);
     TensorPtr tensor_product(TensorPtr a, TensorPtr b);
     TensorPtr reLu(TensorPtr a);

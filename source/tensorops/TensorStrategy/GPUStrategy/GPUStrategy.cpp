@@ -2,6 +2,16 @@
 //
 // Author: Stephen Elliott
 //
+// Date: 2024-11-11
+//
+// Description: 
+//
+// Usage: 
+//
+// source/tensorops/TensorStrategy/GPUStrategy/GPUStrategy.cpp
+//
+// Author: Stephen Elliott
+//
 // Date: 2024-11-10
 //
 // Description: 
@@ -35,7 +45,7 @@ TensorPtr GPUStrategy::sum(TensorPtr a, TensorPtr b) {
 }
 
 
-TensorPtr GPUStrategy::multiple(TensorPtr a) {
+TensorPtr GPUStrategy::multiple(TensorPtr a, TensorPtr scalar) {
     // TODO
     return TensorPtr();
 }

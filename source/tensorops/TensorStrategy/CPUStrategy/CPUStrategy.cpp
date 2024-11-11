@@ -1,3 +1,13 @@
+// source/tensorops/TensorStrategy/CPUStrategy/CPUStrategy.cpp
+//
+// Author: Stephen Elliott
+//
+// Date: 2024-11-11
+//
+// Description: 
+//
+// Usage: 
+//
 // tensorops.cpp
 //
 // Stephen Elliott, October 8 2024
@@ -51,7 +61,7 @@ TensorPtr CPUStrategy::sum(TensorPtr a, TensorPtr b)
 }
 
 
-TensorPtr CPUStrategy::multiple(TensorPtr a, double scalar)
+TensorPtr CPUStrategy::multiple(TensorPtr a, TensorPtr scalar)
 {
     return std::make_shared<torch::Tensor>(*a * scalar);
 }
