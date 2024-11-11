@@ -21,8 +21,11 @@
 
 class MockBlock : public Block {
 public:
-    std::string type = "mock";
-    MockBlock() : Block(type) {}
+    MockBlock(std::string type) : Block(type) {}
+
+    std::string get_type() {
+        return type;
+    }
 };
 
 /*
@@ -66,7 +69,7 @@ TEST_F(TestModel, AddBlock)
     EXPECT_EQ(block_length_initial, 0);
 
     // Build a block
-    std::shared_ptr<Block> block = std::make_shared<MockBlock>();
+    std::shared_ptr<Block> block = std::make_shared<MockBlock>("mock");
 
     // Add the block 
     m->add_block(block);
@@ -85,7 +88,7 @@ TEST_F(TestModel, Compile)
     // Add a block
     // Compile the model
     // Assert no errors thrown
-    EXPECT_TRUE(false);
+    FAIL();
 }
 
 
@@ -98,13 +101,13 @@ TEST_F(TestModel, Train)
     // Assert no errors thrown
     // Get train losses from logs
     // Assert nonempty and contain expected values (debug => constant)
-    EXPECT_TRUE(false);
+    FAIL();
 }
 
 
 TEST_F(TestModel, Evaluate)
 {
-    EXPECT_TRUE(false);
+    FAIL();
 }
 
 
@@ -119,7 +122,7 @@ TEST_F(TestModel, TrainingAndInferenceLogsAdded)
     // Assert nonempty and contain expected values (debug => constant)
     // Get test logs
     // Assert nonempty and contain expected values (debug => constant)
-    EXPECT_TRUE(false);
+    FAIL();
 }
 
 
@@ -127,7 +130,7 @@ TEST_F(TestModel, TestGetters)
 {
     // Train for a bit
     // Get logbook and check training losses
-    EXPECT_TRUE(false);
+    FAIL();
 }
 
 
@@ -136,5 +139,5 @@ TEST_F(TestModel, SerialiseDeserialise)
     // Serialise the model
     // Assert no errors
     // Assert model can be deserialise and retrieved, with all relevant data the same
-    EXPECT_TRUE(false);
+    FAIL();
 }
