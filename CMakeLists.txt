@@ -9,6 +9,9 @@ project(catalyst)
 # Build type is testing
 enable_testing() # TODO: remove in prod
 
+# export compile commands for intellisense
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 #### CUDA
 # cpp libtorch is bundled as cpu-only and with cuda. I'm planning to use opencl initially
 # and learn cuda later (open standard = better?). Using bundled from the start to avoid issues later.
