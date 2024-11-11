@@ -21,6 +21,9 @@
 #include "./GPUStrategy.h"
 
 
+using namespace tensor;
+
+
 GPUStrategy::GPUStrategy() {
     // TODO
     // Initialise the KernelManager
@@ -83,9 +86,4 @@ TensorPtr GPUStrategy::softmax(TensorPtr a) {
     return nullptr;
 }
 
-
-KernelPointer GPUStrategy::get_kernel(std::string type) {
-    // TODO
-    return KernelPointer();
-}
 

@@ -13,64 +13,63 @@
 #include "tensorops/TensorStrategy/CPUStrategy/CPUStrategy.h"
 
 
-namespace tensor {
+using namespace tensor;
+
 
 // Constructor
-TensorOpsSelector::TensorOps(bool execute_on_gpu) {
+TensorOpsSelector::TensorOpsSelector(bool execute_on_gpu) {
     if (execute_on_gpu) {
-        big_daddy = GPUStrategy();
+        big_daddy = std::make_unique<GPUStrategy>();
     } else {
-        big_daddy = CPUStrategy();
+        big_daddy = std::make_unique<CPUStrategy>();
     };
 
 }
 
 // Create a zero tensor
 TensorPtr TensorOpsSelector::zero(int rows, int cols) {
-    return big_daddy.zero(rows, cols);
+    return big_daddy->zero(rows, cols);
 
 }
 
 // Create an identity tensor
 TensorPtr TensorOpsSelector::identity(int dimension) {
-    return big_daddy.identity(dimension);
+    return big_daddy->identity(dimension);
 
 }
 
 // Sum of two tensors
 TensorPtr TensorOpsSelector::sum(TensorPtr a, TensorPtr b) {
-    return big_daddy.sum(a, b);
+    return big_daddy->sum(a, b);
 
 }
 
 // Multiply TensorPtr by itself
 TensorPtr TensorOpsSelector::multiple(TensorPtr a, TensorPtr scalar) {
-    return big_daddy.multiple(a, scalar);
+    return big_daddy->multiple(a, scalar);
 
 }
 
 // Scalar product of two tensors
 TensorPtr TensorOpsSelector::scalar_product(TensorPtr a, TensorPtr b) {
-    return big_daddy.scalar_product(a, b);
+    return big_daddy->scalar_product(a, b);
 
 }
 
 // Tensor product of two tensors
 TensorPtr TensorOpsSelector::tensor_product(TensorPtr a, TensorPtr b) {
-    return big_daddy.tensor_product(a, b);
+    return big_daddy->tensor_product(a, b);
 
 }
 
 // Apply ReLU activation function
 TensorPtr TensorOpsSelector::reLu(TensorPtr a) {
-    return big_daddy.reLu(a);
+    return big_daddy->reLu(a);
 
 }
 
 // Apply softmax function
 TensorPtr TensorOpsSelector::softmax(TensorPtr a) {
-    return big_daddy.softmax(a);
+    return big_daddy->softmax(a);
 
 }
-
-} // namespace tensor

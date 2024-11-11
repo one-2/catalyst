@@ -38,7 +38,7 @@ public:
     virtual TensorPtr sum(TensorPtr a, TensorPtr b)             = 0;
     virtual TensorPtr multiple(TensorPtr a, TensorPtr scalar)   = 0;
     virtual TensorPtr scalar_product(TensorPtr a, TensorPtr b)  = 0;
-    virtual TensorPtr Tensor_product(TensorPtr a, TensorPtr b)  = 0;
+    virtual TensorPtr tensor_product(TensorPtr a, TensorPtr b)  = 0;
     virtual TensorPtr reLu(TensorPtr a)                         = 0;
     virtual TensorPtr softmax(TensorPtr a)                      = 0;
 

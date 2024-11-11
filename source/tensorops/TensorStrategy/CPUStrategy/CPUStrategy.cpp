@@ -33,12 +33,6 @@ TensorPtr CPUStrategy::zero(int rows, int cols)
 }
 
 
-TensorPtr CPUStrategy::matmul(TensorPtr a, TensorPtr b)
-{
-    return std::make_shared<torch::Tensor>(torch::matmul(*a, *b));
-}
-
-
 TensorPtr CPUStrategy::reLu(TensorPtr a)
 {
     return std::make_shared<torch::Tensor>(torch::relu(*a));
@@ -65,7 +59,7 @@ TensorPtr CPUStrategy::sum(TensorPtr a, TensorPtr b)
 
 TensorPtr CPUStrategy::multiple(TensorPtr a, TensorPtr scalar)
 {
-    return std::make_shared<torch::Tensor>(*a * scalar);
+    return std::make_shared<torch::Tensor>(*a * *scalar); // Scalar multiplication syntax
 }
 
 
@@ -77,7 +71,7 @@ TensorPtr CPUStrategy::scalar_product(TensorPtr a, TensorPtr b)
 
 TensorPtr CPUStrategy::tensor_product(TensorPtr a, TensorPtr b)
 {
-    return torch::matmul(a, b);
+    return std::make_shared<torch::Tensor>(torch::matmul(*a, *b));
 }
 
 

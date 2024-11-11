@@ -43,7 +43,7 @@ public:
     TensorPtr softmax(TensorPtr a);
 
 private:
-    TensorStrategy big_daddy;
+    std::unique_ptr<TensorStrategy> big_daddy;
 
 };
   
