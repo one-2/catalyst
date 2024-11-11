@@ -25,12 +25,12 @@ public:
 
     TensorPtr zero(int rows, int cols);
     TensorPtr identity(int dimension);
-    TensorPtr sum(const TensorPtr& a, const TensorPtr& b);
-    TensorPtr multiple(const TensorPtr& a);
-    TensorPtr scalar_product(const TensorPtr& a, const TensorPtr& b);
-    TensorPtr tensor_product(const TensorPtr& a, const TensorPtr& b);
-    TensorPtr reLu(const TensorPtr& a);
-    TensorPtr softmax(const TensorPtr& a);
+    TensorPtr sum(TensorPtr a, TensorPtr b);
+    TensorPtr multiple(TensorPtr a);
+    TensorPtr scalar_product(TensorPtr a, TensorPtr b);
+    TensorPtr tensor_product(TensorPtr a, TensorPtr b);
+    TensorPtr reLu(TensorPtr a);
+    TensorPtr softmax(TensorPtr a);
 
 private:
     TensorStrategy big_daddy;
