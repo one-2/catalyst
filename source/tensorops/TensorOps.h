@@ -33,7 +33,7 @@ public:
     TensorPtr softmax(const TensorPtr& a);
 
 private:
-    TensorStrategy big_daddy();
+    TensorStrategy big_daddy;
 
 };
   

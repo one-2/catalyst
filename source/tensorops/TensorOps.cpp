@@ -12,55 +12,49 @@ TensorOps::TensorOps(bool execute_on_gpu) {
 }
 
 // Create a zero tensor
-Tensor TensorOps::zero(int rows, int cols) {
+TensorPtr TensorOps::zero(int rows, int cols) {
     // TODO
 
 }
 
 // Create an identity tensor
-Tensor TensorOps::identity(int dimension) {
+TensorPtr TensorOps::identity(int dimension) {
     // TODO
 
 }
 
 // Sum of two tensors
-Tensor TensorOps::sum(const Tensor& a, const Tensor& b) {
+TensorPtr TensorOps::sum(const Tensor& a, const Tensor& b) {
     // TODO
 
 }
 
-// Multiply tensor by itself
-Tensor TensorOps::multiple(const Tensor& a) {
+// Multiply TensorPtr by itself
+TensorPtr TensorOps::multiple(const Tensor& a) {
     // TODO
 
 }
 
 // Scalar product of two tensors
-Tensor TensorOps::scalar_product(const Tensor& a, const Tensor& b) {
+TensorPtr TensorOps::scalar_product(const Tensor& a, const Tensor& b) {
     // TODO
 
 }
 
 // Tensor product of two tensors
-Tensor TensorOps::tensor_product(const Tensor& a, const Tensor& b) {
+TensorPtr TensorOps::tensor_product(const Tensor& a, const Tensor& b) {
     // TODO
 
 }
 
 // Apply ReLU activation function
-Tensor TensorOps::reLu(const Tensor& a) {
+TensorPtr TensorOps::reLu(const Tensor& a) {
     // TODO
 
 }
 
 // Apply softmax function
-Tensor TensorOps::softmax(const Tensor& a) {
-    // TODO
-
-}
-
-// Private method
-TensorStrategy TensorOps::big_daddy() {
+TensorPtr TensorOps::softmax(const Tensor& a) {
     // TODO
 
 }

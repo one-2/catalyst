@@ -12,51 +12,62 @@
 #include <torch/torch.h>
 #include "./CPUStrategy.h"
 
-namespace tensorops
+namespace tensor
 {
-    torch::Tensor matmul(torch::Tensor a, torch::Tensor b)
-    {
-        return torch::matmul(a, b);
-    }
 
-    torch::Tensor reLu(torch::Tensor a)
-    {
-        return torch::relu(a);
-    }
-
-    torch::Tensor softmax(torch::Tensor a)
-    {
-        return torch::softmax(a, 0);
-    }
-
-    torch::Tensor identity(int n)
-    {
-        return torch::eye(n);
-    }
-
-    torch::Tensor sum(torch::Tensor a, torch::Tensor b)
-    {
-        return a + b;
-    }
-
-    torch::Tensor multiple(torch::Tensor a, double scalar)
-    {
-        return a * scalar;
-    }
-
-    torch::Tensor scalar_product(torch::Tensor a, torch::Tensor b)
-    {
-        return torch::dot(a, b);
-    }
-
-    torch::Tensor tensor_product(torch::Tensor a, torch::Tensor b)
-    {
-        return torch::matmul(a, b);
-    }
-
-    std::ostream& operator<<(std::ostream& os, const torch::Tensor& tensor)
-    {
-        os << tensor.toString();
-        return os;
-    }
+TensorPtr CPUStrategy::zero(int rows, int cols)
+{
+    return std::make_shared<torch::Tensor>(torch::zeros({rows, cols}));
 }
+
+
+TensorPtr CPUStrategy::matmul(TensorPtr a, TensorPtr b)
+{
+    return std::make_shared<torch::Tensor>(torch::matmul(*a, *b));
+}
+
+
+TensorPtr CPUStrategy::reLu(TensorPtr a)
+{
+    return std::make_shared<torch::Tensor>(torch::relu(*a));
+}
+
+
+TensorPtr CPUStrategy::softmax(TensorPtr a)
+{
+    return std::make_shared<torch::Tensor>(torch::softmax(*a, 0));
+}
+
+
+TensorPtr CPUStrategy::identity(int n)
+{
+    return std::make_shared<torch::Tensor>(torch::eye(n));
+}
+
+
+TensorPtr CPUStrategy::sum(TensorPtr a, TensorPtr b)
+{
+    return std::make_shared<torch::Tensor>(*a + *b);
+}
+
+
+TensorPtr CPUStrategy::multiple(TensorPtr a, double scalar)
+{
+    return std::make_shared<torch::Tensor>(*a * scalar);
+}
+
+
+TensorPtr CPUStrategy::scalar_product(TensorPtr a, TensorPtr b)
+{
+    return std::make_shared<torch::Tensor>(torch::dot(*a, *b));
+}
+
+
+TensorPtr CPUStrategy::tensor_product(TensorPtr a, TensorPtr b)
+{
+    return torch::matmul(a, b);
+}
+
+
+} // namespace tensor
+

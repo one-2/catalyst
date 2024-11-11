@@ -17,51 +17,51 @@ GPUStrategy::GPUStrategy()
 }
 
 
-Tensor GPUStrategy::zero(int rows, int cols) {
+TensorPtr GPUStrategy::zero(int rows, int cols) {
     // TODO
-    return Tensor();
+    return TensorPtr();
 }
 
 
-Tensor GPUStrategy::identity(int dimension) {
+TensorPtr GPUStrategy::identity(int dimension) {
     // TODO
-    return Tensor();
+    return TensorPtr();
 }
 
 
-Tensor GPUStrategy::sum(const Tensor& a, const Tensor& b) {
+TensorPtr GPUStrategy::sum(TensorPtr a, TensorPtr b) {
     // TODO
-    return Tensor();
+    return TensorPtr();
 }
 
 
-Tensor GPUStrategy::multiple(const Tensor& a) {
+TensorPtr GPUStrategy::multiple(TensorPtr a) {
     // TODO
-    return Tensor();
+    return TensorPtr();
 }
 
 
-Tensor GPUStrategy::scalar_product(const Tensor& a, const Tensor& b) {
+TensorPtr GPUStrategy::scalar_product(TensorPtr a, TensorPtr b) {
     // TODO
-    return Tensor();
+    return TensorPtr();
 }
 
 
-Tensor GPUStrategy::tensor_product(const Tensor& a, const Tensor& b) {
+TensorPtr GPUStrategy::tensor_product(TensorPtr a, TensorPtr b) {
     // TODO
-    return Tensor();
+    return TensorPtr();
 }
 
 
-Tensor GPUStrategy::reLu(const Tensor& a) {
+TensorPtr GPUStrategy::reLu(TensorPtr a) {
     // TODO
-    return Tensor();
+    return TensorPtr();
 }
 
 
-Tensor GPUStrategy::softmax(const Tensor& a) {
+TensorPtr GPUStrategy::softmax(TensorPtr a) {
     // TODO
-    return Tensor();
+    return TensorPtr();
 }
 
 

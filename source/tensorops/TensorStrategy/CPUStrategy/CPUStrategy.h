@@ -1,35 +1,37 @@
-// source/tensorops/CPUTensorStrategy.h
+// source/tensorops/CPUStrategy.h
 //
 // Stephen Elliott, 2024-10-06
 //
-// Description: This file contains the declarations for tensor operations
+// Description: This file contains the declarations for tensorPtr operations
 //
 
-#ifndef CPUTENSORSTRATEGY_H
-#define CPUTENSORSTRATEGY_H
+#ifndef CPUSTRATEGY_H
+#define CPUSTRATEGY_H
+
 
 #include "tensorops/tensor_types.h"
 #include "tensorops/TensorStrategy/TensorStrategy.h"
 
 #include <torch/torch.h>
+
 #include <ostream>
 
 
 namespace tensor
 {
 
-class CPUTensorStrategy : public TensorStrategy
+class CPUStrategy : public TensorStrategy
 {
-    Tensor zero(int rows, int cols);
-    Tensor identity(int dimension);
-    Tensor sum(const Tensor& a, const Tensor& b);
-    Tensor multiple(const Tensor& a);
-    Tensor scalar_product(const Tensor& a, const Tensor& b);
-    Tensor tensor_product(const Tensor& a, const Tensor& b);
-    Tensor reLu(const Tensor& a);
-    Tensor softmax(const Tensor& a);
+    TensorPtr zero(int rows, int cols);
+    TensorPtr identity(int dimension);
+    TensorPtr sum(TensorPtr a, TensorPtr b);
+    TensorPtr multiple(TensorPtr a, double scalar);
+    TensorPtr scalar_product(TensorPtr a, TensorPtr b);
+    TensorPtr tensor_product(TensorPtr a, TensorPtr b);
+    TensorPtr reLu(TensorPtr a);
+    TensorPtr softmax(TensorPtr a);
 };
 
 } // namespace tensor
 
-#endif // CPUTENSORSTRATEGY_H
+#endif // CPUSTRATEGY_H

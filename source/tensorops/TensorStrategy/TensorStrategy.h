@@ -22,16 +22,17 @@ class TensorStrategy
 {
 public:
     // Constructor
-    // NOTE: Avoid frequent reinitialisation.
+    // NOTE: Avoid frequent reinitialisation by storing on CG.
 
-    virtual Tensor zero(int rows, int cols)                             = 0;
-    virtual Tensor identity(int dimension)                              = 0;
-    virtual Tensor sum(const Tensor& a, const Tensor& b)                = 0;
-    virtual Tensor multiple(const Tensor& a)                            = 0;
-    virtual Tensor scalar_product(const Tensor& a, const Tensor& b)     = 0;
-    virtual Tensor tensor_product(const Tensor& a, const Tensor& b)     = 0;
-    virtual Tensor reLu(const Tensor& a)                                = 0;
-    virtual Tensor softmax(const Tensor& a)                             = 0;
+    virtual TensorPtr zero(int rows, int cols)                                  = 0;
+    virtual TensorPtr identity(int dimension)                                   = 0;
+    virtual TensorPtr sum(const TensorPtr a, const TensorPtr b)                 = 0;
+    virtual TensorPtr multiple(const TensorPtr a)                               = 0;
+    virtual TensorPtr scalar_product(const TensorPtr a, const TensorPtr b)      = 0;
+    virtual TensorPtr Tensor_product(const TensorPtr a, const TensorPtr b)      = 0;
+    virtual TensorPtr reLu(const TensorPtr a)                                   = 0;
+    virtual TensorPtr softmax(const TensorPtr a)                                = 0;
+
 
 };
   
