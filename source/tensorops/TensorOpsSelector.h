@@ -1,4 +1,4 @@
-// source/tensorops/TensorOps.h
+// source/tensoropsSelector/TensorOpsSelector.h
 //
 // Author: Stephen Elliott
 //
@@ -8,8 +8,8 @@
 //
 
 
-#ifndef TENSOROPS_H
-#define TENSOROPS_H
+#ifndef TENSOROPSSelector_H
+#define TENSOROPSSelector_H
 
 #include <torch/torch.h>
 #include "tensorops/TensorStrategy/TensorStrategy.h"
@@ -17,11 +17,11 @@
 
 namespace tensor {
 
-class TensorOps
+class TensorOpsSelector
 {
 public:
     // Constructor
-    TensorOps(bool execute_on_gpu);
+    TensorOpsSelector(bool execute_on_gpu);
 
     TensorPtr zero(int rows, int cols);
     TensorPtr identity(int dimension);
@@ -39,4 +39,4 @@ private:
   
 }
 
-#endif // TENSOROPS_H
+#endif // TENSOROPSSelector_H
