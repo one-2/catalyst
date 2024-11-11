@@ -5,8 +5,7 @@
 #include <torch/torch.h>
 
 
-typedef torch::Tensor Tensor;
-// typedef (std::shared_ptr<torch::tensor>)(Tensor);
+typedef (std::shared_ptr<torch::tensor>)(TensorPtr);
 
 
 #endif // TENSOR_TYPES_H

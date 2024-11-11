@@ -23,14 +23,14 @@ public:
     // Constructor
     TensorOps(bool execute_on_gpu);
 
-    Tensor zero(int rows, int cols);
-    Tensor identity(int dimension);
-    Tensor sum(const Tensor& a, const Tensor& b);
-    Tensor multiple(const Tensor& a);
-    Tensor scalar_product(const Tensor& a, const Tensor& b);
-    Tensor tensor_product(const Tensor& a, const Tensor& b);
-    Tensor reLu(const Tensor& a);
-    Tensor softmax(const Tensor& a);
+    TensorPtr zero(int rows, int cols);
+    TensorPtr identity(int dimension);
+    TensorPtr sum(const TensorPtr& a, const TensorPtr& b);
+    TensorPtr multiple(const TensorPtr& a);
+    TensorPtr scalar_product(const TensorPtr& a, const TensorPtr& b);
+    TensorPtr tensor_product(const TensorPtr& a, const TensorPtr& b);
+    TensorPtr reLu(const TensorPtr& a);
+    TensorPtr softmax(const TensorPtr& a);
 
 private:
     TensorStrategy big_daddy();
