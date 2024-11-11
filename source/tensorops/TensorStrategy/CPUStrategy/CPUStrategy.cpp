@@ -25,6 +25,8 @@
 namespace tensor
 {
 
+CPUStrategy::CPUStrategy() {}
+
 TensorPtr CPUStrategy::zero(int rows, int cols)
 {
     return std::make_shared<torch::Tensor>(torch::zeros({rows, cols}));

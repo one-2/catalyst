@@ -29,6 +29,11 @@
 #include <memory>
 #include <string>
 
+
+// Forward declarations
+class KernelManager;
+
+
 namespace tensor
 {
 
@@ -47,7 +52,7 @@ public:
     TensorPtr softmax(TensorPtr a);
 
 private:
-    KernelPointer get_kernel(std::string type);
+    std::shared_ptr<KernelManager> kernel_manager;
 
 };
 

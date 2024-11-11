@@ -15,7 +15,7 @@
 
 namespace tensor {
 
-// uctorPtr
+// Constructor
 TensorOpsSelector::TensorOps(bool execute_on_gpu) {
     if (execute_on_gpu) {
         big_daddy = GPUStrategy();

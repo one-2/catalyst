@@ -32,6 +32,9 @@ namespace tensor
 
 class CPUStrategy : public TensorStrategy
 {
+public:
+    CPUStrategy();
+
     TensorPtr zero(int rows, int cols);
     TensorPtr identity(int dimension);
     TensorPtr sum(TensorPtr a, TensorPtr b);

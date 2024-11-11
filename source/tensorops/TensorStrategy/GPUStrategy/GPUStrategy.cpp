@@ -21,57 +21,66 @@
 #include "./GPUStrategy.h"
 
 
-GPUStrategy::GPUStrategy()
-{
+GPUStrategy::GPUStrategy() {
     // TODO
+    // Initialise the KernelManager
+
 }
 
 
 TensorPtr GPUStrategy::zero(int rows, int cols) {
     // TODO
-    return TensorPtr();
+    // Call KernelManager.run_kernel(type, in_size)
+    return nullptr;
 }
 
 
 TensorPtr GPUStrategy::identity(int dimension) {
     // TODO
-    return TensorPtr();
+    // Call KernelManager.run_kernel(type, in_size)
+    return nullptr;
 }
 
 
 TensorPtr GPUStrategy::sum(TensorPtr a, TensorPtr b) {
     // TODO
-    return TensorPtr();
+    // Call KernelManager.run_kernel(type, in_size)
+    return nullptr;
 }
 
 
 TensorPtr GPUStrategy::multiple(TensorPtr a, TensorPtr scalar) {
     // TODO
-    return TensorPtr();
+    // Call KernelManager.run_kernel(type, in_size)
+    return nullptr;
 }
 
 
 TensorPtr GPUStrategy::scalar_product(TensorPtr a, TensorPtr b) {
     // TODO
-    return TensorPtr();
+    // Call KernelManager.run_kernel(type, in_size)
+    return nullptr;
 }
 
 
 TensorPtr GPUStrategy::tensor_product(TensorPtr a, TensorPtr b) {
     // TODO
-    return TensorPtr();
+    // Call KernelManager.run_kernel(type, in_size)
+    return nullptr;
 }
 
 
 TensorPtr GPUStrategy::reLu(TensorPtr a) {
     // TODO
-    return TensorPtr();
+    // Call KernelManager.run_kernel(type, in_size)
+    return nullptr;
 }
 
 
 TensorPtr GPUStrategy::softmax(TensorPtr a) {
     // TODO
-    return TensorPtr();
+    // Call KernelManager.run_kernel(type, in_size)
+    return nullptr;
 }
 
 

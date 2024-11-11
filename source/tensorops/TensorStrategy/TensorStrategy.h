@@ -31,7 +31,6 @@ namespace tensor {
 class TensorStrategy
 {
 public:
-    // Constructor
     // NOTE: Avoid frequent reinitialisation by storing on CG.
 
     virtual TensorPtr zero(int rows, int cols)                  = 0;
