@@ -16,7 +16,13 @@ namespace gpuops
 class KernelFactory
 {
 public:
-    std::shared_ptr<Kernel> build_kernel(std::string type, int in_size);
+    KernelCallback build_kernel(std::string type, int in_size);
+    // NOTE: should change KernelCallback to KernelPtr?
+
+private:
+    KernelCallback build_matmul(int in_size, int workgroup_size); // NOTE: Do we need in_size here?
+    KernelCallback build_relu(int in_size, int workgroup_size);
+
 }
 
 } // namespace gpuops
