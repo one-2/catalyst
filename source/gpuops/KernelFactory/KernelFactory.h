@@ -16,7 +16,7 @@ namespace gpuops
 class KernelFactory
 {
 public:
-    std::shared_ptr<Kernel> build_kernel(std::string type, Args args);
+    std::shared_ptr<Kernel> build_kernel(std::string type, int in_size);
 }
 
 } // namespace gpuops
