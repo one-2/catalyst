@@ -13,7 +13,8 @@
 
 
 #include <unordered_map>
-
+#include <string>
+#include <list>
 
 namespace gpuops
 {
@@ -29,18 +30,18 @@ public:
     
 private:
     // Get kernel: finds a kernel in the cache or initialises it if it's not in the cache
-    KernelCallback get_kernel(std::string type, int in_size); // Search cache and build if not found
+    KernelPtr get_kernel(std::string type, int in_size); // Search cache and build if not found
     
     // helpers for get_kernel
-    KernelCallback search_cache(std::string type, int in_size); // Searches map
-    KernelCallback build_kernel(std::string type, int in_size); // Calls builder class and register_kernel
-    KernelCallback register_kernel(std::string type, int in_size); // Registers a kernel to the map
+    KernelPtr search_cache(std::string type, int in_size); // Searches map
+    KernelPtr build_kernel(std::string type, int in_size); // Calls builder class and register_kernel
+    KernelPtr register_kernel(std::string type, int in_size); // Registers a kernel to the map
 
     // Load gpu: enqueues kernel and data to GPU
-    KernelCallback load_gpu(KernelCallback kernelcallback, TensorPtr in_data);
+    KernelPtr load_gpu(KernelPtr kernel_ptr, TensorPtr in_data);
 
     // Kernel map
-    std::unordered_map<std::string, std::unordered_map<int, KernelCallback>> kernel_map; // Mapped by type, indexed by in_size
+    std::unordered_map<std::string, std::list<KernelPtr>> kernel_map; // Hashmap of type to a list of kernel ptrs
 
 
     // NOTE: need a variable pointing to the GPU for enqueue?

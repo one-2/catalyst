@@ -11,8 +11,8 @@ namespace gpuops
 class MatmulKernel : public Kernel
 {
 public:
-    MatmulKernel(int workgroup_size);
-    static std::string build_src(int workgroup_size);
+    MatmulKernel(int workgroup_size, int workgroup_count);
+    static std::string build_src(int workgroup_size, int workgroup_count);
 
 private:
     static const std::string base_src_path = "./matmul_base_src.txt";

@@ -10,18 +10,19 @@
 #ifndef KERNELFACTORY_H
 #define KERNELFACTORY_H
 
+#include <string>
+
 namespace gpuops
 {
 
 class KernelFactory
 {
 public:
-    KernelCallback build_kernel(std::string type, int in_size);
-    // NOTE: should change KernelCallback to KernelPtr?
+    KernelPtr build_kernel(std::string type, int workgroup_size, int workgroup_count);
 
 private:
-    KernelCallback build_matmul(int in_size, int workgroup_size); // NOTE: Do we need in_size here?
-    KernelCallback build_relu(int in_size, int workgroup_size);
+    KernelPtr build_matmul(int workgroup_size, int workgroup_count);
+    KernelPtr build_relu(int workgroup_size, int workgroup_count);
 
 }
 
