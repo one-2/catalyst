@@ -1,6 +1,7 @@
 # Project nuisance files
 build
 localbuildcommands.txt
+notes_todo.txt
 
 # Runtime & test generated
 Testing

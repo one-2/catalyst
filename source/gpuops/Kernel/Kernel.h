@@ -10,17 +10,25 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
-namespace gpuops {
+#include <string>
+
+namespace gpuops
+{
 
 class Kernel
 {
 public:
-    virtual void execute() = 0; // NOTE: =0 => virtual must be overridden. Otherwise, it's optional.
-    void compile();
+    virtual void compile() = 0;
+    static std::string get_machine_code();
 
 protected:
-    Kernel() = default; // For subclasses
-    // NOTE: Should I also define destructors for these?
+    Kernel(int workgroup_size, int workgroup_count);
+
+private:
+    int workgroup_size;
+    int workgroup_count;
+    std::string src;
+    std::string machine_code;
 
 };
 } // namespace gpuops
