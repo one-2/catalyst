@@ -21,13 +21,20 @@ namespace computationgraph
 class CGNode {
 public:
     // Constructors
-    CGNode(int batch_size);
+    CGNode();
 
     // Computation
-    SharedTensorPtr compute_activation(SharedTensorPtr inputs);
-    SharedTensorPtr compute_gradient(SharedTensorPtr inputs);
+    void compute_activations(SharedTensorPtr inputs);
+    void compute_gradients(SharedTensorPtr outputs);
     void update_weight(float learning_rate);
+    void update_bias(float bias);
 
+    // Getters
+    SharedTensorPtr get_current_activations;
+    SharedTensorPtr get_current_mean_activation;
+    SharedTensorPtr get_current_gradients;
+    SharedTensorPtr get_current_weight;
+    SharedTensorPtr get_current_bias;
 
 private:
     // Callbacks
@@ -37,9 +44,10 @@ private:
 
     // Data
     SharedTensorPtr activations_;
-    float mean_activation_;
+    SharedTensorPtr mean_activation_;
     SharedTensorPtr gradients_;
     SharedTensorPtr weight_;
+    SharedTensorPtr bias_;
 };
 
 } // namespace computationgraph
