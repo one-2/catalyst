@@ -21,15 +21,15 @@ using namespace tensorops;
 class ComputationGraphTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        auto cgn = CGNode();
+        cgn = std::make_shared<CGNode>();
     };
 
     std::shared_ptr<CGNode> cgn;
 };
 
-TEST_F(ComputationGraphTest, Constructor) {
+TEST_F(ComputationGraphTest, ConstructorAndGetters) {
     // May fail sometimes due to random inits and NEAR.
-    // Test construction works
+    // Test object creation
     EXPECT_NE(
         cgn, nullptr
     );
@@ -57,33 +57,36 @@ TEST_F(ComputationGraphTest, Constructor) {
     EXPECT_NE(
         cgn->get_current_bias(), cgn2.get_current_bias()
     );
-}
 
-TEST_F(ComputationGraphTest, Getters) {
     // Test get_current_activations
     SharedTensorPtr activations = cgn->get_current_activations();
     EXPECT_NE(activations, nullptr);
-    EXPECT_EQ(activations->numel(), 0); // Initially empty
+    EXPECT_EQ(activations->numel(), 0); // Should be initialised with no elements.
 
     // Test get_current_mean_activation
     SharedTensorPtr mean_activation = cgn->get_current_mean_activation();
     EXPECT_NE(mean_activation, nullptr);
-    EXPECT_EQ(mean_activation->numel(), 0); // Initially empty
+    EXPECT_EQ(mean_activation->numel(), 0); // Should be initialised with no elements.
 
     // Test get_current_gradients
     SharedTensorPtr gradients = cgn->get_current_gradients();
     EXPECT_NE(gradients, nullptr);
-    EXPECT_EQ(gradients->numel(), 0); // Initially empty
+    EXPECT_EQ(gradients->numel(), 0); // Should be initialised with no elements.
+
+    // Test get_current_mean_gradient
+    SharedTensorPtr mean_gradient_ = cgn->get_current_mean_gradient();
+    EXPECT_NE(mean_gradient_, nullptr);
+    EXPECT_EQ(mean_gradient_->numel(), 0); // Should be initialised with no elements.
 
     // Test get_current_weight
     SharedTensorPtr weight = cgn->get_current_weight();
     EXPECT_NE(weight, nullptr);
-    EXPECT_NE(weight->numel(), 0); // Should be initialised.
+    EXPECT_EQ(weight->numel(), 1); // Should be initialised with 1 element.
 
     // Test get_current_bias
     SharedTensorPtr bias = cgn->get_current_bias();
     EXPECT_NE(bias, nullptr);
-    EXPECT_NE(bias->numel(), 0); // Should be initialised.
+    EXPECT_EQ(bias->numel(), 1); // Should be initialised with 1 element.
 }
 
 
@@ -121,13 +124,13 @@ TEST_F(ComputationGraphTest, ComputeAndUpdateActivationsGradients) {
         }
     }
 
-    EXPECT_EQ(
-        *computed_activations, *expected_activations
+    EXPECT_TRUE(
+        torch::equal(*computed_activations, *expected_activations)
     );
 
     // Check mean of activations correct
-    EXPECT_EQ(
-        computed_activations->mean(), computed_mean_activation
+    EXPECT_TRUE(
+        torch::equal(computed_activations->mean(), *computed_mean_activation)
     );
 
     // Test gradients
@@ -155,8 +158,8 @@ TEST_F(ComputationGraphTest, ComputeAndUpdateActivationsGradients) {
         }
     }
 
-    EXPECT_EQ(
-        *computed_gradients, *expected_gradients
+    EXPECT_TRUE(
+        torch::equal(*computed_gradients, *expected_gradients)
     );
     
     // Test weight update
@@ -170,11 +173,11 @@ TEST_F(ComputationGraphTest, ComputeAndUpdateActivationsGradients) {
     
     // Check updated values correct
     EXPECT_NE(
-        *current_weight, *new_weight
+        current_weight, new_weight
     );
 
     EXPECT_NE(
-        *current_bias, *new_bias
+        current_bias, new_bias
     );
 
     // Check updates correct
@@ -187,15 +190,15 @@ TEST_F(ComputationGraphTest, ComputeAndUpdateActivationsGradients) {
     );
     
     // Expected values
-    (*expected_new_weight) = (*current_weight) - 0.01 * (*computed_gradients);
+    (*expected_new_weight) = (*current_weight) - 0.01 * (*computed_gradients); // TODO replace with variable learning rate value
     (*expected_new_bias) = (*current_bias) - 1 * (*computed_gradients);
 
     // Tests
-    EXPECT_EQ(
-        *new_weight, *expected_new_weight
+    EXPECT_TRUE(
+        torch::equal(*new_weight, *expected_new_weight)
     );
 
-    EXPECT_EQ(
-        *new_bias, *expected_new_bias
+    EXPECT_TRUE(
+        torch::equal(*new_bias, *expected_new_bias)
     );
 }

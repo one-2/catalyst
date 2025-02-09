@@ -14,6 +14,7 @@
 
 #include <torch/torch.h>
 #include <functional>
+#include "../../tensorops/tensorops.h"
 
 using namespace tensorops;
 
@@ -35,19 +36,21 @@ public:
     SharedTensorPtr get_current_activations();
     SharedTensorPtr get_current_mean_activation();
     SharedTensorPtr get_current_gradients();
+    SharedTensorPtr get_current_mean_gradient();
     SharedTensorPtr get_current_weight();
     SharedTensorPtr get_current_bias();
 
 private:
-    // Callbacks
-    std::function<void(SharedTensorPtr)> input_function_; // TODO update to TensorOp when that's implemented
-    std::function<void(SharedTensorPtr)> activation_function_; // TODO update to TensorOp when that's implemented
-    std::function<void(SharedTensorPtr)> gradient_function_; // TODO update to TensorOps& when that's implemented
+    // Callbacks TODO when tensor ops done
+    // std::function<void(SharedTensorPtr)> input_function_; // TODO update to TensorOp when that's implemented
+    // std::function<void(SharedTensorPtr)> activation_function_; // TODO update to TensorOp when that's implemented
+    // std::function<void(SharedTensorPtr)> gradient_function_; // TODO update to TensorOps& when that's implemented
 
     // Data
     SharedTensorPtr activations_;
     SharedTensorPtr mean_activation_;
     SharedTensorPtr gradients_;
+    SharedTensorPtr mean_gradient_;
     SharedTensorPtr weight_;
     SharedTensorPtr bias_;
 };
