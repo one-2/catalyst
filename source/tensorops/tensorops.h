@@ -12,19 +12,21 @@
 #include <ostream>
 
 // Function declarations
-    namespace tensorops
-    {
-        torch::Tensor matmul(torch::Tensor a, torch::Tensor b);
-        torch::Tensor reLu(torch::Tensor a);
-        torch::Tensor softmax(torch::Tensor a);
-        torch::Tensor identity(int n);
-        torch::Tensor sum(torch::Tensor a, torch::Tensor b);
-        torch::Tensor multiple(torch::Tensor a, double scalar);
-        torch::Tensor scalar_product(torch::Tensor a, torch::Tensor b);
-        torch::Tensor tensor_product(torch::Tensor a, torch::Tensor b);
+namespace tensorops
+{
+    typedef std::shared_ptr<torch::Tensor> SharedTensorPtr;
 
-        // Overloaded operator<< for the tensor library
-        std::ostream& operator<<(std::ostream& os, const torch::Tensor& tensor);
-    }
+    torch::Tensor matmul(torch::Tensor a, torch::Tensor b);
+    torch::Tensor reLu(torch::Tensor a);
+    torch::Tensor softmax(torch::Tensor a);
+    torch::Tensor identity(int n);
+    torch::Tensor sum(torch::Tensor a, torch::Tensor b);
+    torch::Tensor multiple(torch::Tensor a, double scalar);
+    torch::Tensor scalar_product(torch::Tensor a, torch::Tensor b);
+    torch::Tensor tensor_product(torch::Tensor a, torch::Tensor b);
+
+    // Overloaded operator<< for the tensor library
+    std::ostream& operator<<(std::ostream& os, const torch::Tensor& tensor);
+}
 
 #endif // TESTTENSOROPS_H

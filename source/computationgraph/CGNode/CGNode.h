@@ -15,6 +15,8 @@
 #include <torch/torch.h>
 #include <functional>
 
+using namespace tensorops;
+
 namespace computationgraph
 {
 
@@ -30,17 +32,17 @@ public:
     void update_bias(float bias);
 
     // Getters
-    SharedTensorPtr get_current_activations;
-    SharedTensorPtr get_current_mean_activation;
-    SharedTensorPtr get_current_gradients;
-    SharedTensorPtr get_current_weight;
-    SharedTensorPtr get_current_bias;
+    SharedTensorPtr get_current_activations();
+    SharedTensorPtr get_current_mean_activation();
+    SharedTensorPtr get_current_gradients();
+    SharedTensorPtr get_current_weight();
+    SharedTensorPtr get_current_bias();
 
 private:
     // Callbacks
-    TensorOps& input_function_;
-    TensorOps& activation_function_;
-    TensorOps& gradient_function_;
+    std::function<void(SharedTensorPtr)> input_function_; // TODO update to TensorOp when that's implemented
+    std::function<void(SharedTensorPtr)> activation_function_; // TODO update to TensorOp when that's implemented
+    std::function<void(SharedTensorPtr)> gradient_function_; // TODO update to TensorOps& when that's implemented
 
     // Data
     SharedTensorPtr activations_;
