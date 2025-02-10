@@ -14,7 +14,7 @@ namespace computationgraph {
 // Constructor
 CGNode::CGNode() {
     // Initialise weight and bias with random values
-    weight_ = std::make_shared<torch::Tensor>(torch::randn({2, 1}));
+    weight_ = std::make_shared<torch::Tensor>(torch::randn({3, 1}));
     bias_ = std::make_shared<torch::Tensor>(torch::randn({1}));
 
     // Initialise activations, mean_activation, and gradients as empty tensors.
@@ -25,21 +25,29 @@ CGNode::CGNode() {
 
     // Initialise current_weight and current_bias with 1 element apiece, set to a small random number.
     weight_ = std::make_shared<torch::Tensor>(torch::randn({1}) * 0.01);
-    bias_ = std::make_shared<torch::Tensor>(torch::randn({1}) * 0.01);
+    bias_   = std::make_shared<torch::Tensor>(torch::randn({1}) * 0.01);
 }
 
 // Computation
 void CGNode::compute_activations(SharedTensorPtr inputs) {
-    // Input function implemented as sum,
-    // Activation function implemented as ReLu.
-    activations_ = std::make_shared<torch::Tensor>(torch::matmul(*inputs, *weight_) + *bias_); // TODO replace with the private callback when it's complete
-    activations_ = std::make_shared<torch::Tensor>(torch::relu(*activations_)); // TODO replace with the private callback when it's complete
-    mean_activation_ = std::make_shared<torch::Tensor>(activations_->mean());
+    // Input function: sum.
+    // Activation function: ReLu.
+
+    // Weight the inputs TODO
+
+    // Sum the weighted inputs
+
+    // Bias the sum
+
+    // Activate the biased sum
+
+    // Return the activations as an (n observations * 1) tensor.
+
 }
 
 void CGNode::compute_gradients(SharedTensorPtr outputs) {
-    // Gradient function implemented as ReLu gradient
-    gradients_ = std::make_shared<torch::Tensor>(torch::zeros_like(*outputs));
+    // ReLu gradient function
+    gradients_ = std::make_shared<torch::Tensor>(torch::zeros_like(*outputs)); // TODO make return instead
     for (int i = 0; i < outputs->size(0); i++) {
         for (int j = 0; j < outputs->size(1); j++) {
             float activation_value = (*activations_)[i][j].item<float>();
