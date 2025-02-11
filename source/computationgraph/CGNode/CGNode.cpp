@@ -64,8 +64,8 @@ void CGNode::update_weight(float learning_rate) {
     *weight_ -= learning_rate * (*gradients_);
 }
 
-void CGNode::update_bias(float bias) {
-    *bias_ -= bias * (*gradients_);
+void CGNode::update_bias(float new_bias) {
+    (*bias_)[0] = new_bias;
 }
 
 // Getters
@@ -84,12 +84,12 @@ SharedTensorPtr CGNode::get_current_mean_gradient() {
     return mean_gradient_;
 }
 
-SharedTensorPtr CGNode::get_current_weight() {
-    return weight_;
+float CGNode::get_current_weight() {
+    return weight_->item().toFloat();
 }
 
-SharedTensorPtr CGNode::get_current_bias() {
-    return bias_;
+float CGNode::get_current_bias() {
+    return bias_->item().toFloat();
 }
 
 } // namespace computationgraph

@@ -40,11 +40,11 @@ TEST_F(ComputationGraphTest, ConstructorAndGetters) {
 
     // Test intialisations are reasonable (w/in 0.5 absolute of 0).
     EXPECT_NEAR( // Expect this to fail sometimes due to NE and random init of weight/bias.
-        cgn->get_current_weight()->item<double>(), 0, 0.5
+        cgn->get_current_bias(), 0.0f, 0.5f
     );
 
     EXPECT_NEAR( // Expect this to fail sometimes due to NE and random init of weight/bias.
-        cgn->get_current_bias()->item<double>(), 0, 0.5
+        cgn->get_current_bias(), 0.0f, 0.5f
     );
 
     // Test parameters are randomly initialised
@@ -79,14 +79,12 @@ TEST_F(ComputationGraphTest, ConstructorAndGetters) {
     EXPECT_EQ(mean_gradient_->numel(), 0); // Should be initialised with no elements.
 
     // Test get_current_weight
-    SharedTensorPtr weight = cgn->get_current_weight();
-    EXPECT_NE(weight, nullptr);
-    EXPECT_EQ(weight->numel(), 1); // Should be initialised with 1 element.
+    float weight = cgn->get_current_weight();
+    EXPECT_NE(weight, 0); // Should be initialised to 1 small random element.
 
     // Test get_current_bias
-    SharedTensorPtr bias = cgn->get_current_bias();
-    EXPECT_NE(bias, nullptr);
-    EXPECT_EQ(bias->numel(), 1); // Should be initialised with 1 element.
+    float bias = cgn->get_current_bias();
+    EXPECT_NE(bias, 0); // Should be initialised to 1 small random element.
 }
 
 TEST_F(ComputationGraphTest, ComputeActivations) {
@@ -96,42 +94,53 @@ TEST_F(ComputationGraphTest, ComputeActivations) {
     );
 
     // Get node state at initialisation
-    SharedTensorPtr current_weight = cgn->get_current_weight();
-    SharedTensorPtr current_bias = cgn->get_current_bias();
+    float current_weight = cgn->get_current_weight();
+    float current_bias = cgn->get_current_bias();
 
     // Test activations
     // Execute computation
-    cgn->compute_activations(inputs); // DEBUG bug here
+    cgn->compute_activations(inputs);
 
     // Get computed values
     SharedTensorPtr computed_activations = cgn->get_current_activations();
     SharedTensorPtr computed_mean_activation = cgn->get_current_mean_activation();   
+
+    // Sanity check
+    ASSERT_EQ(
+        cgn->get_current_activations()->numel(), 3
+    );
     
     // Check activations correct
-    SharedTensorPtr expected_activations = std::make_shared<torch::Tensor>(torch::zeros({inputs->size(0), current_weight->size(0)}));
+    // Create an empty activation tensor of dimension inputs->size(0) * 1.
+    SharedTensorPtr expected_activations = std::make_shared<torch::Tensor>(torch::zeros({inputs->size(0), 1}));
+
     for (int i = 0; i < inputs->size(0); i++) { // For each observation
-            float activation = 0.0f;
-            
-            for (int k = 0; k < inputs->size(1); k++) { // For each input variable
-                // Sum the inputs
-            }
+        float input_sum = 0.0f; // note: without f in 0.0f, this is saved as a double
 
-            // Weight the inputs
+        for (int k = 0; k < inputs->size(1); k++) { // For each input variable
+            // Sum the inputs
+            input_sum += (*inputs)[i][k].item<float>();
+        }
 
-            // Activate the weighted values with ReLu
+        // Weight the inputs
+        float weighted_inputs = input_sum * current_weight + current_bias;
+    
+        // Activate the weighted values with ReLu
+        float activated_weighted_inputs = std::max(weighted_inputs, 0.0f);
 
-            // Save the activated value to a Tensor of dimension inputs->size(0) * 1.
-
-
-
-            // TODO current bug was here, rewrite
-
-
-
+        // Save the activated value to the activation tensor.
+        (*expected_activations)[i][0] = activated_weighted_inputs;
     }
 
+    // debug: fetch every value from the computed_activations and expected_activations objects
+    torch::Tensor t1 = (*computed_activations); // This is size 0
+    torch::Tensor t2 = (*expected_activations); // This is size 3*1, as expected
+    std::vector t1_size = t1.sizes().vec();
+    std::vector t2_size = t2.sizes().vec();
+
+
     ASSERT_TRUE(
-        torch::equal(*computed_activations, *expected_activations)
+        torch::equal(*computed_activations, *expected_activations) // debug: FAILING
     );
 
     // Check mean of activations correct
@@ -162,7 +171,7 @@ TEST_F(ComputationGraphTest, ComputeGradients) {
         for (int j = 0; j < inputs->size(1); j++) {
             // Get values
             float input_value = (*inputs)[i][j].item<float>();
-            float weight_value = (*cgn->get_current_weight())[j].item<float>();
+            float weight_value = cgn->get_current_weight();
             float activation_value = (*computed_activations)[i][j].item<float>();
 
             // Apply ReLu derivative
@@ -186,46 +195,49 @@ TEST_F(ComputationGraphTest, UpdateWeightsAndBiases) {
     cgn->compute_gradients(labels);
 
     // Get initial weights and biases
-    SharedTensorPtr current_weight = cgn->get_current_weight();
-    SharedTensorPtr current_bias = cgn->get_current_bias();
+    float current_weight = cgn->get_current_weight();
+    float current_bias = cgn->get_current_bias();
     SharedTensorPtr computed_gradients = cgn->get_current_gradients();
 
     // Execute weight and bias update
-    cgn->update_weight(0.01);
-    cgn->update_bias(1);
+    float learning_rate = 0.01;
+    float bias_update = 1;
+
+    cgn->update_weight(learning_rate);
+    cgn->update_bias(bias_update);
 
     // Get new weights and biases
-    SharedTensorPtr new_weight = cgn->get_current_weight();
-    SharedTensorPtr new_bias = cgn->get_current_bias();
+    float computed_new_weight = cgn->get_current_weight();
+    float computed_new_bias = cgn->get_current_bias();
     
     // Check updated values correct
     ASSERT_NE(
-        current_weight, new_weight
+        current_weight, computed_new_weight
     );
 
     ASSERT_NE(
-        current_bias, new_bias
+        current_bias, computed_new_bias
     );
 
     // Check updates correct
     // Data
     SharedTensorPtr expected_new_weight = std::make_shared<torch::Tensor>(
-        torch::zeros_like(*current_weight)
+        torch::zeros({})
     );
     SharedTensorPtr expected_new_bias = std::make_shared<torch::Tensor>(
-        torch::zeros_like(*current_bias)
+        torch::zeros({})
     );
     
     // Expected values
-    (*expected_new_weight) = (*current_weight) - 0.01 * (*computed_gradients); // TODO replace with variable learning rate value
-    (*expected_new_bias) = (*current_bias) - 1 * (*computed_gradients);
+    (*expected_new_weight) = current_weight - 0.01 * (*computed_gradients); // TODO replace with variable learning rate value
+    (*expected_new_bias) = current_bias - 1 * (*computed_gradients);
 
     // Tests
     ASSERT_TRUE(
-        torch::equal(*new_weight, *expected_new_weight)
+        torch::equal(torch::tensor(computed_new_weight), (*expected_new_weight)[0])
     );
 
     ASSERT_TRUE(
-        torch::equal(*new_bias, *expected_new_bias)
+        torch::equal(torch::tensor(computed_new_bias), (*expected_new_bias)[0])
     );
 }

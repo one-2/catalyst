@@ -30,15 +30,15 @@ public:
     void compute_activations(SharedTensorPtr inputs);
     void compute_gradients(SharedTensorPtr outputs);
     void update_weight(float learning_rate);
-    void update_bias(float bias);
+    void update_bias(float new_bias); // note: new bias to be computed across whole layer by CGGraph
 
     // Getters
     SharedTensorPtr get_current_activations();
     SharedTensorPtr get_current_mean_activation();
     SharedTensorPtr get_current_gradients();
     SharedTensorPtr get_current_mean_gradient();
-    SharedTensorPtr get_current_weight();
-    SharedTensorPtr get_current_bias();
+    float get_current_weight();
+    float get_current_bias();
 
 private:
     // Callbacks TODO when tensor ops done
