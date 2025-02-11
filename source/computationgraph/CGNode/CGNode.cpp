@@ -14,7 +14,7 @@ namespace computationgraph {
 // Constructor
 CGNode::CGNode() {
     // Initialise weight and bias with random values
-    weight_ = std::make_shared<torch::Tensor>(torch::randn({3, 1}));
+    weight_ = std::make_shared<torch::Tensor>(torch::randn({2, 1}));
     bias_ = std::make_shared<torch::Tensor>(torch::randn({1}));
 
     // Initialise activations, mean_activation, and gradients as empty tensors.
@@ -33,16 +33,28 @@ void CGNode::compute_activations(SharedTensorPtr inputs) {
     // Input function: sum.
     // Activation function: ReLu.
 
-    // Weight the inputs TODO
+    // Broadcast weight to match the input dimensions
+    auto expanded_weight = weight_->expand({inputs->size(1), weight_->size(0)});
 
-    // Sum the weighted inputs
+    // Weight the inputs
+    auto weighted_inputs = torch::matmul(*inputs, expanded_weight);
 
-    // Bias the sum
+    // Sum the weighted inputs and add bias
+    auto biased_sum = weighted_inputs + *bias_;
 
-    // Activate the biased sum
+    // Custom ReLu activation function
+    auto relu = [](const torch::Tensor& tensor) {
+        return torch::max(tensor, torch::zeros_like(tensor));
+    };
 
-    // Return the activations as an (n observations * 1) tensor.
+    // Activate the biased sum using custom ReLu
+    auto activated_weighted_inputs = relu(biased_sum);
 
+    // Save the activated values to the activation tensor
+    activations_ = std::make_shared<torch::Tensor>(activated_weighted_inputs);
+
+    // Compute and save the mean activation
+    mean_activation_ = std::make_shared<torch::Tensor>(activations_->mean());
 }
 
 void CGNode::compute_gradients(SharedTensorPtr outputs) {

@@ -99,17 +99,20 @@ TEST_F(ComputationGraphTest, ComputeActivations) {
 
     // Test activations
     // Execute computation
-    cgn->compute_activations(inputs);
+    cgn->compute_activations(inputs); // debug: failing
 
     // Get computed values
     SharedTensorPtr computed_activations = cgn->get_current_activations();
     SharedTensorPtr computed_mean_activation = cgn->get_current_mean_activation();   
 
-    // Sanity check
+    // Sanity check: computed activation vector contains the correct number of elements (expect 3*1)
     ASSERT_EQ(
-        cgn->get_current_activations()->numel(), 3
+        cgn->get_current_activations()->size(0), 3
     );
-    
+    ASSERT_EQ(
+        cgn->get_current_activations()->size(1), 1
+    );
+
     // Check activations correct
     // Create an empty activation tensor of dimension inputs->size(0) * 1.
     SharedTensorPtr expected_activations = std::make_shared<torch::Tensor>(torch::zeros({inputs->size(0), 1}));
@@ -132,15 +135,40 @@ TEST_F(ComputationGraphTest, ComputeActivations) {
         (*expected_activations)[i][0] = activated_weighted_inputs;
     }
 
-    // debug: fetch every value from the computed_activations and expected_activations objects
-    torch::Tensor t1 = (*computed_activations); // This is size 0
-    torch::Tensor t2 = (*expected_activations); // This is size 3*1, as expected
-    std::vector t1_size = t1.sizes().vec();
-    std::vector t2_size = t2.sizes().vec();
+    // Sanity check: vectors do not contain zero values.
+    std::vector<float> computed_values_vector(
+        computed_activations->data_ptr<float>(),
+        computed_activations->data_ptr<float>() + computed_activations->numel()
+    );
+    std::vector<float> expected_values_vector(
+        expected_activations->data_ptr<float>(),
+        expected_activations->data_ptr<float>() + expected_activations->numel()
+    );
 
+    auto print_vectorised_tensors = [](std::vector<float> computed_values_vector, std::vector<float> expected_values_vectors) {
+        std::cout << "Computed Activations: ";
+        for (const auto& val : computed_values_vector) {
+            std::cout << val << " ";
+        }
+        std::cout << std::endl;
 
+        std::cout << "Expected Activations: ";
+        for (const auto& val : expected_values_vectors) {
+            std::cout << val << " ";
+        }
+        std::cout << std::endl;
+    };
+
+    print_vectorised_tensors(computed_values_vector, expected_values_vector);
+
+    // Check activations are non-zero
+    ASSERT_NE(
+        computed_activations->sum().item<float>(), 0.0f
+    );
+
+    // Check activations are equal
     ASSERT_TRUE(
-        torch::equal(*computed_activations, *expected_activations) // debug: FAILING
+        torch::equal(*computed_activations, *expected_activations)
     );
 
     // Check mean of activations correct
@@ -151,8 +179,8 @@ TEST_F(ComputationGraphTest, ComputeActivations) {
 
 TEST_F(ComputationGraphTest, ComputeGradients) {
     // Data
-    SharedTensorPtr inputs = std::make_shared<torch::Tensor>(torch::tensor({{1, 1}, {2, 1}, {2, 2}}));
-    SharedTensorPtr labels = std::make_shared<torch::Tensor>(torch::tensor({{15}, {25}, {30}}));
+    SharedTensorPtr inputs = std::make_shared<torch::Tensor>(torch::tensor({{1, 1}, {2, 1}, {2, 2}}, torch::kFloat32));
+    SharedTensorPtr labels = std::make_shared<torch::Tensor>(torch::tensor({{15}, {25}, {30}}, torch::kFloat32));
 
     // Execute computation
     cgn->compute_activations(inputs);
@@ -167,15 +195,10 @@ TEST_F(ComputationGraphTest, ComputeGradients) {
         torch::zeros_like(*labels)
     );
 
-    for (int i = 0; i < inputs->size(0); i++) {
-        for (int j = 0; j < inputs->size(1); j++) {
-            // Get values
-            float input_value = (*inputs)[i][j].item<float>();
-            float weight_value = cgn->get_current_weight();
-            float activation_value = (*computed_activations)[i][j].item<float>();
-
-            // Apply ReLu derivative
-            float gradient = (activation_value > 0) ? input_value * weight_value : 0.0f;
+    for (int i = 0; i < labels->size(0); i++) {
+        for (int j = 0; j < labels->size(1); j++) {
+            float activation_value = (*computed_activations)[i][0].item<float>();
+            float gradient = (activation_value > 0) ? 1.0f : 0.0f;
             (*expected_gradients)[i][j] = gradient;
         }
     }
@@ -187,8 +210,8 @@ TEST_F(ComputationGraphTest, ComputeGradients) {
 
 TEST_F(ComputationGraphTest, UpdateWeightsAndBiases) {
     // Data
-    SharedTensorPtr inputs = std::make_shared<torch::Tensor>(torch::tensor({{1, 1}, {2, 1}, {2, 2}}));
-    SharedTensorPtr labels = std::make_shared<torch::Tensor>(torch::tensor({{15}, {25}, {30}}));
+    SharedTensorPtr inputs = std::make_shared<torch::Tensor>(torch::tensor({{1, 1}, {2, 1}, {2, 2}}, torch::kFloat32));
+    SharedTensorPtr labels = std::make_shared<torch::Tensor>(torch::tensor({{15}, {25}, {30}}, torch::kFloat32));
 
     // Execute computation
     cgn->compute_activations(inputs);
