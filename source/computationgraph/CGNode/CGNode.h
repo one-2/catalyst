@@ -34,9 +34,9 @@ public:
 
     // Getters
     SharedTensorPtr get_current_activations();
-    SharedTensorPtr get_current_mean_activation();
+    float get_current_mean_activation();
     SharedTensorPtr get_current_gradients();
-    SharedTensorPtr get_current_mean_gradient();
+    float get_current_mean_gradient();
     float get_current_weight();
     float get_current_bias();
 
