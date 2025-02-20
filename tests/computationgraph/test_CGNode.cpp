@@ -6,8 +6,6 @@
 //
 // Description: Test file for CGNode class in computationgraph namespace.
 //
-// Usage: 
-//
 
 #include <gtest/gtest.h>
 #include <torch/torch.h>

@@ -24,8 +24,6 @@ using namespace tensorops;
 namespace computationgraph
 {
 
-typedef std::shared<CGNode> SharedCGNodePtr;
-
 class CGGraph {
 public:
     // Constructors
@@ -38,6 +36,8 @@ public:
     void forward(DataLoader& dataloader);
     void backward(DataLoader& dataloader);
 
+    // Getters
+    std::vector<int> get_graph_dimensions();
     
 private:
     // Graph data

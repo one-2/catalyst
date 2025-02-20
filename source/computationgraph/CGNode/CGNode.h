@@ -21,6 +21,8 @@ using namespace tensorops;
 namespace computationgraph
 {
 
+typedef std::shared<CGNode> SharedCGNodePtr;
+
 class CGNode {
 public:
     // Constructors
