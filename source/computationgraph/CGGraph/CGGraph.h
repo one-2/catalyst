@@ -14,8 +14,6 @@
 #define CGGRAPH_H
 
 #include <vector>
-#include <list>
-#include <functional>
 #include "../../tensorops/tensorops.h"
 #include "CGNode.h"
 
@@ -40,9 +38,12 @@ public:
     std::vector<int> get_graph_dimensions();
     
 private:
-    // Graph data
+    // Data
     std::vector<std::vector<SharedCGNodePtr>> graph_adj_list_;
     SharedTensorPtr last_loss_;
+
+    // State modifiers
+    void add_node(int layer);
 
     // Graph execution
     SharedCGNodePtr topo_sort_();
