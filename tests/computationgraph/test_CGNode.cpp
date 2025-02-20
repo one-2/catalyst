@@ -18,7 +18,7 @@
 using namespace computationgraph;
 using namespace tensorops;
 
-class ComputationGraphTest : public ::testing::Test {
+class ComputationGraphNodeTest : public ::testing::Test {
 protected:
     void SetUp() override {
         cgn = std::make_shared<CGNode>();
@@ -33,7 +33,7 @@ protected:
     SharedTensorPtr labels;
 };
 
-TEST_F(ComputationGraphTest, ConstructorAndGetters) {
+TEST_F(ComputationGraphNodeTest, ConstructorAndGetters) {
     // May fail sometimes due to random inits and NEAR.
     // Test object creation
     ASSERT_NE(
@@ -103,7 +103,7 @@ TEST_F(ComputationGraphTest, ConstructorAndGetters) {
     EXPECT_NE(bias, 0); // Should be initialised to 1 small random element.
 }
 
-TEST_F(ComputationGraphTest, ComputeActivations) {
+TEST_F(ComputationGraphNodeTest, ComputeActivations) {
     // Get node state at initialisation
     float current_weight = cgn->get_current_weight();
     float current_bias = cgn->get_current_bias();
@@ -210,7 +210,7 @@ TEST_F(ComputationGraphTest, ComputeActivations) {
     );
 }
 
-TEST_F(ComputationGraphTest, ComputeGradients) {
+TEST_F(ComputationGraphNodeTest, ComputeGradients) {
     // Execute computation
     cgn->compute_activations(inputs);
     cgn->compute_gradients(labels);
@@ -237,7 +237,7 @@ TEST_F(ComputationGraphTest, ComputeGradients) {
     );
 }
 
-TEST_F(ComputationGraphTest, UpdateWeightsAndBiases) {
+TEST_F(ComputationGraphNodeTest, UpdateWeightsAndBiases) {
     // Execute computation
     cgn->compute_activations(inputs);
     cgn->compute_gradients(labels);
