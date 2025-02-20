@@ -16,25 +16,23 @@
 #include <vector>
 #include <list>
 #include <functional>
-#include "TensorOps.h"
+#include "../../tensorops/tensorops.h"
 #include "CGNode.h"
+
+using namespace tensorops;
 
 namespace computationgraph
 {
+
+typedef std::shared<CGNode> SharedCGNodePtr;
 
 class CGGraph {
 public:
     // Constructors
     CGGraph();
 
-    // Setters
-    void set_loss(std::function<void()> loss);
-
     // Graph operations
-    void add_layer(TensorOps operation, std::function<void()> activation); // TODO change operation to a callback
-    void add_neural_layer(int depth, int width);                                       //      how to do autodiff on these?
-                                                                           //      probs need to write the callbacks
-                                                                           //      to some interface
+    void add_neural_layer(int width);
 
     // Graph execution
     void forward(DataLoader& dataloader);
@@ -43,15 +41,11 @@ public:
     
 private:
     // Graph data
-    std::vector<std::vector<int>> graph_adj_list_;
-    std::vector<float> last_loss_;
-
-    // Graph operations
-    void add_layer_(TensorOps operation, std::function<void()> activation); // TODO change operation to a callback
-    int validate_layer_(); // Checks validity of a newly added layer
+    std::vector<std::vector<SharedCGNodePtr>> graph_adj_list_;
+    SharedTensorPtr last_loss_;
 
     // Graph execution
-    std::vector<CGNode> topo_sort_();
+    SharedCGNodePtr topo_sort_();
     void optimise_();
 
 };
