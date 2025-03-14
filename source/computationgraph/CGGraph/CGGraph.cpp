@@ -15,6 +15,8 @@
 
 #include "./CGGraph.h"
 
+using namespace datahandlers;
+
 namespace computationgraph
 {
 
@@ -29,42 +31,93 @@ void CGGraph::add_neural_layer(int width) {
     // Create new layer
     graph_adj_list_.push_back( {} ); // push an empty vector
 
-    // Get final layer reference
+    // Get a reference to the final layer we just added
     std::vector<SharedCGNodePtr>& final_layer = graph_adj_list_.back();
 
-    // Add nodes to final layer
+    // Add width number of nodes to the final layer
     for (int i : width) {
-        // Make a new node
         SharedCGNodePtr new_node = std::make_shared<CGNode>;
-
-        // Push it to the final graph layer
         final_layer.push_back(new_node);
     };
 }
 
-void CGGraph::forward(DataLoader& dataloader) {
-    // TODO
+void CGGraph::forward(Observation& observation) {
+    // Retrieve the inputs
+    torch::Tensor inputs = observation.inputs;
+
+    // Create a tensor to store the layer activations
+    torch::Tensor current_layer_activations = torch::empty({1, 1, 1});
+    torch::Tensor all_layer_activations = torch::empty({1, 1, 1});
+
+    // For each layer layer:
+    for (std::vector<SharedCGNodePtr>& layer : graph_adj_list_) {
+        // Activate each neuron
+        for (SharedCGNodePtr& node : layer) {
+            node->compute_activations(inputs);
+
+            // Sum the neuron's activations with the current layer tally
+            current_layer_activations = torch::sum({current_layer_activations, node->get_current_activations()}, 2);
+        }
+
+        // After a layer is complete,
+        // Mean the activations
+        torch::Tensor mean_activations = torch::mean(current_layer_activations, 2);
+        
+        // Save the meaned activations
+        all_layer_activations = torch::cat({all_layer_activations, mean_activations}, 2);
+
+        // Update the inputs for the next layer
+        inputs = mean_activations;
+
+    }
+
+    // Retrieve the ouputs and predicted outputs
+    torch::Tensor outputs = observation.outputs;
+    torch::Tensor predicted_outputs = all_layer_activations.back();
+
+    // Compute and save the loss
+    torch::Tensor error = torch::sub(outputs, predicted_outputs);
+    last_loss_ = torch::mean(torch::square(error));
 
 }
 
-void CGGraph::backward(DataLoader& dataloader) {
-    // TODO
+void CGGraph::backward() {
+    // Retrieve the last loss
+
+    // Retrieve the adjacency list and reverse topo sort it
+
+    // For each node in the sorted list
+
+        // Compute the partial derivatives of the ReLu wrt the loss
+        // Or backpropogate the loss with the chain rule
+    
+        // Save the gradients on the node
 
 }
 
 std::vector<int> CGGraph::get_graph_dimensions() {
-    // TODO
+    // Return the graph dimensions as a vector of layer widths, in topo order
 
 }
 
 // private
 SharedCGNodePtr CGGraph::topo_sort_() {
-    // TODO
+    // Turn the adjacency list into an ordered vector of nodes, start-to-finish
+
+}
+
+SharedCGNodePtr CGGraph::reverse_topo_sort_() {
+    // Turn the adjacency list into an ordered vector of nodes, finish-to-start
 
 }
 
 void CGGraph::optimise_() {
-    // TODO
+    // Retrieve the adjacency list
+
+    // For each node
+
+        // Execute the gradient update rule using the last stored gradient
+        // and a fixed learning rate
 
 }
 

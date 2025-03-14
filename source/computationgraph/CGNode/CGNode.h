@@ -43,11 +43,6 @@ public:
     float get_current_bias();
 
 private:
-    // Callbacks TODO when tensor ops done
-    // std::function<void(SharedTensorPtr)> input_function_; // TODO update to TensorOp when that's implemented
-    // std::function<void(SharedTensorPtr)> activation_function_; // TODO update to TensorOp when that's implemented
-    // std::function<void(SharedTensorPtr)> gradient_function_; // TODO update to TensorOps& when that's implemented
-
     // Data
     SharedTensorPtr activations_;
     SharedTensorPtr mean_activation_;

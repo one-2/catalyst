@@ -31,8 +31,8 @@ public:
     void add_neural_layer(int width);
 
     // Graph execution
-    void forward(DataLoader& dataloader);
-    void backward(DataLoader& dataloader);
+    void forward(Observation& observation);
+    void backward();
 
     // Getters
     std::vector<int> get_graph_dimensions();
@@ -47,6 +47,7 @@ private:
 
     // Graph execution
     SharedCGNodePtr topo_sort_();
+    SharedCGNodePtr reverse_topo_sort_();
     void optimise_();
 
 };
