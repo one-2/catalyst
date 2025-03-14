@@ -105,7 +105,11 @@ void CGGraph::backward() {
 
 std::vector<int> CGGraph::get_graph_dimensions() {
     // Return the graph dimensions as a vector of layer widths, in topo order
-
+    std::vector<int> graph_dimensions;
+    for (std::vector<SharedCGNodePtr>& layer : graph_adj_list_) {
+        graph_dimensions.push_back(layer.size());
+    }
+    return graph_dimensions;
 }
 
 // private
