@@ -133,15 +133,18 @@ std::vector<int> CGGraph::get_graph_dimensions() {
 
 
 // private
-std::vector<SharedCGNodePtr> CGGraph::topo_sort_() {
-    // Adjacency list representation of the graph
-
+std::vector<SharedCGNodePtr> CGGraph::topo_sort_() { // TODO: add cache so this only has to be done once
+    // TODO: implement a topo sort, baby
+    return std::vector<SharedCGNodePtr>();
 }
+
 
 
 SharedCGNodePtr CGGraph::reverse_topo_sort_() {
     // Turn the adjacency list into an ordered vector of nodes, finish-to-start
-
+    std::vector<SharedCGNodePtr> sorted = topo_sort_();
+    std::reverse(sorted.begin(), sorted.end());
+    return sorted;
 }
 
 void CGGraph::optimise_() {
