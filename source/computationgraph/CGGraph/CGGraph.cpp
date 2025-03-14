@@ -22,22 +22,24 @@ namespace computationgraph
 
 // public
 CGGraph::CGGraph() {
-    graph_adj_list_ = std::vector<std::vector<SharedCGNodePtr>>();
+    graph_adj_list_         // TODO
+
     last_loss_ = nullptr;
 
 }
 
 void CGGraph::add_neural_layer(int width) {
     // Create new layer
-    graph_adj_list_.push_back( {} ); // push an empty vector
+        // TODO
 
     // Get a reference to the final layer we just added
-    std::vector<SharedCGNodePtr>& final_layer = graph_adj_list_.back();
+        // TODO
 
     // Add width number of nodes to the final layer
     for (int i : width) {
         SharedCGNodePtr new_node = std::make_shared<CGNode>;
-        final_layer.push_back(new_node);
+
+        // TODO
     };
 }
 
@@ -50,7 +52,8 @@ void CGGraph::forward(Observation& observation) {
     torch::Tensor all_layer_activations = torch::empty({1, 1, 1});
 
     // For each layer layer:
-    for (std::vector<SharedCGNodePtr>& layer : graph_adj_list_) {
+    std::vector<SharedCGNodePtr> topod_list = topo_sort_();
+    for (std::vector<SharedCGNodePtr>& layer : topod_list) {
         // Activate each neuron
         for (SharedCGNodePtr& node : layer) {
             node->compute_activations(inputs);
@@ -103,44 +106,21 @@ void CGGraph::backward() {
 
 }
 
-std::vector<int> CGGraph::get_graph_dimensions() {
-    std::vector<int> dims;
-    
-    // If the adjacency list is empty, return an empty vector
-    if (graph_adj_list_.empty()) {
-        return dims;
-    }
+std::vector<int> CGGraph::get_graph_dimensions() { // TODO: add caching
+    // TODO
 
-    // Start from the first node in the adjacency list
-    auto it = graph_adj_list_.begin();
-    SharedCGNodePtr node = it->first;
-
-    // Traverse along the feedforward chain
-    while (graph_adj_list_.count(node)) {
-        const std::vector<SharedCGNodePtr>& next_layer = graph_adj_list_[node];
-        dims.push_back(next_layer.size()); // Save the width of the current layer
-
-        // Move to the first node in the next layer
-        if (!next_layer.empty()) {
-            node = next_layer[0]; // Pick the first child as the next node
-        } else {
-            break; // Stop at an endpoint
-        }
-    }
-
-    return dims;
 }
 
 
 // private
-std::vector<SharedCGNodePtr> CGGraph::topo_sort_() { // TODO: add cache so this only has to be done once
+std::vector<SharedCGNodePtr> CGGraph::topo_sort_() { // TODO: add caching
     // TODO: implement a topo sort, baby
     return std::vector<SharedCGNodePtr>();
 }
 
 
 
-SharedCGNodePtr CGGraph::reverse_topo_sort_() {
+SharedCGNodePtr CGGraph::reverse_topo_sort_() { // TODO: add caching
     // Turn the adjacency list into an ordered vector of nodes, finish-to-start
     std::vector<SharedCGNodePtr> sorted = topo_sort_();
     std::reverse(sorted.begin(), sorted.end());
