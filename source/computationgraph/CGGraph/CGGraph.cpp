@@ -104,19 +104,40 @@ void CGGraph::backward() {
 }
 
 std::vector<int> CGGraph::get_graph_dimensions() {
-    // Return the graph dimensions as a vector of layer widths, in topo order
-    std::vector<int> graph_dimensions;
-    for (std::vector<SharedCGNodePtr>& layer : graph_adj_list_) {
-        graph_dimensions.push_back(layer.size());
+    std::vector<int> dims;
+    
+    // If the adjacency list is empty, return an empty vector
+    if (graph_adj_list_.empty()) {
+        return dims;
     }
-    return graph_dimensions;
+
+    // Start from the first node in the adjacency list
+    auto it = graph_adj_list_.begin();
+    SharedCGNodePtr node = it->first;
+
+    // Traverse along the feedforward chain
+    while (graph_adj_list_.count(node)) {
+        const std::vector<SharedCGNodePtr>& next_layer = graph_adj_list_[node];
+        dims.push_back(next_layer.size()); // Save the width of the current layer
+
+        // Move to the first node in the next layer
+        if (!next_layer.empty()) {
+            node = next_layer[0]; // Pick the first child as the next node
+        } else {
+            break; // Stop at an endpoint
+        }
+    }
+
+    return dims;
 }
+
 
 // private
-SharedCGNodePtr CGGraph::topo_sort_() {
-    // Turn the adjacency list into an ordered vector of nodes, start-to-finish
+std::vector<SharedCGNodePtr> CGGraph::topo_sort_() {
+    // Adjacency list representation of the graph
 
 }
+
 
 SharedCGNodePtr CGGraph::reverse_topo_sort_() {
     // Turn the adjacency list into an ordered vector of nodes, finish-to-start

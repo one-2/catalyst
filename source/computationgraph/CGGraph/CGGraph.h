@@ -39,7 +39,7 @@ public:
     
 private:
     // Data
-    std::vector<std::vector<SharedCGNodePtr>> graph_adj_list_;
+    std::unordered_map<SharedCGNodePtr, std::vector<SharedCGNodePtr>> graph_adj_list_;
     SharedTensorPtr last_loss_;
 
     // State modifiers
