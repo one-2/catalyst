@@ -142,14 +142,15 @@ std::vector<int> CGGraph::get_graph_dimensions() {
     return dims_;
 }
 
+SharedTensorPtr get_last_loss() {
+    return last_loss_;
+}
 
 // private
 std::vector<SharedCGNodePtr> CGGraph::topo_sort_() { // TODO: add caching
     // TODO: implement a topo sort, baby
     return std::vector<SharedCGNodePtr>();
 }
-
-
 
 std::vector<SharedCGNodePtr> CGGraph::reverse_topo_sort_() { // TODO: add caching
     // Turn the adjacency list into an ordered vector of nodes, finish-to-start
