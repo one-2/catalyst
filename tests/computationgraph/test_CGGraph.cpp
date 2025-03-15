@@ -12,15 +12,17 @@
 
 #include "computationgraph/CGGraph/CGGraph.h"
 #include "tensorops/tensorops.h"
+#include "datahandlers/DataLoader/DataLoader.h"
 
 using namespace computationgraph;
 using namespace tensorops;
+using namespace datahandlers;
 
 class ComputationGraphTest : public ::testing::Test {
 protected:
     void SetUp() override {
         cgg = CGGraph();
-    }
+    };
 
     CGGraph cgg;
 };
@@ -30,76 +32,54 @@ protected:
 TEST_F(ComputationGraphTest, Constructor) {
     ASSERT_NE(
         cgg, nullptr
-    )
-}
+    );
+};
 
 // Graph operations
 TEST_F(ComputationGraphTest, AddNeuralLayers) {
+    // Add a layer
     cgg.add_neural_layer(10);
     std::vector<int> dims = cgg.get_graph_dimensions();
     ASSERT_EQ(
         dims.size(), 1
-    )
+    );
+
     EXPECT_EQ(
         dims[0], 10
-    )
+    );
     
+    // Add another layer
     cgg.add_neural_layer(50);
-    dims = cgg.get_graph_dimensions;
+    dims = cgg.get_graph_dimensions();
+
     ASSERT_EQ(
         dims.size(), 2
-    )
+    );
+    
     EXPECT_EQ(
         dims[0], 10
-    )
+    );
+
     EXPECT_EQ(
         dims[1], 50
-    )
-}
+    );
+};
 
 // Graph execution
 TEST_F(ComputationGraphTest, ForwardPass) {
     cgg.add_neural_layer(5);
     cgg.add_neural_layer(5);
 
-    cgg.forward(
-        // Dataloader&
-    )
-
-    // Check that there are activations on every node
-
-}
-
-TEST_F(ComputationGraphTest, BackwardPass) {
-    cgg.add_neural_layer(5);
-    cgg.add_neural_layer(5);
-
-    cgg.forward(
-        // Dataloader&
-    )
-
-    cgg.backward(
-        // Dataloader&
-    )
-
-    // Check that there are gradients on every node
-
-}
-
-TEST_F(ComputationGraphTest, ForwardPass) {
-    cgg.add_neural_layer(5);
-    cgg.add_neural_layer(5);
-
-    Observation observation;
-    observation.inputs = torch::rand({1, 5});
-    observation.outputs = torch::rand({1, 5});
+    DataLoader::Observation observation;
+    observation.input = torch::rand({1, 5});
+    observation.target = torch::rand({1, 5});
 
     cgg.forward(observation);
 
     torch::Tensor last_loss = cgg.get_last_loss();
     ASSERT_TRUE(last_loss.defined());
     EXPECT_GT(last_loss.item<float>(), 0);
-}
+};
 
 TEST_F(ComputationGraphTest, BackwardPass) {
     cgg.add_neural_layer(5);
@@ -107,17 +87,18 @@ TEST_F(ComputationGraphTest, BackwardPass) {
 
     Observation observation;
     observation.inputs = torch::rand({1, 5});
-    observation.outputs = torch::rand({1, 5});
+    observation.target = torch::rand({1, 5});
 
     cgg.forward(observation);
     cgg.backward();
 
-    // Check if gradients are computed and weights are updated
-    // This is a placeholder check, actual implementation may vary
-    torch::Tensor last_loss = cgg.get_last_loss();
-    ASSERT_TRUE(last_loss.defined());
-    EXPECT_GT(last_loss.item<float>(), 0);
-}
+    // Check that there are gradients on every node
+    std::vector<SharedCGNodePtr> topo_sorted_graph = cgg.topo_sort_();
+    for (SharedCGNodePtr node : topo_sorted_graph) {
+        torch::Tensor gradients = *(node->get_current_gradients());
+        ASSERT_TRUE(gradients.defined());
+    }
+};
 
 // Getters
 TEST_F(ComputationGraphTest, GetGraphDimensions) {
@@ -127,11 +108,11 @@ TEST_F(ComputationGraphTest, GetGraphDimensions) {
     std::vector<int> dims = cgg.get_graph_dimensions();
     ASSERT_EQ(
         dims.size(), 2
-    )
+    );
     EXPECT_EQ(
         dims[0], 5
-    )
+    );
     EXPECT_EQ(
         dims[1], 5
-    )
-}
+    );
+};

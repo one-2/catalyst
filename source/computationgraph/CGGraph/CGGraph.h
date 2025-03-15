@@ -15,12 +15,15 @@
 
 #include <vector>
 #include "../../tensorops/tensorops.h"
-#include "CGNode.h"
+#include "../CGNode/CGNode.h"
+#include "../../datahandlers/DataLoader/DataLoader.h"
 
 using namespace tensorops;
+using namespace datahandlers;
 
 namespace computationgraph
 {
+typedef std::shared_ptr<CGNode> SharedCGNodePtr;
 
 class CGGraph {
 public:
@@ -31,12 +34,13 @@ public:
     void add_neural_layer(int width);
 
     // Graph execution
-    void forward(Observation& observation);
+    void forward(DataLoader::Observation& observation);
     void backward();
 
     // Getters
     std::vector<int> get_graph_dimensions();
-    
+    SharedTensorPtr get_last_loss();
+
 private:
     // Data
     std::unordered_map<SharedCGNodePtr, std::vector<SharedCGNodePtr>> graph_adj_list_; // TODO: requires custom hashing and equality comparator

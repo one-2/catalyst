@@ -21,9 +21,7 @@ namespace computationgraph
 {
 
 // public
-CGGraph::CGGraph() : graph_adj_list_() {
-    last_loss_ = nullptr;
-}
+CGGraph::CGGraph() : last_loss_(nullptr) {}
 
 void CGGraph::add_neural_layer(int width) {
     // Create an object to hold the new nodes in the layer
@@ -76,45 +74,52 @@ void CGGraph::add_neural_layer(int width) {
     dims_.push_back(width);
 }
 
-void CGGraph::forward(Observation& observation) {
+void CGGraph::forward(DataLoader::Observation& observation) {
     // Retrieve the inputs
-    torch::Tensor inputs = observation.inputs;
+    SharedTensorPtr inputs = std::make_shared<torch::Tensor>(observation.input);
+    // ^ todo: move ptr construction to DataLoader
 
-    // Create a tensor to store the layer activations
-    torch::Tensor current_layer_activations = torch::empty({1, 1, 1});
-    torch::Tensor all_layer_activations = torch::empty({1, 1, 1});
+    // For each layer in the graph
+    std::vector<SharedCGNodePtr> topo_sorted_graph = topo_sort_();
 
-    // For each layer layer:
-    std::vector<SharedCGNodePtr> topod_list = topo_sort_();
-    for (std::vector<SharedCGNodePtr>& layer : topod_list) {
-        // Activate each neuron
-        for (SharedCGNodePtr& node : layer) {
+    int layer_count = dims_.size();
+    for (int layer_idx = 0; layer_idx < layer_count; layer_idx++) {
+        // Work out the start index of the layer
+        int layer_start = std::accumulate(dims_.begin(), dims_.begin() + layer_idx, 0);
+
+        // For each node in the layer
+        int nodes_in_layer = dims_[layer_idx];
+        torch::Tensor current_layer_activation_tally = torch::empty({1, 1, 1});
+        
+        for (int i = 0; i < nodes_in_layer; i++) {
+            int current_node_idx = layer_start + i;
+            SharedCGNodePtr node = topo_sorted_graph[current_node_idx];
+
+            // Activate the node
             node->compute_activations(inputs);
 
-            // Sum the neuron's activations with the current layer tally
-            current_layer_activations += node->get_current_activations();
+            // Sum the node's activations with the current layer tally
+            torch::Tensor this_node_activations = *(node->get_current_activations());
+            current_layer_activation_tally = current_layer_activation_tally + this_node_activations;
         }
 
         // After a layer is complete,
-        // Mean the activations
-        torch::Tensor mean_activations = torch::mean(current_layer_activations, 2);
-        
-        // Save the meaned activations
-        all_layer_activations = torch::cat({all_layer_activations, mean_activations}, 2);
+        // Mean the activations across the layer
+        torch::Tensor mean_activations = torch::mean(current_layer_activation_tally, 2);
 
         // Update the inputs for the next layer
-        inputs = mean_activations;
-
+        inputs = std::make_shared<torch::Tensor>(mean_activations);
     }
 
-    // Retrieve the ouputs and predicted outputs
-    torch::Tensor outputs = observation.outputs;
-    torch::Tensor predicted_outputs = all_layer_activations.select(2, all_layer_activations.size(2) - 1);
+
+    // Retrieve the ouputs and predicted targets
+    torch::Tensor targets = observation.target;
+    torch::Tensor predicted_targets = *inputs;
 
     // Compute and save the loss
-    torch::Tensor error = torch::sub(outputs, predicted_outputs);
-    last_loss_ = torch::mean(torch::square(error));
-
+    torch::Tensor error = torch::sub(targets, predicted_targets);
+    torch::Tensor loss = torch::mean(torch::square(error));
+    last_loss_ = std::make_shared<torch::Tensor>(loss);
 }
 
 void CGGraph::backward() {
@@ -165,6 +170,9 @@ void CGGraph::optimise_() {
         // Execute the gradient update rule using the last stored gradient (fixed learning rate)
         node->update_weight(learning_rate);
     }
+
+    // TODO: update biases
+
 }
 
 } // namespace computationgraph
