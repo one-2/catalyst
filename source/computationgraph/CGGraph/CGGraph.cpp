@@ -21,8 +21,7 @@ namespace computationgraph
 {
 
 // public
-CGGraph::CGGraph() {
-    graph_adj_list_(); // Calls default constructor for std::unordered_map<SharedCGNodePtr, std::vector<SharedCGNodePtr>>
+CGGraph::CGGraph() : graph_adj_list_() {
     last_loss_ = nullptr;
 }
 
@@ -32,7 +31,7 @@ void CGGraph::add_neural_layer(int width) {
 
     // Create "width" number of new nodes
     for (int i = 0; i < width; i++) {
-        SharedCGNodePtr new_node = std::make_shared<CGNode>;        
+        SharedCGNodePtr new_node = std::make_shared<CGNode>();        
         new_layer.push_back(new_node);
     };
 
@@ -46,23 +45,30 @@ void CGGraph::add_neural_layer(int width) {
 
     } else {
         // Otherwise, add the new layer to the CGGraph
-        // First, point the final layer of the graph to the new nodes
-        // Get the number of nodes in the last layer of the graph
-        int j = dims_.back();
 
-        // For each of the nodes in the last layer of the graph,
+        // First, point the final layer of the graph to the new nodes
+        // Get the last layer of the graph
+        int j = dims_.back();
+        std::vector<SharedCGNodePtr> reverse_topo = reverse_topo_sort_();
+
+        // For each node in the last layer of the graph,
         for (int i = 0; i < j; i++) {
-            // For each node in the new layer
-            for (int i = 0; i < width; i++) {
-                // Add the node to the adjacency list
-                graph_adj_list_.insert({new_layer[i], std::vector<SharedCGNodePtr>()});
+            SharedCGNodePtr outer_node = reverse_topo[i];
+
+            // For each node in the new layer,
+            for (int w = 0; w < width; w++) {
+                SharedCGNodePtr new_node = new_layer[w];
+
+                // Add the new node to the dependencies of the outer node
+                graph_adj_list_[outer_node].push_back(new_node);
             }
         }
 
+        // Second, add the new nodes to the graph itself
         // For each node in the new layer
-        for (int i : width) {
+        for (int i = 0; i < width; i++) {
             // Add the node to the adjacency list
-            graph_adj_list_.insert({new_layer[i], std::vector<SharedCGNodePtr>()})
+            graph_adj_list_.insert({new_layer[i], std::vector<SharedCGNodePtr>()});
         }
     }
 
@@ -86,7 +92,7 @@ void CGGraph::forward(Observation& observation) {
             node->compute_activations(inputs);
 
             // Sum the neuron's activations with the current layer tally
-            current_layer_activations = torch::sum({current_layer_activations, node->get_current_activations()}, 2);
+            current_layer_activations += node->get_current_activations();
         }
 
         // After a layer is complete,
@@ -103,7 +109,7 @@ void CGGraph::forward(Observation& observation) {
 
     // Retrieve the ouputs and predicted outputs
     torch::Tensor outputs = observation.outputs;
-    torch::Tensor predicted_outputs = all_layer_activations.back();
+    torch::Tensor predicted_outputs = all_layer_activations.select(2, all_layer_activations.size(2) - 1);
 
     // Compute and save the loss
     torch::Tensor error = torch::sub(outputs, predicted_outputs);
@@ -140,7 +146,7 @@ std::vector<SharedCGNodePtr> CGGraph::topo_sort_() { // TODO: add caching
 
 
 
-SharedCGNodePtr CGGraph::reverse_topo_sort_() { // TODO: add caching
+std::vector<SharedCGNodePtr> CGGraph::reverse_topo_sort_() { // TODO: add caching
     // Turn the adjacency list into an ordered vector of nodes, finish-to-start
     std::vector<SharedCGNodePtr> sorted = topo_sort_();
     std::reverse(sorted.begin(), sorted.end());

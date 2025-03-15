@@ -47,8 +47,8 @@ private:
     void add_node(int layer);
 
     // Graph execution
-    SharedCGNodePtr topo_sort_();
-    SharedCGNodePtr reverse_topo_sort_();
+    std::vector<SharedCGNodePtr> topo_sort_();
+    std::vector<SharedCGNodePtr> reverse_topo_sort_();
     void optimise_();
 
 };
