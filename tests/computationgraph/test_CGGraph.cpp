@@ -30,8 +30,12 @@ protected:
 
 // Constructor
 TEST_F(ComputationGraphTest, Constructor) {
-    ASSERT_NE(
-        cgg, nullptr
+    std::vector<int> dims = cgg.get_graph_dimensions();
+    ASSERT_EQ(
+        dims.size(), 0
+    );
+    ASSERT_EQ(
+        cgg.get_last_loss(), nullptr
     );
 };
 
@@ -76,7 +80,7 @@ TEST_F(ComputationGraphTest, ForwardPass) {
 
     cgg.forward(observation);
 
-    torch::Tensor last_loss = cgg.get_last_loss();
+    torch::Tensor last_loss = *(cgg.get_last_loss());
     ASSERT_TRUE(last_loss.defined());
     EXPECT_GT(last_loss.item<float>(), 0);
 };
@@ -85,8 +89,8 @@ TEST_F(ComputationGraphTest, BackwardPass) {
     cgg.add_neural_layer(5);
     cgg.add_neural_layer(5);
 
-    Observation observation;
-    observation.inputs = torch::rand({1, 5});
+    DataLoader::Observation observation;
+    observation.input = torch::rand({1, 5});
     observation.target = torch::rand({1, 5});
 
     cgg.forward(observation);

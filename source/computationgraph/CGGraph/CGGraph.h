@@ -39,7 +39,10 @@ public:
 
     // Getters
     std::vector<int> get_graph_dimensions();
-    std::vector<int> get_last_loss();
+    SharedTensorPtr get_last_loss();
+    
+    std::vector<SharedCGNodePtr> topo_sort_();
+    std::vector<SharedCGNodePtr> reverse_topo_sort_();
 
 private:
     // Data
@@ -51,8 +54,6 @@ private:
     void add_node(int layer);
 
     // Graph execution
-    std::vector<SharedCGNodePtr> topo_sort_();
-    std::vector<SharedCGNodePtr> reverse_topo_sort_();
     void optimise_();
 
 };

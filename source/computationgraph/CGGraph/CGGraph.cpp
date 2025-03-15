@@ -142,11 +142,10 @@ std::vector<int> CGGraph::get_graph_dimensions() {
     return dims_;
 }
 
-SharedTensorPtr get_last_loss() {
+SharedTensorPtr CGGraph::get_last_loss() {
     return last_loss_;
 }
 
-// private
 std::vector<SharedCGNodePtr> CGGraph::topo_sort_() { // TODO: add caching
     // TODO: implement a topo sort, baby
     return std::vector<SharedCGNodePtr>();
@@ -159,6 +158,7 @@ std::vector<SharedCGNodePtr> CGGraph::reverse_topo_sort_() { // TODO: add cachin
     return sorted;
 }
 
+// private
 void CGGraph::optimise_() {
     // Retrieve the graph
     std::vector<SharedCGNodePtr> graph = topo_sort_();
