@@ -119,16 +119,13 @@ void CGGraph::forward(Observation& observation) {
 
 void CGGraph::backward() {
     // Executes backpropagation
-    // Retrieve the last loss
-    torch::Tensor loss = last_loss_;
-
     // Retrieve the adjacency list and reverse topo sort it
     std::vector<SharedCGNodePtr> sorted_nodes = reverse_topo_sort_();
 
     // For each node in the sorted list
     for (SharedCGNodePtr& node : sorted_nodes) {
         // Compute the partial derivatives of the ReLU wrt the loss
-        node->compute_gradients(loss);
+        node->compute_gradients(last_loss_);
     }
 
     // Optimise the weights and biases
