@@ -148,13 +148,17 @@ SharedCGNodePtr CGGraph::reverse_topo_sort_() { // TODO: add caching
 }
 
 void CGGraph::optimise_() {
-    // Retrieve the adjacency list
+    // Retrieve the graph
+    std::vector<SharedCGNodePtr> graph = topo_sort_();
+
+    // Set a fixed learning rate
+    float learning_rate = 0.05;
 
     // For each node
-
-        // Execute the gradient update rule using the last stored gradient
-        // and a fixed learning rate
-
+    for (SharedCGNodePtr node : graph) {
+        // Execute the gradient update rule using the last stored gradient (fixed learning rate)
+        node->update_weight(learning_rate);
+    }
 }
 
 } // namespace computationgraph
