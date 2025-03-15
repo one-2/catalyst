@@ -30,33 +30,25 @@ void CGGraph::add_neural_layer(int width) {
     // Create an object to hold the new nodes in the layer
     std::vector<SharedCGNodePtr> new_layer = {};
 
-    // Create width new nodes
+    // Create "width" number of new nodes
     for (int i = 0; i < width; i++) {
         SharedCGNodePtr new_node = std::make_shared<CGNode>;        
         new_layer.push_back(new_node);
     };
 
-    // Get the current state of the graph
-    // Reverse topo sort the graph
-    std::vector<SharedCGNodePtr> graph = reverse_topo_sort_();
-    
-    // Get the graph dimensions
-    std::vector<int> dims = get_graph_dimensions();
-
     // If the graph is empty,
-    if (dims.empty()) {
+    if (dims_.empty()) {
         // For each node in the new layer
         for (int i = 0; i < width; i++) {
             // Add the node to the adjacency list
             graph_adj_list_.insert({new_layer[i], std::vector<SharedCGNodePtr>()});
         }
-        return;
 
     } else {
         // Otherwise, add the new layer to the CGGraph
         // First, point the final layer of the graph to the new nodes
         // Get the number of nodes in the last layer of the graph
-        int j = dims.back();
+        int j = dims_.back();
 
         // For each of the nodes in the last layer of the graph,
         for (int i = 0; i < j; i++) {
@@ -72,8 +64,10 @@ void CGGraph::add_neural_layer(int width) {
             // Add the node to the adjacency list
             graph_adj_list_.insert({new_layer[i], std::vector<SharedCGNodePtr>()})
         }
-        return;
     }
+
+    // Update the dimension vector
+    dims_.push_back(width);
 }
 
 void CGGraph::forward(Observation& observation) {
@@ -133,9 +127,8 @@ void CGGraph::backward() {
 
 }
 
-std::vector<int> CGGraph::get_graph_dimensions() { // TODO: add caching
-    // TODO
-
+std::vector<int> CGGraph::get_graph_dimensions() {
+    return dims_;
 }
 
 

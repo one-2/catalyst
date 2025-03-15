@@ -41,6 +41,7 @@ private:
     // Data
     std::unordered_map<SharedCGNodePtr, std::vector<SharedCGNodePtr>> graph_adj_list_; // TODO: requires custom hashing and equality comparator
     SharedTensorPtr last_loss_;
+    std::vector<int> dims_;
 
     // State modifiers
     void add_node(int layer);
