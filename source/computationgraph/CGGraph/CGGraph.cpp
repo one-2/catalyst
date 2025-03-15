@@ -118,6 +118,7 @@ void CGGraph::forward(Observation& observation) {
 }
 
 void CGGraph::backward() {
+    // Executes backpropagation
     // Retrieve the last loss
     torch::Tensor loss = last_loss_;
 
@@ -127,11 +128,7 @@ void CGGraph::backward() {
     // For each node in the sorted list
     for (SharedCGNodePtr& node : sorted_nodes) {
         // Compute the partial derivatives of the ReLU wrt the loss
-        // Or backpropagate the loss with the chain rule
         node->compute_gradients(loss);
-
-        // Save the gradients on the node
-        node->store_gradients();
     }
 
     // Optimise the weights and biases
