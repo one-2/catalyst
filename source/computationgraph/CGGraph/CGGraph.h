@@ -39,7 +39,7 @@ public:
 
     // Getters
     std::vector<int> get_graph_dimensions();
-    SharedTensorPtr get_last_loss();
+    std::vector<int> get_last_loss();
 
 private:
     // Data
