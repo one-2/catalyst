@@ -26,13 +26,12 @@ protected:
 };
 
 
-// Constructors
+// Constructor
 TEST_F(ComputationGraphTest, Constructor) {
     ASSERT_NE(
         cgg, nullptr
     )
 }
-// CGGraph();
 
 // Graph operations
 TEST_F(ComputationGraphTest, AddNeuralLayers) {
@@ -57,7 +56,6 @@ TEST_F(ComputationGraphTest, AddNeuralLayers) {
         dims[1], 50
     )
 }
-// void add_neural_layer(int width);
 
 // Graph execution
 TEST_F(ComputationGraphTest, ForwardPass) {
@@ -67,12 +65,10 @@ TEST_F(ComputationGraphTest, ForwardPass) {
     cgg.forward(
         // Dataloader&
     )
-    EXPECT_EQ(
-        // Not sure what to put here
-    )
-}
-// void forward(DataLoader& dataloader);
 
+    // Check that there are activations on every node
+
+}
 
 TEST_F(ComputationGraphTest, BackwardPass) {
     cgg.add_neural_layer(5);
@@ -86,8 +82,56 @@ TEST_F(ComputationGraphTest, BackwardPass) {
         // Dataloader&
     )
 
+    // Check that there are gradients on every node
+
+}
+
+TEST_F(ComputationGraphTest, ForwardPass) {
+    cgg.add_neural_layer(5);
+    cgg.add_neural_layer(5);
+
+    Observation observation;
+    observation.inputs = torch::rand({1, 5});
+    observation.outputs = torch::rand({1, 5});
+
+    cgg.forward(observation);
+
+    torch::Tensor last_loss = cgg.get_last_loss();
+    ASSERT_TRUE(last_loss.defined());
+    EXPECT_GT(last_loss.item<float>(), 0);
+}
+
+TEST_F(ComputationGraphTest, BackwardPass) {
+    cgg.add_neural_layer(5);
+    cgg.add_neural_layer(5);
+
+    Observation observation;
+    observation.inputs = torch::rand({1, 5});
+    observation.outputs = torch::rand({1, 5});
+
+    cgg.forward(observation);
+    cgg.backward();
+
+    // Check if gradients are computed and weights are updated
+    // This is a placeholder check, actual implementation may vary
+    torch::Tensor last_loss = cgg.get_last_loss();
+    ASSERT_TRUE(last_loss.defined());
+    EXPECT_GT(last_loss.item<float>(), 0);
+}
+
+// Getters
+TEST_F(ComputationGraphTest, GetGraphDimensions) {
+    cgg.add_neural_layer(5);
+    cgg.add_neural_layer(5);
+
+    std::vector<int> dims = cgg.get_graph_dimensions();
+    ASSERT_EQ(
+        dims.size(), 2
+    )
     EXPECT_EQ(
-        // Not sure what to put here
+        dims[0], 5
+    )
+    EXPECT_EQ(
+        dims[1], 5
     )
 }
-// void backward(DataLoader& dataloader);
