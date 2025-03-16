@@ -22,9 +22,12 @@ namespace computationgraph
 {
 
 // public
-CGGraph::CGGraph() : last_loss_(nullptr) {}
+CGGraph::CGGraph() : last_loss_(nullptr), is_topo_cache_valid_(false) {}
 
 void CGGraph::add_neural_layer(int width) {
+    // Invalidate the cache
+    is_topo_cache_valid_ = false;
+
     // Create an object to hold the new nodes in the layer
     std::vector<SharedCGNodePtr> new_layer = {};
 
@@ -147,13 +150,21 @@ SharedTensorPtr CGGraph::get_last_loss() {
     return last_loss_;
 }
 
-std::vector<SharedCGNodePtr> CGGraph::topo_sort_() { // TODO: add caching
+std::vector<SharedCGNodePtr> CGGraph::topo_sort_() {
+    // todo: add cache and dfs tests
+    
     // note: A topological sort of the DAG is a linear ordering of all its vertices such that if 
     //       G contains an edge (u,v) then u appears before v in the ordering. (p573 CLRS)
     //       There are two implementations for serial computation of the topo sort,
     //       Kahn's Algorithm and the post-order DFS algorithm described by CLRS. Both are O(V+E).
     //       We implement the DFS algorithm, for more practice with DFS can't hurt.
     
+    // If the cache is valid, return it
+    if (is_topo_cache_valid_) {
+        return topo_forward_ordering_cache_;
+    };
+
+    // Otherwise, the cache is not valid and we need to compute a new sort.
     // Set up a stack and a flag map mapping vertices to their visited status
     std::stack<SharedCGNodePtr> st;
     std::unordered_map<SharedCGNodePtr, bool> visited;
@@ -191,6 +202,10 @@ std::vector<SharedCGNodePtr> CGGraph::topo_sort_() { // TODO: add caching
         forward_ordering.push_back(st.top());
         st.pop();
     }
+
+    // Save and validate the cache
+    topo_forward_ordering_cache_ = forward_ordering;
+    is_topo_cache_valid_ = true;
 
     return forward_ordering;
 }

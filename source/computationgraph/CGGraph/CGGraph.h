@@ -52,6 +52,10 @@ private:
     SharedTensorPtr last_loss_;
     std::vector<int> dims_;
 
+    // Cache data
+    bool is_topo_cache_valid_;
+    std::vector<SharedCGNodePtr> topo_forward_ordering_cache_;
+
     // State modifiers
     void add_node(int layer);
 
