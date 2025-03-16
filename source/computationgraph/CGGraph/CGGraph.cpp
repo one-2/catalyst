@@ -78,7 +78,7 @@ void CGGraph::add_neural_layer(int width) {
     dims_.push_back(width);
 }
 
-void CGGraph::forward(DataLoader::Observation& observation) {
+void CGGraph::forward(DataLoader::Observation& observation) { // todo: pass only the input tensors. model should not depend on DataLoader
     // Retrieve the inputs
     SharedTensorPtr inputs = std::make_shared<torch::Tensor>(observation.input);
     // ^ todo: move ptr construction to DataLoader
@@ -267,7 +267,7 @@ void CGGraph::optimise_(std::vector<torch::Tensor> mean_layer_gradients) {
         int nodes_in_layer = dims_[i];
 
         // Compute the new bias from the mean_layer_gradients
-        float new_bias = graph[layer_start]->get_current_bias() - mean_layer_gradients[i]; // since relu derivative is 1
+        float new_bias = graph[layer_start]->get_current_bias() - learning_rate * mean_layer_gradients[i]; // since relu derivative is 1
         // bug: type mismatch here. get_current_bias returns a float while mean_layer_gradients is a tensor
 
         // For each node in the layer
