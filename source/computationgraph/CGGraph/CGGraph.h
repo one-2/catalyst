@@ -56,11 +56,8 @@ private:
     bool is_topo_cache_valid_;
     std::vector<SharedCGNodePtr> topo_forward_ordering_cache_;
 
-    // State modifiers
-    void add_node(int layer);
-
     // Graph execution
-    void optimise_();
+    void optimise_(std::vector<torch::Tensor> mean_layer_activations);
 
 };
 
