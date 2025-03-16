@@ -14,6 +14,7 @@
 // using namespace tensorops;
 
 #include "./CGGraph.h"
+#include <stack>
 
 using namespace datahandlers;
 
@@ -51,7 +52,7 @@ void CGGraph::add_neural_layer(int width) {
 
         // For each node in the last layer of the graph,
         for (int i = 0; i < j; i++) {
-            SharedCGNodePtr outer_node = reverse_topo[i];
+            SharedCGNodePtr outer_node = reverse_topo[i];  // debug: segfault here
 
             // For each node in the new layer,
             for (int w = 0; w < width; w++) {
@@ -147,8 +148,51 @@ SharedTensorPtr CGGraph::get_last_loss() {
 }
 
 std::vector<SharedCGNodePtr> CGGraph::topo_sort_() { // TODO: add caching
-    // TODO: implement a topo sort, baby
-    return std::vector<SharedCGNodePtr>();
+    // note: A topological sort of the DAG is a linear ordering of all its vertices such that if 
+    //       G contains an edge (u,v) then u appears before v in the ordering. (p573 CLRS)
+    //       There are two implementations for serial computation of the topo sort,
+    //       Kahn's Algorithm and the post-order DFS algorithm described by CLRS. Both are O(V+E).
+    //       We implement the DFS algorithm, for more practice with DFS can't hurt.
+    
+    // Set up a stack and a flag map mapping vertices to their visited status
+    std::stack<SharedCGNodePtr> st;
+    std::unordered_map<SharedCGNodePtr, bool> visited;
+
+    for (auto& pair : graph_adj_list_) {
+        visited[pair.first] = false;
+    }
+
+    // Define the dfs_visit function
+    std::function<void(SharedCGNodePtr)> dfs_visit = [&](SharedCGNodePtr node) {
+        visited[node] = true; // Mark the current node as visited
+
+        // Recur for all its unvisited children
+        for (auto& child : graph_adj_list_[node]) {
+            if (!visited[child]) {
+                dfs_visit(child);
+            }
+        }
+
+        // When all subtree searches terminate, update the stack with this node
+        st.push(node);
+    };
+
+    // Pick an unvisited vertex to start at and dfs all nodes in the graph
+    for (auto& pair : graph_adj_list_) {
+        if (!visited[pair.first]) {
+            dfs_visit(pair.first);
+        }
+    }
+
+    // The resulting stack is a reverse topological ordering of the nodes.
+    // Pop from the stack to yield a forward topological ordering.
+    std::vector<SharedCGNodePtr> forward_ordering;
+    while (!st.empty()) {
+        forward_ordering.push_back(st.top());
+        st.pop();
+    }
+
+    return forward_ordering;
 }
 
 std::vector<SharedCGNodePtr> CGGraph::reverse_topo_sort_() { // TODO: add caching

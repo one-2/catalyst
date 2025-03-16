@@ -36,7 +36,7 @@ TEST_F(ComputationGraphTest, Constructor) {
     );
     ASSERT_EQ(
         cgg.get_last_loss(), nullptr
-    );
+    ); 
 };
 
 // Graph operations
@@ -53,7 +53,7 @@ TEST_F(ComputationGraphTest, AddNeuralLayers) {
     );
     
     // Add another layer
-    cgg.add_neural_layer(50);
+    cgg.add_neural_layer(50); // debug: segfault here
     dims = cgg.get_graph_dimensions();
 
     ASSERT_EQ(

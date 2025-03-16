@@ -46,7 +46,9 @@ public:
 
 private:
     // Data
-    std::unordered_map<SharedCGNodePtr, std::vector<SharedCGNodePtr>> graph_adj_list_; // TODO: requires custom hashing and equality comparator
+    std::unordered_map<SharedCGNodePtr, std::vector<SharedCGNodePtr>> graph_adj_list_;
+    // TODO: requires custom hashing and equality comparator
+    // note: using an adj list because the graph is sparse (|E| << |V|^2) and directed. p549 of CLRS.
     SharedTensorPtr last_loss_;
     std::vector<int> dims_;
 
