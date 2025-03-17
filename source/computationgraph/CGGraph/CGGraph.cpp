@@ -37,25 +37,16 @@ void CGGraph::add_neural_layer(int width) {
         new_layer.push_back(new_node);
     };
 
-    // If the graph is empty,
-    if (dims_.empty()) {
-        // For each node in the new layer
-        for (int i = 0; i < width; i++) {
-            // Add the node to the adjacency list
-            graph_adj_list_.insert({new_layer[i], std::vector<SharedCGNodePtr>()});
-        }
-
-    } else {
-        // Otherwise, add the new layer to the CGGraph
-
-        // First, point the final layer of the graph to the new nodes
+    // First, connect the new nodes to the dependencies of the last layer
+    if (!(dims_.empty())) {
+        // Point the final layer of the graph to the new nodes
         // Get the last layer of the graph
-        int j = dims_.back();
+        int last_layer_dimension = dims_.back();
         std::vector<SharedCGNodePtr> reverse_topo = reverse_topo_sort_();
 
-        // For each node in the last layer of the graph,
-        for (int i = 0; i < j; i++) {
-            SharedCGNodePtr outer_node = reverse_topo[i];  // debug: segfault here
+        // For each node in the last layer of the graph / first layer of the reverse topo sort
+        for (int i = 0; i < last_layer_dimension; i++) {
+            SharedCGNodePtr outer_node = reverse_topo[i];
 
             // For each node in the new layer,
             for (int w = 0; w < width; w++) {
@@ -65,13 +56,13 @@ void CGGraph::add_neural_layer(int width) {
                 graph_adj_list_[outer_node].push_back(new_node);
             }
         }
+    }
 
-        // Second, add the new nodes to the graph itself
-        // For each node in the new layer
-        for (int i = 0; i < width; i++) {
-            // Add the node to the adjacency list
-            graph_adj_list_.insert({new_layer[i], std::vector<SharedCGNodePtr>()});
-        }
+    // Second, add the new nodes to the adjacency list itself
+    // For each node in the new layer
+    for (int i = 0; i < width; i++) {
+        // Add the node to the adjacency list
+        graph_adj_list_[new_layer[i]] = {};
     }
 
     // Update the dimension vector
@@ -95,9 +86,10 @@ void CGGraph::forward(DataLoader::Observation& observation) { // todo: pass only
         int nodes_in_layer = dims_[layer_idx];
         torch::Tensor current_layer_activation_tally = torch::empty({1, 1});
         
-        for (int i = 0; i < nodes_in_layer; i++) {
-            int current_node_idx = layer_start + i;
+        for (int current_node_idx = layer_start; current_node_idx < layer_start + nodes_in_layer; current_node_idx++) {
             SharedCGNodePtr node = topo_sorted_graph[current_node_idx];
+            // debug: segfault here on second layer
+            //         dims correct, adj list correct, downstream dependencies correct, topo sort fails
 
             // Activate the node
             node->compute_activations(inputs);
@@ -109,7 +101,7 @@ void CGGraph::forward(DataLoader::Observation& observation) { // todo: pass only
 
         // After a layer is complete,
         // Mean the activations across the layer
-        torch::Tensor mean_activations = torch::mean(current_layer_activation_tally, 2);
+        torch::Tensor mean_activations = torch::mean(current_layer_activation_tally, 0);
 
         // Update the inputs for the next layer
         inputs = std::make_shared<torch::Tensor>(mean_activations);
@@ -257,7 +249,6 @@ void CGGraph::optimise_(std::vector<torch::Tensor> mean_layer_gradients) {
         node->update_weight(learning_rate);
     }
 
-    // TODO: update biases
     // Compute the new bias for each layer
     int layer_count = dims_.size();
     for (int i = 0; i < layer_count; i++) {
@@ -280,9 +271,6 @@ void CGGraph::optimise_(std::vector<torch::Tensor> mean_layer_gradients) {
             node->update_bias(new_bias);
         }
     }
-
-    // Call node->update_bias
-
 }
 
 } // namespace computationgraph
