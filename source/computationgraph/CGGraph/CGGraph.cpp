@@ -67,6 +67,9 @@ void CGGraph::add_neural_layer(int width) {
 
     // Update the dimension vector
     dims_.push_back(width);
+
+    // Invalidate the cache
+    is_topo_cache_valid_ = false;
 }
 
 void CGGraph::forward(DataLoader::Observation& observation) { // todo: pass only the input tensors. model should not depend on DataLoader
@@ -178,7 +181,7 @@ std::vector<SharedCGNodePtr> CGGraph::topo_sort_() {
     //       We implement the DFS algorithm, for more practice with DFS can't hurt.
     
     // If the cache is valid, return it
-    if (is_topo_cache_valid_) {
+    if (is_topo_cache_valid_) { // bug is here
         return topo_forward_ordering_cache_;
     };
 
