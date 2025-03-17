@@ -95,7 +95,8 @@ void CGGraph::forward(DataLoader::Observation& observation) { // todo: pass only
             //         dims correct, adj list correct, downstream dependencies correct, topo sort fails
 
             // Activate the node
-            node->compute_activations(inputs);
+            
+            node->compute_activations(inputs); // bug: segfault here on second iteration
 
             // Sum the node's activations with the current layer tally
             torch::Tensor this_node_activations = *(node->get_current_activations());

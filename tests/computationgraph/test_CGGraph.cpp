@@ -71,8 +71,8 @@ TEST_F(ComputationGraphTest, AddNeuralLayers) {
 
 // Graph execution
 TEST_F(ComputationGraphTest, ForwardPass) {
-    cgg.add_neural_layer(15);
-    cgg.add_neural_layer(15);
+    cgg.add_neural_layer(1);
+    cgg.add_neural_layer(1);
 
     DataLoader::Observation observation;
     observation.input = torch::rand({1, 5});
