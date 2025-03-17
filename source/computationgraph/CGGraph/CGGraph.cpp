@@ -153,7 +153,7 @@ void CGGraph::backward() {
         int nodes_in_layer = dims_[layer_idx];
         torch::Tensor curr_layer_tally_ = torch::zeros_like(*(topo_sorted_graph[0]->get_current_gradients()));
 
-        for (int node_idx = 0; node_idx < nodes_in_layer; node_idx++) {
+        for (int node_idx = layer_start; node_idx < layer_start + nodes_in_layer; node_idx++) {
             // Sum its gradients with the tally
             curr_layer_tally_[layer_idx] += *(topo_sorted_graph[node_idx]->get_current_gradients());
         };
@@ -259,7 +259,8 @@ void CGGraph::optimise_(std::vector<torch::Tensor> mean_layer_gradients) {
 
     // TODO: update biases
     // Compute the new bias for each layer
-    for (int i = 0; i < dims_.size(); i++) {
+    int layer_count = dims_.size();
+    for (int i = 0; i < layer_count; i++) {
         // Get the start index of the layer
         int layer_start = std::accumulate(dims_.begin(), dims_.begin() + i, 0);
 
@@ -267,7 +268,7 @@ void CGGraph::optimise_(std::vector<torch::Tensor> mean_layer_gradients) {
         int nodes_in_layer = dims_[i];
 
         // Compute the new bias from the mean_layer_gradients
-        float new_bias = graph[layer_start]->get_current_bias() - learning_rate * mean_layer_gradients[i]; // since relu derivative is 1
+        float new_bias = graph[layer_start]->get_current_bias() - learning_rate * mean_layer_gradients[i].item<float>(); // since relu derivative is 1
         // bug: type mismatch here. get_current_bias returns a float while mean_layer_gradients is a tensor
 
         // For each node in the layer
