@@ -64,7 +64,7 @@ CPU Strategy ← → GPU Strategy (OpenCL)
 
 See also:
 - The [technical report](docs/PROJECT_REPORT_4121.pdf) for a detailed design discussion, including a review of major frameworks;
-- The [architecture review](ARCHITECTURE_REVIEW.md) for a spotlight on the main features of each module, and the [system diagrams](https://www.figma.com/design/UXEFP7oxLK4gug4gUgBLbK/Catalyst-Working-Class-Diagram) for an overview of the system architecture;
+- The [architecture review](docs/ARCHITECTURE_REVIEW.md) for a spotlight on the main features of each module, and the [system diagrams](https://www.figma.com/design/UXEFP7oxLK4gug4gUgBLbK/Catalyst-Working-Class-Diagram) for an overview of the system architecture;
 - The [branch guide](docs/BRANCH_GUIDE.md) for what's on each of the dev branches.
 
 ## Implementation Status
