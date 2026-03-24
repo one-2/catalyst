@@ -4,12 +4,12 @@ This document provides technical implementation details for Catalyst's design.
 
 ## Design Philosophy
 
-Catalyst uses explicit abstractions in the high-level design. I deliberately built more flexibly than I needed to, to better understand the structures at play in more realistic systems. For example:
+Catalyst uses explicit abstractions in the high-level design. I deliberately built more flexibly than I needed to, to better understand the structures at play in realistic systems. For example:
 
 - Computational graphs are represented explicitly as DAGs, rather than building DAGs implicitly with default types
-- Hardware dispatch is implemented through a strategy pattern
-- Memory management is all explicit, with smart pointers
-- Strategy pattern for tensor operations, preparing the architecture for custom GPU kernels.
+- I implemented runtime hardware selection with a strategy pattern
+- I handled memory management explicitly using smart pointers
+- I used a strategy pattern for tensor operations to prepare the architecture for custom GPU kernels.
 
 ## System Layers
 
@@ -191,62 +191,42 @@ void add_log_to_map(const LogEntry& log) {
    - OpenCL source files empty
    - KernelManager device queries unfinished.
 
-1. **Missing Error Handling**: No input validation, assumes valid data.
+5. **Missing Error Handling**: No input validation, assumes valid data.
 
 ## Design Decisions
 
 ### DAG Representation for Computational Graphs
-- This is a natural representation of data dependencies
+
+- This is a natural representation of data dependencies, so it's easy to handled distributed execution
 - Topological sort determines execution order
 - Reverse topological sort enables backpropagation
 - It supports future graph optimisations (fusion, pruning)
 
 ### Strategy Pattern for Hardware Abstraction
+
 - We can do runtime device selection without recompilation, like PyTorch
-- Flexible - easily extensible to new backends (TPU, custom accelerators)
-- Transparent to model code, giving a consistent API and good abstraction
+- Easily extensible to new backends (TPU, custom accelerators)
 - Trivial testing of our custom implementation against major backends
 
-### LibTorch as Fallback Implementation
-- Provides correct reference implementations
-- Handles edge cases (broadcasting, numerical stability)
-- Allows focus on architecture over low-level debugging
-- Enables incremental replacement with custom kernels
+### LibTorch Implements Tensor Types
+
+- I used the tensor type from LibTorch (PyTorch backend) because I knew it would provide the tensor operations I needed. I considered Eigen as well but I wasn't experienced enough with deep learning systems to determine if it was suitable
+- Provides a correct reference implementations for testing
 
 ### Asynchronous Logging
-- Training becomes I/O bound with synchronous logging
-- Instead, an asynchronous approach maintains throughput
-- Implementation is simple with std::async and mutex
+
+- ASync logging avoids holding up the pipeline
+- Simple implementation with std::async and mutex
 
 ### C++ Implementation Without Python Frontend
-- Project objective: understand C++ DL/HPC systems implementations
-- Python binding introduces a lot of complexity
-- Python API could be added as an extension
 
+- I wanted to understand C++ deep learning backends / high-performance systems programming
 
 ## Performance Considerations
 
-I moved on from the project before finishing the implementation, so the system is not optimised for performance:
-- No benchmarking performed
-- No profiling-guided optimisation
-- LibTorch fallback provides adequate baseline performance
-- Custom kernels would improve GPU utilisation
+Having learned what I came for, I moved on from the project before finishing my ambitiously-scoped project, so the system is not optimised for performance.
 
-Potential optimisations for future work:
-- Memory pooling for allocation reuse
-- Operator fusion (e.g., matmul+relu)
-- Mixed precision (FP16 forward pass, FP32 gradients)
-- Gradient accumulation to reduce update frequency
-
-## Future Architectural Extensions
-
-Potential development directions:
-
-1. **Graph Compilation**: Translate DAG to an intermediate representation for optimisation before execution. Operator fusion, for instance, would be interesting
-2. **Checkpointing**: Implement save/restore on graph state using existing Cereal logging
-3. **Distributed Training**: Add MPI support (Bonzo-HPC, see report) for multi-node training
-4. **JIT Compilation**: Runtime kernel specialisation based on tensor shapes.
-
----
-
-For questions about specific design decisions, see inline comments in source code or technical report.
+- I didn't do benchmarking
+- Yet to implement graph optimisations like operator fusion
+- No mixed precision (FP16 forward pass, FP32 gradients)
+- No gradient accumulation 
